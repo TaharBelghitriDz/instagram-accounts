@@ -50,6 +50,7 @@ export default () => {
       h="full"
       spacing="10%"
       display={{ start: "flex", md: "none" }}
+      pb="50px"
     >
       <Stack
         w="full"
