@@ -20,9 +20,18 @@ export default extendTheme({
     black: {
       0: "#262626",
     },
+    blue: {
+      0: "#0F366A",
+      1: "#8EBEFF",
+    },
+    green: {
+      0: "#254441",
+      1: "#00FFB2",
+    },
   },
   shadows: {
     black: "0 0 10px rgb(0,0,0,25%)",
+    black2: "0 0 10px rgb(0,0,0,50%)",
   },
   breakpoints: {
     start: "0px",
