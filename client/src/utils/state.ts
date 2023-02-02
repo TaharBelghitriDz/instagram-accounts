@@ -54,7 +54,7 @@ function createState<T, R>(
 }
 
 const state = {
-  place: "home",
+  place: "accounts",
 };
 
 export default createState(state, (currentState) => ({
