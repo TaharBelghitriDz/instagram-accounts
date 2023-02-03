@@ -1,8 +1,9 @@
-import { HStack, Image, Stack, Text } from "@chakra-ui/react";
+import { Divider, HStack, Image, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import Loading, { ProgressLoading } from "./components/loading";
 import Login from "./components/login/login";
-import RightSideBar from "./components/right.sideBar";
+import Navbar from "./components/navbar";
+import RightSideBar from "./components/navbar/right.sideBar";
 import Pages from "./pages";
 
 function App() {
@@ -14,13 +15,14 @@ function App() {
 
   return (
     <Stack w="full" alignItems="center" justifyContent="center">
-      <HStack
+      <Stack
         w="full"
         maxW="1250px"
         justifyContent="space-between"
         spacing="0"
         p="15px"
         alignItems="start"
+        flexDir={{ start: "column", lg: "row" }}
       >
         <Image
           pos="absolute"
@@ -32,11 +34,17 @@ function App() {
           objectFit="cover"
         />
 
-        <RightSideBar />
+        <Navbar />
+        <Divider
+          borderColor="transparent"
+          w="0px"
+          p={{ start: "10px", lg: "20px" }}
+        />
+
         <Pages place="/" />
         {/* <ProgressLoading />
       <Loading isLoading={false} /> */}
-      </HStack>
+      </Stack>
     </Stack>
   );
 }

@@ -52,3 +52,8 @@ export const Settings = createIcon({
   viewBox: "0 0 24 24",
   d: "M12 1l9.5 5.5v11L12 23l-9.5-5.5v-11L12 1zm0 2.311L4.5 7.653v8.694l7.5 4.342 7.5-4.342V7.653L12 3.311zM12 16a4 4 0 110-8 4 4 0 010 8zm0-2a2 2 0 100-4 2 2 0 000 4z",
 });
+export const Navbar = createIcon({
+  displayName: "Navbar",
+  viewBox: "0 0 24 24",
+  d: "M3 4h18v2H3V4zm6 7h12v2H9v-2zm-6 7h18v2H3v-2z",
+});
