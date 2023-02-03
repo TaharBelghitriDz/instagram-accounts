@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import { loginFun } from "../../utils/api/login.api";
-import CustomButtonComponent from "../custom.button.component";
+
 import { UserIcon } from "../icons";
 
 export const InputProps = {
@@ -26,6 +26,7 @@ export const InputProps = {
 export default () => {
   const [isError, setError] = useState({ name: "", place: "" });
   const [isLoading, setIsLoading] = useState(false);
+
   const [{ email, password }, setInputs] = useState({
     password: "",
     email: "",

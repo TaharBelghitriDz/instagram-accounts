@@ -6,13 +6,19 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Stack,
 } from "@chakra-ui/react";
 import { ActionIcon, CustomAddIcon } from "../custom.button.component";
 import { Refresh, Settings } from "../icons";
 
 export default () => {
   return (
-    <HStack w="full" alignItems="center" justifyContent="space-between">
+    <Stack
+      w="full"
+      alignItems="center"
+      justifyContent="space-between"
+      flexDir={{ start: "column", md: "row" }}
+    >
       <Flex alignItems="center">
         <Menu>
           <MenuButton
@@ -100,6 +106,6 @@ export default () => {
           <Settings w="24px" h="24px" bg="" />
         </HStack>
       </HStack>
-    </HStack>
+    </Stack>
   );
 };

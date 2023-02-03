@@ -23,7 +23,7 @@ export default () => {
       px="20px"
       rounded="20px"
       overscrollX="contain"
-      overflowX="scroll"
+      overflowX="auto"
     >
       <AccountsTableHeaderComponent />
       <Table
@@ -46,7 +46,13 @@ export default () => {
         <Tbody>
           <Tr>
             <Td>
-              <Image src="/side.back.png" h="75px" w="75px" rounded="10px" />
+              <Image
+                src="/side.back.png"
+                h="75px"
+                minW="75"
+                w="75px"
+                rounded="10px"
+              />
             </Td>
             <Td textAlign="center">اسم الحساب</Td>
             <Td textAlign="center"> نشط </Td>
