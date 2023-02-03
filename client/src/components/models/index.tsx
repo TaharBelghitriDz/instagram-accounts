@@ -12,7 +12,7 @@ import { ReactNode, useRef } from "react";
 export default (props: {
   isOpen: boolean;
   onClose: () => void;
-  content: ReactNode;
+  content: JSX.Element;
 }) => {
   const ref = useRef(null);
   useOutsideClick({

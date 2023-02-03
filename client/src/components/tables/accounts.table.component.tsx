@@ -33,8 +33,8 @@ export default () => {
         bg="black.0"
         rounded="20px"
       >
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
-        <Thead>
+        <TableCaption h="20px"> </TableCaption>
+        <Thead pt="20px">
           <Tr>
             <Th textAlign="center">صورة الحساب</Th>
             <Th textAlign="center">اسم الحساب</Th>

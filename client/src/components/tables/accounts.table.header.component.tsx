@@ -28,7 +28,6 @@ export default () => {
               <CustomAddIcon color="blue.0" bg="blue.100" children="-" />
             }
             rounded="20px"
-            // padding="20px"
             _hover={{}}
             border="none"
             bg="blue.900"
