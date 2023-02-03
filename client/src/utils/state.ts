@@ -54,7 +54,7 @@ function createState<T, R>(
 }
 
 const state = {
-  place: "accounts",
+  place: "الحسابات",
 };
 
 export default createState(state, (currentState) => ({
