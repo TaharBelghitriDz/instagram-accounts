@@ -2,6 +2,7 @@ import { Box, Text, VStack } from "@chakra-ui/react";
 
 import state from "../utils/state";
 import AccountsPage from "./accounts.page";
+import proxiesPage from "./proxies.page";
 
 export default (props: { place: string }) => {
   const place = state.useStore((e) => e.place);
@@ -9,6 +10,7 @@ export default (props: { place: string }) => {
   let Comp = Box;
 
   if (place == "الحسابات") Comp = AccountsPage;
+  if (place == "البروكسيات") Comp = proxiesPage;
 
   return (
     <VStack

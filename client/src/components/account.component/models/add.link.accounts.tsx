@@ -1,11 +1,11 @@
-import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
-import { Add } from "../icons";
+import { CloseButton, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
   return (
     <VStack w="full" spacing="50px">
       <HStack w="full" justifyContent="space-between">
-        <Text fontSize="30px"> تغيير اسماء الحسابات</Text>
+        <Text fontSize="30px">اضافة رابط للحسابات​</Text>
         <CloseButton
           bg="white"
           color="black"
@@ -15,6 +15,13 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
+      <Textarea
+        bg="whiteAlpha.100"
+        border=""
+        rounded="10px"
+        rows={5}
+        placeholder="لصق النص هنا"
+      />
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"

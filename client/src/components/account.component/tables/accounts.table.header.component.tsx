@@ -7,11 +7,16 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { ActionIcon, CustomAddIcon } from "../custom.button.component";
-import { Refresh, Settings } from "../icons";
+import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
+import { Refresh, Settings } from "../../icons";
+import Models from "../models";
+import AccountsGroupSettings from "../models/accounts.group.settings";
 
 export default () => {
+  const discloser = useDisclosure();
+
   return (
     <Stack
       w="full"
@@ -19,6 +24,10 @@ export default () => {
       justifyContent="space-between"
       flexDir={{ start: "column", md: "row" }}
     >
+      <Models
+        {...discloser}
+        content={<AccountsGroupSettings {...discloser} />}
+      />
       <Flex alignItems="center">
         <Menu>
           <MenuButton
@@ -101,6 +110,7 @@ export default () => {
           bg="red.900"
           color="red.100"
           cursor="pointer"
+          onClick={() => discloser.onOpen()}
         >
           <Settings w="24px" h="24px" bg="" />
         </HStack>

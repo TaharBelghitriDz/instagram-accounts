@@ -1,8 +1,8 @@
-import { HStack, VStack } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import { Fragment } from "react";
 import ActionListComponent from "../components/account.component/action.list.component";
 import CircleChartComponent from "../components/circle.chart.component";
-import AccountsTableComponent from "../components/tables/accounts.table.component";
+import AccountsTableComponent from "../components/account.component/tables/accounts.table.component";
 
 export default () => {
   return (
