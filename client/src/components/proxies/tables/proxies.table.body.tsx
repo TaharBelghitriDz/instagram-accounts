@@ -1,12 +1,9 @@
 import {
   Checkbox,
-  Image,
   Table,
   TableCaption,
   Tbody,
   Td,
-  Text,
-  Tfoot,
   Th,
   Thead,
   Tr,

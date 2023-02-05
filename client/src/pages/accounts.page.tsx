@@ -1,8 +1,9 @@
 import { HStack } from "@chakra-ui/react";
 import { Fragment } from "react";
-import ActionListComponent from "../components/account.component/action.list.component";
+
 import CircleChartComponent from "../components/circle.chart.component";
-import AccountsTableComponent from "../components/account.component/tables/accounts.table.component";
+import AccountsTableComponent from "../components/account/tables/accounts.table.component";
+import AccountActionListComponent from "../components/account/account.action.list.component";
 
 export default () => {
   return (
@@ -22,7 +23,7 @@ export default () => {
         <CircleChartComponent text="مفعل​" />
         <CircleChartComponent text="غير مفعل​" />
       </HStack>
-      <ActionListComponent />
+      <AccountActionListComponent />
 
       <AccountsTableComponent />
     </Fragment>

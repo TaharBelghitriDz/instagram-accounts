@@ -7,11 +7,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ComponentType, useState } from "react";
-import Models from "../../account.component/models";
+import Models from "../../account/models";
 import { ActionIcon } from "../../custom.button.component";
 import { Settings } from "../../icons";
 import newProxiesModel from "../models/new.proxies.model";
-import proxiesSettingsModel from "../models/proxies.settings.model";
 import ProxiesSettingsModel from "../models/proxies.settings.model";
 
 export default () => {
@@ -69,7 +68,7 @@ export default () => {
           bg="purple.800"
           color="purple.200"
           cursor="pointer"
-          onClick={() => view(proxiesSettingsModel)}
+          onClick={() => view(ProxiesSettingsModel)}
         >
           <Settings w="24px" h="24px" bg="" />
         </HStack>

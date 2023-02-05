@@ -55,8 +55,10 @@ function createState<T, R>(
 
 const state = {
   place: "الحسابات",
+  listPlace: "names",
 };
 
 export default createState(state, (currentState) => ({
   changeView: (place) => ({ place }),
+  changeListPlace: (listPlace) => ({ listPlace }),
 }));
