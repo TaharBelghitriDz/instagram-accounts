@@ -41,7 +41,7 @@ export default (props: {
           w="full"
           h="full"
           alignItems="center"
-          justifyContent="center"
+          justifyContent="start"
           spacing="0"
         >
           <Stack
