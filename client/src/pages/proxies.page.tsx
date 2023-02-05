@@ -7,18 +7,15 @@ export default () => (
   <Fragment>
     <HStack
       w="full"
-      justifyContent={{ start: "center", md: "space-between" }}
+      justifyContent={{ start: "center", md: "space-evenly" }}
       alignItems="center"
       p="20px"
-      // bg="#2F2F2F"
       rounded="20px"
       flexWrap="wrap"
     >
-      <CircleChartComponent text="نشط" />
-      <CircleChartComponent text="موقوف​" />
-      <CircleChartComponent text="خطأ" />
-      <CircleChartComponent text="مفعل​" />
-      <CircleChartComponent text="غير مفعل​" />
+      <CircleChartComponent text="مكتمل" />
+      <CircleChartComponent text="شاغر​" />
+      <CircleChartComponent text=" الاستخدام" />
     </HStack>
     <ProxiesTableBody />
   </Fragment>

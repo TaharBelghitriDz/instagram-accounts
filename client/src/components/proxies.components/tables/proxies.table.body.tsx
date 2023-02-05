@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   Image,
   Table,
   TableCaption,
@@ -11,7 +12,37 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import ProxiesTableHeader from "./proxies.table.header";
+
+const TableBodyRow = () => {
+  const [remove, setRemove] = useState(false);
+
+  return (
+    <Tr bg={remove ? "red.900" : ""}>
+      <Td>
+        <Checkbox
+          p="10px"
+          type="checkbox"
+          onChange={(e) => {
+            setRemove(() => e.target.checked);
+          }}
+        />
+      </Td>
+
+      <Td textAlign="center">proxy name</Td>
+      <Td textAlign="center"> 123456789 </Td>
+      <Td textAlign="center">182.102.50.16</Td>
+      <Td textAlign="center">8080</Td>
+      <Td isNumeric>
+        <VStack>
+          <span> 02/02/2023 </span>
+          <span>12:23</span>
+        </VStack>
+      </Td>
+    </Tr>
+  );
+};
 
 export default () => {
   return (
@@ -36,52 +67,19 @@ export default () => {
         <TableCaption h="20px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            <Th textAlign="center">صورة الحساب</Th>
-            <Th textAlign="center">اسم الحساب</Th>
-            <Th textAlign="center">حالة الحساب</Th>
-            <Th textAlign="center">وضع الحساب</Th>
+            <Th />
+            <Th textAlign="center">اسم</Th>
+            <Th textAlign="center">كلمة المرور</Th>
+            <Th textAlign="center">المضيف</Th>
+            <Th textAlign="center">المدخل</Th>
             <Th textAlign="center">تاريخ الاضافة</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>
-              <Image
-                src="/side.back.png"
-                h="75px"
-                minW="75"
-                w="75px"
-                rounded="10px"
-              />
-            </Td>
-            <Td textAlign="center">اسم الحساب</Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td textAlign="center">
-              <Text p="10px" rounded="10px" bg="green.900" color="green.100">
-                نشط
-              </Text>
-            </Td>
-            <Td isNumeric>
-              <VStack>
-                <span> 02/02/2023 </span>
-                <span>12:23</span>
-              </VStack>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Image src="/side.back.png" h="75px" w="75px" rounded="10px" />
-            </Td>
-            <Td textAlign="center">اسم الحساب</Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td isNumeric>
-              <VStack>
-                <span> 02/02/2023 </span>
-                <span>12:23</span>
-              </VStack>
-            </Td>
-          </Tr>
+          <TableBodyRow />
+          <TableBodyRow />
+          <TableBodyRow />
+          <TableBodyRow />
         </Tbody>
       </Table>
     </VStack>

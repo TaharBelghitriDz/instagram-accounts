@@ -1,23 +1,30 @@
 import {
-  Button,
   Flex,
   HStack,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { ComponentType, useState } from "react";
 import Models from "../../account.component/models";
-import AccountsGroupSettings from "../../account.component/models/accounts.group.settings";
-import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
-import { Refresh, Settings } from "../../icons";
+import { ActionIcon } from "../../custom.button.component";
+import { Settings } from "../../icons";
+import newProxiesModel from "../models/new.proxies.model";
+import proxiesSettingsModel from "../models/proxies.settings.model";
+import ProxiesSettingsModel from "../models/proxies.settings.model";
 
 export default () => {
   const discloser = useDisclosure();
+
+  const [content, setContent] = useState<JSX.Element>(
+    <ProxiesSettingsModel {...discloser} />
+  );
+
+  const view = (Comp: ComponentType<any>) => {
+    setContent(() => <Comp {...discloser} />);
+    discloser.onOpen();
+  };
 
   return (
     <Stack
@@ -26,12 +33,9 @@ export default () => {
       justifyContent="space-between"
       flexDir={{ start: "column", md: "row" }}
     >
-      <Models
-        {...discloser}
-        content={<AccountsGroupSettings {...discloser} />}
-      />
+      <Models {...discloser} content={content} />
       <Flex alignItems="center">
-        <ActionIcon text="جديد" onClick={() => console.log("jadid")} />
+        <ActionIcon text="جديد" onClick={() => view(newProxiesModel)} />
         <Input
           border="none"
           rounded="15px"
@@ -41,20 +45,34 @@ export default () => {
           placeholder="بحث"
         />
       </Flex>
+      <HStack spacing="10px">
+        <Text
+          p="7px"
+          rounded="10px"
+          px="20px"
+          bg="red.800"
+          color="red.200"
+          verticalAlign="center"
+          textAlign="center"
+          cursor="pointer"
+        >
+          حذف الكل
+        </Text>
 
-      <HStack
-        w="40px"
-        h="40px"
-        rounded="10px"
-        spacing="0"
-        justifyContent="center"
-        alignContent="center"
-        bg="red.900"
-        color="red.100"
-        cursor="pointer"
-        onClick={() => discloser.onOpen()}
-      >
-        <Settings w="24px" h="24px" bg="" />
+        <HStack
+          w="40px"
+          h="40px"
+          rounded="10px"
+          spacing="0"
+          justifyContent="center"
+          alignContent="center"
+          bg="purple.800"
+          color="purple.200"
+          cursor="pointer"
+          onClick={() => view(proxiesSettingsModel)}
+        >
+          <Settings w="24px" h="24px" bg="" />
+        </HStack>
       </HStack>
     </Stack>
   );
