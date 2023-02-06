@@ -1,8 +1,10 @@
 import { Fragment } from "react";
-import ProxiesTableBody from "../components/proxies/tables/proxies.table.body";
+import ListsBodyComponents from "../components/lists/lists.body.components";
+import ListsHeaderComponent from "../components/lists/lists.header.component";
 
 export default () => (
   <Fragment>
-    <ProxiesTableBody />
+    <ListsHeaderComponent />
+    <ListsBodyComponents />
   </Fragment>
 );
