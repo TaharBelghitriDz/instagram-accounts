@@ -11,8 +11,9 @@ export default (props: {
       p="20px"
       pt="0px"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent={{ start: "space-evenly", md: "space-between" }}
       flexDir="row"
+      flexWrap="wrap"
     >
       <Checkbox
         bg="blue.800"
