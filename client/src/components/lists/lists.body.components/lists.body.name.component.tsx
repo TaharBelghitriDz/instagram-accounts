@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import ListBodyComponentHeader from "./list.body.component.header";
 
 const Name = (props: {
