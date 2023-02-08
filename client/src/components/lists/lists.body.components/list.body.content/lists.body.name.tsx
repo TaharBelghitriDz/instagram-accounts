@@ -1,8 +1,8 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import ListBodyComponentHeader from "./list.body.component.header";
+import ListBodyComponentHeader from "../list.body.header/list.body.component.header";
 
-const Bio = (props: {
+const Name = (props: {
   onClick: () => void;
   name: string;
   selected: boolean;
@@ -45,7 +45,7 @@ export default () => {
   ]);
 
   return (
-    <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="20px">
+    <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader
         names={names}
         status={names.filter((e) => e.selected == false && e).length > 0}
@@ -56,7 +56,7 @@ export default () => {
       />
       <HStack spacing="0" flexWrap="wrap" justifyContent="space-around">
         {names.map((e, i) => (
-          <Bio
+          <Name
             key={i * 34}
             selected={e.selected}
             name={e.name}
