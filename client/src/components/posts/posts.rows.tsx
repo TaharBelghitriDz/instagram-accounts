@@ -8,6 +8,7 @@ export default (props: { onClick: () => void }) => {
     <Tr bg={remove ? "red.900" : ""}>
       <Td textAlign="center"> كود ماكس </Td>
       <Td textAlign="center"> المجموعة 1 </Td>
+      <Td textAlign="center"> 10 دقائق </Td>
       <Td textAlign="center"> بوسة </Td>
       <Td isNumeric>
         <VStack>
