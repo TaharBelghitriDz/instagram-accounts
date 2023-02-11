@@ -22,7 +22,7 @@ export const CustomAddIcon = (props: ChakraProps & PropsWithChildren) => (
     backgroundColor={props.bg}
   >
     {props.children ? (
-      <Down color="blue.900" h="25px" w="25px" />
+      <Down color={props.color || "blue.900"} h="25px" w="25px" />
     ) : (
       <Add color="green.0" h="25px" w="25px" />
     )}

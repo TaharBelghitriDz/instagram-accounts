@@ -1,4 +1,5 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
+import posts from "../components/posts";
 
 import state from "../utils/state";
 import AccountsPage from "./accounts.page";
@@ -13,6 +14,7 @@ export default (props: { place: string }) => {
   if (place == "الحسابات") Comp = AccountsPage;
   if (place == "البروكسيات") Comp = proxiesPage;
   if (place == "القوائم") Comp = listsPage;
+  if (place == "النشر") Comp = posts;
 
   return (
     <VStack
