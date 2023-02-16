@@ -2,6 +2,26 @@ import { useSyncExternalStore } from "use-sync-external-store/shim";
 import { deepmerge } from "deepmerge-ts";
 import { GroupInutType } from "./api/groups.api";
 
+const isObject = (item: any) =>
+  typeof item === "object" && !Array.isArray(item);
+
+const merge = (target: any, source: any) => {
+  const isDeep = (prop: any) =>
+    isObject(source[prop]) &&
+    target.hasOwnProperty(prop) &&
+    isObject(target[prop]);
+  const replaced: any = Object.getOwnPropertyNames(source)
+    .map((prop) => ({
+      [prop]: isDeep(prop) ? merge(target[prop], source[prop]) : source[prop],
+    }))
+    .reduce((a, b) => ({ ...a, ...b }), {});
+
+  return {
+    ...target,
+    ...replaced,
+  };
+};
+
 function createState<T, R>(
   state: T,
   methods: (currentState: T) => {
@@ -28,13 +48,13 @@ function createState<T, R>(
         typeof (fun(p) as any).then === "function"
       )
         return (fun(p) as Promise<Partial<T>>).then((s: Partial<T>) => {
-          newState = deepmerge(newState, s) as any as T;
+          newState = merge(newState, s) as any as T;
           listeners.forEach((l) => l());
           return newState;
         });
       else
         return (
-          (newState = deepmerge(newState, fun(p)) as any as T),
+          (newState = merge(newState, fun(p)) as any as T),
           listeners.forEach((l) => l()),
           newState
         );
