@@ -1,5 +1,6 @@
 import { HStack, useDisclosure } from "@chakra-ui/react";
 import React, { useState } from "react";
+import state from "../../utils/state";
 import { ActionIcon } from "../custom.button.component";
 import Models from "./models";
 import addAccount from "./models/add.account";
@@ -12,6 +13,9 @@ import changeAccountsStatus from "./models/change.accounts.status";
 import removeAccounts from "./models/remove.accounts";
 
 export default () => {
+  const groups = state.useStore((e) => e.groups);
+  console.log(groups);
+
   const discloser = useDisclosure();
 
   const [Content, setContent] = useState<JSX.Element>(

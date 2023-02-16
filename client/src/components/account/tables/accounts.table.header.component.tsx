@@ -12,10 +12,14 @@ import {
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
 import { Refresh, Settings } from "../../icons";
 import Models from "../models";
+import AccountsAddGroup from "../models/accounts.add.group";
 import AccountsGroupSettings from "../models/accounts.group.settings";
 
 export default () => {
   const discloser = useDisclosure();
+  const AddDiscloser = useDisclosure();
+
+  const groupNamesLists = ["1 المجموعات", "2 المجموعات", "3 المجموعات"];
 
   return (
     <Stack
@@ -25,9 +29,14 @@ export default () => {
       flexDir={{ start: "column", md: "row" }}
     >
       <Models
+        {...AddDiscloser}
+        content={<AccountsAddGroup {...AddDiscloser} />}
+      />
+      <Models
         {...discloser}
         content={<AccountsGroupSettings {...discloser} />}
       />
+
       <Flex alignItems="center">
         <Menu>
           <MenuButton
@@ -55,36 +64,21 @@ export default () => {
             border="none"
             rounded="20px"
           >
-            <MenuItem
-              bg="transparent"
-              _hover={{ bg: "blackAlpha.500" }}
-              rounded="10px"
-              p="10px"
-              px="20px"
-            >
-              1 المجموعات​
-            </MenuItem>
-            <MenuItem
-              bg="transparent"
-              _hover={{ bg: "blackAlpha.500" }}
-              rounded="10px"
-              p="10px"
-              px="20px"
-            >
-              1 المجموعات​
-            </MenuItem>
-            <MenuItem
-              bg="transparent"
-              _hover={{ bg: "blackAlpha.500" }}
-              rounded="10px"
-              p="10px"
-              px="20px"
-            >
-              1 المجموعات​
-            </MenuItem>
+            {groupNamesLists.map((e, i) => (
+              <MenuItem
+                key={i * 23}
+                bg="transparent"
+                _hover={{ bg: "blackAlpha.500" }}
+                rounded="10px"
+                p="10px"
+                px="20px"
+              >
+                {e}​
+              </MenuItem>
+            ))}
           </MenuList>
         </Menu>
-        <ActionIcon text="جديد" onClick={() => console.log("jadid")} />
+        <ActionIcon text="جديد" onClick={() => AddDiscloser.onOpen()} />
       </Flex>
       <HStack spacing="10px">
         <HStack

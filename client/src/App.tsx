@@ -5,6 +5,7 @@ import Login from "./components/login/login";
 import Navbar from "./components/navbar";
 import RightSideBar from "./components/navbar/right.sideBar";
 import Pages from "./pages";
+import state from "./utils/state";
 
 function App() {
   const [count, setCount] = useState();

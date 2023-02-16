@@ -35,7 +35,7 @@ export default (props: {
         as={HStack}
         alignItems="center"
         justifyContent="center"
-        bg={{ start: "rgb(0,0,0,30%)" }}
+        bg={{ start: "rgb(0,0,0,70%)" }}
       >
         <Stack
           w="full"
@@ -49,14 +49,15 @@ export default (props: {
             w="full"
             h="auto"
             p="20px"
-            bg="rgb(0,0,0,50%)"
-            backdropFilter="blur(20px)"
+            bg="rgb(260,260,260,5%)"
+            backdropFilter="blur(50px)"
             rounded="20px"
             spacing="0"
             justifyContent="center"
             alignItems="center"
             ref={ref}
             style={{ margin: "30px" }}
+            boxShadow="0px 0px 20px -10px black"
           >
             {props.content}
           </Stack>

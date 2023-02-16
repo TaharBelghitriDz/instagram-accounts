@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import { loginFun } from "../../utils/api/login.api";
-
+import queryString from "query-string";
 import { UserIcon } from "../icons";
 
 export const InputProps = {
@@ -37,10 +37,20 @@ export default () => {
   const login = () => {
     setIsLoading(() => true);
 
-    loginFun({ email, password }).then(async ({ res, err }) => {
+    loginFun(
+      new URLSearchParams({
+        username: email,
+        password,
+        grant_type: "",
+        scope: "",
+        client_id: "",
+        client_secret: "",
+      })
+    ).then(async ({ res, err }) => {
       setIsLoading(() => false);
 
       console.log(err);
+      console.log(res);
 
       if (!res?.data || err)
         return (
@@ -50,6 +60,13 @@ export default () => {
           })),
           toast({ status: "error", title: "خطا في الارسال", duration: 2000 })
         );
+
+      localStorage.setItem(
+        "token",
+        `${res.data.token_type} ${res.data.access_token}`
+      );
+
+      // console.log(localStorage.getItem("token"));
 
       // function for response
     });

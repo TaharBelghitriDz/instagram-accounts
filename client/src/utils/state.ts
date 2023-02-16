@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "use-sync-external-store/shim";
 import { deepmerge } from "deepmerge-ts";
+import { GroupInutType } from "./api/groups.api";
 
 function createState<T, R>(
   state: T,
@@ -56,9 +57,11 @@ function createState<T, R>(
 const state = {
   place: "الحسابات",
   listPlace: "names",
+  groups: [] as GroupInutType[],
 };
 
 export default createState(state, (currentState) => ({
   changeView: (place) => ({ place }),
   changeListPlace: (listPlace) => ({ listPlace }),
+  changeState: (s: Partial<typeof state>) => ({ ...s }),
 }));

@@ -1,34 +1,44 @@
 import { HStack, Progress, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Fragment } from "react";
 import { newShade } from "../utils/color";
 
 export const ProgressLoading = (props: { text?: string }) => {
   return (
     <VStack
-      w="100px"
+      maxW="300px"
+      w="full"
       // spacing="20px"
       p="10px"
       px="20px"
-      rounded="10px"
+      rounded="full"
       alignItems="center"
       justifyContent="center"
-      bg="blue.900"
-      color="blue.100"
+      // bg="blue.900"
+      //  color="white"
       // color={newShade("#0000FF", -200)}
       // bg={newShade("#0000FF", 200)}
     >
       <Text>{props.text ? props.text : "تحميل"} </Text>
 
       <Progress
-        w="80px"
-        bg="transparent"
+        w="full"
+        // bg="transparent"
         rounded="full"
-        colorScheme="#b4e3f8"
+        color="black"
+        colorScheme="gray"
+        // color="#FFFFFF"
         size="xs"
         isIndeterminate
       />
     </VStack>
   );
 };
+
+export const ProgressLoadingCompnent = () => (
+  <VStack w="full">
+    <ProgressLoading />
+  </VStack>
+);
 
 export default (props: { isLoading: boolean }) => {
   return (

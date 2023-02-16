@@ -1,13 +1,36 @@
 import { CloseButton, HStack, Input, Text, VStack } from "@chakra-ui/react";
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Add } from "../../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
 import { InputProps as Props } from "../../login/login.inputs.component";
-import { EditGroupInterface } from "./accounts.add.group";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
 );
+
+export interface EditGroupInterface {
+  name: string;
+  likes: {
+    from: number;
+    to: number;
+  };
+  time: {
+    from: number;
+    to: number;
+  };
+  comments: {
+    from: number;
+    to: number;
+  };
+  comments_time: {
+    from: number;
+    to: number;
+  };
+  emojis: {
+    from: number;
+    to: number;
+  };
+}
 
 const AccountsGroupElmntProps = {
   w: "full",
@@ -216,7 +239,7 @@ export default (props: { onClose: () => void }) => {
   return (
     <VStack w="full" spacing="20px">
       <HStack w="full" justifyContent="space-between">
-        <Text fontSize="30px">اعدادات المجموعة </Text>
+        <Text fontSize="30px">اضافة المجموعة </Text>
         <CloseButton
           bg="white"
           color="black"
@@ -227,7 +250,6 @@ export default (props: { onClose: () => void }) => {
         />
       </HStack>
       <AccountsGroupInputs values={values} setVelaues={setValues} />
-
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"
@@ -237,6 +259,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
+          onClick={sendFun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

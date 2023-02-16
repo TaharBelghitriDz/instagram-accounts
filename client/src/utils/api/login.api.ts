@@ -1,8 +1,11 @@
 import { axiosFun, endpoint } from "./costant";
 
-export const loginFun = async (data: { email: string; password: string }) =>
+export const loginFun = async (data: any) =>
   axiosFun({
     method: "POST",
-    url: endpoint,
+    headers: {
+      accept: "application/json",
+    },
+    url: endpoint + "/auth/login",
     data,
   });
