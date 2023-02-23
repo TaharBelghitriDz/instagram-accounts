@@ -7,34 +7,40 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Proxies, proxiesGet } from "../../../utils/api/proxies.api";
+import state from "../../../utils/state";
 import ProxiesTableHeader from "./proxies.table.header";
 
-const TableBodyRow = () => {
-  const [remove, setRemove] = useState(false);
-
+const TableBodyRow = (
+  props: Proxies & { setSelect: (p: boolean) => void; remove: boolean }
+) => {
   return (
-    <Tr bg={remove ? "red.900" : ""}>
+    <Tr bg={props.remove ? "red.900" : ""}>
       <Td>
         <Checkbox
           p="10px"
           type="checkbox"
+          checked={props.remove}
           onChange={(e) => {
-            setRemove(() => e.target.checked);
+            console.log("here");
+
+            props.setSelect(e.target.checked);
           }}
         />
       </Td>
 
-      <Td textAlign="center">proxy name</Td>
-      <Td textAlign="center"> 123456789 </Td>
-      <Td textAlign="center">182.102.50.16</Td>
-      <Td textAlign="center">8080</Td>
+      <Td textAlign="center">{props.username}</Td>
+      <Td textAlign="center"> {props.password} </Td>
+      <Td textAlign="center">{props.host}</Td>
+      <Td textAlign="center">{props.port}</Td>
       <Td isNumeric>
         <VStack>
-          <span> 02/02/2023 </span>
-          <span>12:23</span>
+          <span>{props.created_date?.slice(0, 12)}</span>
+          <span>{props.created_date?.slice(13, 23)}</span>
         </VStack>
       </Td>
     </Tr>
@@ -42,6 +48,32 @@ const TableBodyRow = () => {
 };
 
 export default () => {
+  const toast = useToast();
+  const proxiesState = state.useStore((e) => e.proxies);
+  const [select, setSelect] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log("select");
+    console.log(select);
+
+    setSelect(() => []);
+    console.log(select);
+  }, [proxiesState]);
+
+  useState(() => {
+    proxiesGet.then(({ err, res }) => {
+      if (err)
+        return toast({
+          status: "error",
+          title: "خطا في الاتصال",
+          isClosable: true,
+        });
+
+      state.changeState({ proxies: res?.data });
+      return;
+    });
+  });
+
   return (
     <VStack
       w="full"
@@ -53,7 +85,7 @@ export default () => {
       overscrollX="contain"
       overflowX="auto"
     >
-      <ProxiesTableHeader />
+      <ProxiesTableHeader select={select} />
       <Table
         variant="simple"
         colorScheme="whiteAlpha"
@@ -73,10 +105,20 @@ export default () => {
           </Tr>
         </Thead>
         <Tbody>
-          <TableBodyRow />
-          <TableBodyRow />
-          <TableBodyRow />
-          <TableBodyRow />
+          {proxiesState.map((e: any, i: number) => (
+            <TableBodyRow
+              {...e}
+              key={i * 38}
+              remove={select.find((element) => element == e.id)}
+              setSelect={(checked: boolean) =>
+                !checked
+                  ? setSelect((a) => [
+                      ...a.filter((s) => (s != e.id ? e : undefined)),
+                    ])
+                  : setSelect((a) => [...a, e.id])
+              }
+            />
+          ))}
         </Tbody>
       </Table>
     </VStack>

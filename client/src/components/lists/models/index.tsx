@@ -18,6 +18,7 @@ export default (props: {
     handler: () => props.onClose(),
   });
   window.scrollTo(0, 0);
+
   return (
     <AlertDialog
       {...props}

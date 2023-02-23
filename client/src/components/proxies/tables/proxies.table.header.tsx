@@ -5,16 +5,20 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { ComponentType, useState } from "react";
+import { proxiesDelete } from "../../../utils/api/proxies.api";
+import state from "../../../utils/state";
 import Models from "../../account/models";
 import { ActionIcon } from "../../custom.button.component";
 import { Settings } from "../../icons";
 import newProxiesModel from "../models/new.proxies.model";
 import ProxiesSettingsModel from "../models/proxies.settings.model";
 
-export default () => {
+export default (props: { select: string[] }) => {
   const discloser = useDisclosure();
+  const toast = useToast();
 
   const [content, setContent] = useState<JSX.Element>(
     <ProxiesSettingsModel {...discloser} />
@@ -23,6 +27,24 @@ export default () => {
   const view = (Comp: ComponentType<any>) => {
     setContent(() => <Comp {...discloser} />);
     discloser.onOpen();
+  };
+
+  const fun = () => {
+    proxiesDelete(props.select).then(({ err, res }) => {
+      if (err)
+        return toast({
+          status: "error",
+          title: "خطا في الاتصال",
+          isClosable: true,
+        });
+
+      state.changeState({ proxies: res?.data });
+      return toast({
+        status: "success",
+        title: "تم العملية",
+        isClosable: true,
+      });
+    });
   };
 
   return (
@@ -54,6 +76,7 @@ export default () => {
           verticalAlign="center"
           textAlign="center"
           cursor="pointer"
+          onClick={fun}
         >
           حذف الكل
         </Text>

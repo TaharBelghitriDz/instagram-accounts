@@ -1,11 +1,37 @@
 import { Box, HStack, Image, VStack } from "@chakra-ui/react";
+
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { profilePicGet } from "../../../../utils/api/lists/profile.pics.api";
+import state from "../../../../utils/state";
 import ListsHeaderPictures from "../list.body.header/lists.header.pictures";
 
-const Picture = (props: { src: string }) => {
+const Picture = (props: { src: string; id: number }) => {
   const [clicked, setClicked] = useState(false);
-  const toggle = () => setClicked(() => !clicked);
+  const pictsState = state.useStore((e) => e.selectedPics);
+
+  const states = state.useStore((e) => e.profile_pics);
+  useEffect(() => {
+    setClicked(() => false);
+    state.changeState({
+      selectedPics: [],
+    });
+  }, [states]);
+
+  const toggle = () => {
+    if (!clicked)
+      state.changeState({
+        selectedPics: [...pictsState, props.id],
+      });
+    else
+      state.changeState({
+        selectedPics: [
+          ...pictsState.filter((e: any) => (e == props.id ? false : e)),
+        ],
+      });
+
+    setClicked(() => !clicked);
+  };
 
   return (
     <Box
@@ -26,6 +52,7 @@ const Picture = (props: { src: string }) => {
       <Image
         src={props.src}
         onClick={toggle}
+        h="1000px"
         maxH={{ start: "80px", md: "150px" }}
         rounded="10px"
       />
@@ -34,37 +61,26 @@ const Picture = (props: { src: string }) => {
 };
 
 export default () => {
-  const picturs: string[] = [
-    "https://source.unsplash.com/random/?profile_picture&1",
-    "https://source.unsplash.com/random/?profile_picture&2",
-    "https://source.unsplash.com/random/?profile_picture&3",
-    "https://source.unsplash.com/random/?profile_picture&4",
-    "https://source.unsplash.com/random/?profile_picture&5",
-    "https://source.unsplash.com/random/?profile_picture&6",
-    "https://source.unsplash.com/random/?profile_picture&7",
-    "https://source.unsplash.com/random/?profile_picture&8",
-    "https://source.unsplash.com/random/?profile_picture&9",
-    "https://source.unsplash.com/random/?profile_picture&10",
-    "https://source.unsplash.com/random/?profile_picture&11",
-    "https://source.unsplash.com/random/?profile_picture&1",
-    "https://source.unsplash.com/random/?profile_picture&2",
-    "https://source.unsplash.com/random/?profile_picture&3",
-    "https://source.unsplash.com/random/?profile_picture&4",
-    "https://source.unsplash.com/random/?profile_picture&5",
-    "https://source.unsplash.com/random/?profile_picture&6",
-    "https://source.unsplash.com/random/?profile_picture&7",
-    "https://source.unsplash.com/random/?profile_picture&8",
-    "https://source.unsplash.com/random/?profile_picture&9",
-    "https://source.unsplash.com/random/?profile_picture&10",
-    "https://source.unsplash.com/random/?profile_picture&11",
-  ];
+  const pictureState = state.useStore((e) => e.profile_pics);
+  const [pictures, setPictures] = useState([...pictureState]);
+
+  useState(() => {
+    profilePicGet.then(({ err, res }) => {
+      if (!err) state.changeState({ profile_pics: res?.data });
+    });
+  });
+
+  useEffect(() => {
+    setPictures(() => [...pictureState]);
+  }, [pictureState]);
 
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListsHeaderPictures />
+
       <HStack spacing="0" flexWrap="wrap" justifyContent="space-evenly">
-        {picturs.map((e, i) => (
-          <Picture key={i * 34} src={e} />
+        {pictures.map((e, i) => (
+          <Picture key={i * 34} src={e.profile_pic_link} id={e.id} />
         ))}
       </HStack>
     </VStack>

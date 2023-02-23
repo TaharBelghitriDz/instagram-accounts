@@ -1,5 +1,7 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { namesGet } from "../../../../utils/api/lists/names.api";
+import state from "../../../../utils/state";
 import ListBodyComponentHeader from "../list.body.header/list.body.component.header";
 
 const Name = (props: {
@@ -31,22 +33,36 @@ const Name = (props: {
 );
 
 export default () => {
+  const namesState = state.useStore((e) => e.name);
+
   const [names, setNames] = useState([
-    { name: "تسويق الكتروني", selected: false },
-    { name: "اكواد خصم", selected: false },
-    { name: "تسويق الكتروني", selected: false },
-    { name: "اكواد خصم", selected: false },
-    { name: "تسويق الكتروني", selected: false },
-    { name: "اكواد خصم", selected: false },
-    { name: "تسويق الكتروني", selected: false },
-    { name: "اكواد خصم", selected: false },
-    { name: "تسويق الكتروني", selected: false },
-    { name: "اكواد خصم", selected: false },
+    ...namesState.map((e: any) => ({
+      name: e.name,
+      selected: false,
+      id: e.id,
+    })),
   ]);
+
+  useEffect(
+    () =>
+      setNames(() => [
+        ...namesState.map((e: any) => ({
+          name: e.name,
+          selected: false,
+          id: e.id,
+        })),
+      ]),
+    [namesState]
+  );
+
+  useEffect(() => {
+    state.changeState({ selcted: names.filter((e) => e.id).map((e) => e.id) });
+  }, [names]);
 
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader
+        place="name"
         names={names}
         status={names.filter((e) => e.selected == false && e).length > 0}
         selectAll={(checked: boolean) => {

@@ -10,12 +10,36 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { postsGet } from "../../utils/api/posts.api";
+import state from "../../utils/state";
 import { CustomAddIcon } from "../custom.button.component";
 import PostsModel from "./posts.model";
 import PostsRows from "./posts.rows";
 
+export type Post = {
+  title_id: number;
+  group_id: number;
+  is_active: boolean;
+  time_between_posting: number;
+  is_photo: true;
+  id?: number;
+};
+
 export default () => {
+  const postsState = state.useStore((e) => e.posts);
+
+  const [posts, setPosts] = useState<Post[]>([...postsState]);
   const discloser = useDisclosure();
+
+  useState(() => {
+    postsGet.then(({ err, res }) => {
+      if (err) return;
+      setPosts(() => res?.data);
+    });
+  });
+
+  useEffect(() => setPosts(() => [...postsState]), [postsState]);
 
   return (
     <VStack
@@ -67,9 +91,9 @@ export default () => {
           </Tr>
         </Thead>
         <Tbody>
-          <PostsRows onClick={() => discloser.onOpen()} />
-          <PostsRows onClick={() => discloser.onOpen()} />
-          <PostsRows onClick={() => discloser.onOpen()} />
+          {posts?.map((e, i) => (
+            <PostsRows {...e} key={i * 45} onClick={() => discloser.onOpen()} />
+          ))}
         </Tbody>
       </Table>
     </VStack>

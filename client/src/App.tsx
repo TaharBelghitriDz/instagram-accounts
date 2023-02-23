@@ -1,18 +1,39 @@
-import { Divider, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import { Divider, Image, Stack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import Loading, { ProgressLoading } from "./components/loading";
+import { ProgressLoadingCompnent } from "./components/loading";
 import Login from "./components/login/login";
 import Navbar from "./components/navbar";
-import RightSideBar from "./components/navbar/right.sideBar";
 import Pages from "./pages";
-import state from "./utils/state";
+import { initialData } from "./utils/api/accounts.api";
 
 function App() {
-  const [count, setCount] = useState();
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = window.location.pathname;
 
   if (location == "/login") return <Login />;
+
+  const token = localStorage.getItem("token");
+  if (!token && location != "/login") window.location.replace("/login");
+
+  if (token)
+    useState(() =>
+      initialData.then((res) => {
+        console.log("loaded");
+
+        if (!res)
+          return toast({
+            status: "error",
+            isClosable: true,
+            description: "خطا في الاتصال",
+          });
+
+        setIsLoading(() => false);
+      })
+    );
+
+  if (isLoading) return <ProgressLoadingCompnent />;
 
   return (
     <Stack w="full" alignItems="center" justifyContent="center">
@@ -43,8 +64,6 @@ function App() {
         />
 
         <Pages place="/" />
-        {/* <ProgressLoading />
-      <Loading isLoading={false} /> */}
       </Stack>
     </Stack>
   );

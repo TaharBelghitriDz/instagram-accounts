@@ -1,8 +1,29 @@
-import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
+import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
+import { profilePicChange } from "../../../utils/api/lists/profile.pics.api";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
-  const fun = () => {};
+  const toast = useToast();
+
+  const fun = () => {
+    profilePicChange().then(({ err }) => {
+      console.log(err);
+
+      if (err)
+        return toast({
+          status: "error",
+          isClosable: true,
+          title: "خطا في الارسال",
+        });
+
+      toast({
+        status: "success",
+        isClosable: true,
+        title: "تم التغيير",
+      });
+    });
+  };
+
   return (
     <VStack w="full" spacing="50px">
       <HStack w="full" justifyContent="space-between">

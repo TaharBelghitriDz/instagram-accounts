@@ -1,6 +1,38 @@
-import { Divider, HStack, Image, Stack, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Flex,
+  HStack,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+  captionAdd,
+  captionDelete,
+  captionGet,
+} from "../../../../utils/api/lists/captions.api";
+import {
+  titleAdd,
+  titleDelete,
+  titleGet,
+  titleUpdate,
+} from "../../../../utils/api/lists/titles.api";
+import state from "../../../../utils/state";
+import { CustomAddIcon } from "../../../custom.button.component";
 import { Historiq, Pen } from "../../../icons";
+import Models from "../../models";
+import ListsAddTitle from "../../models/lists.add.title";
+import listsAddTitle from "../../models/lists.add.title";
+import ListsRemove from "../../models/lists.remove";
 
 const picturs: string[] = [
   "https://source.unsplash.com/random/?instagram_reels&1",
@@ -16,53 +48,123 @@ const picturs: string[] = [
   "https://source.unsplash.com/random/?instagram_reels&11",
 ];
 
-const Texts = () => {
-  const TextItem = () => (
-    <HStack
-      as={motion.div}
-      whileHover={{ backgroundColor: "#020202" }}
-      spacing="10px"
-      justifyContent="space-between"
-      w="full"
-      alignItems="start"
-      p="10px"
-      bg="blackAlpha.400"
-      rounded="10px"
-    >
-      <Text>
-        أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك
-        احداث الصينية.
-      </Text>
-      <Stack
-        spacing={{ start: "10px", md: "0" }}
-        flexDir={{ start: "column", md: "row" }}
-      >
-        <Pen
-          h="40px"
-          w="40px"
-          p="10px"
-          bg="green.900"
-          color="green.100"
-          rounded="5px"
-          cursor="pointer"
-        />
-        <Divider borderColor="transparent" w="10px" h="0px" />
-        <Historiq
-          h="40px"
-          w="40px"
-          p="10px"
-          bg="red.800"
-          color="red.100"
-          rounded="5px"
-          cursor="pointer"
-        />
-      </Stack>
-    </HStack>
+const TitleEdit = () => {
+  const [titles, setTitles] = useState<{ title: string; id: number }[]>([]);
+  const discloser = useDisclosure();
+
+  useState(() => {
+    titleGet.then(({ res }) => {
+      state.changeState({ titles: res?.data });
+      setTitles(() => [...res?.data]);
+    });
+  });
+
+  const Add = () => (
+    <ListsAddTitle
+      {...discloser}
+      name="اضافة عنوان"
+      fun={(e: any) => {
+        titleAdd({ title: e }).then(({ res, err }) => {
+          if (err) return;
+
+          state.changeState({ titles: [...titles, res?.data] });
+          setTitles((e) => [...e, res?.data]);
+          discloser.onClose();
+        });
+      }}
+    />
   );
+
+  const TextItem = (props: { name: string; id: number }) => {
+    const editDiscloser = useDisclosure();
+    const removeDiscloser = useDisclosure();
+
+    const Remove = () => (
+      <ListsRemove
+        {...removeDiscloser}
+        fun={() => {
+          titleDelete(props.id).then(({ res, err }) => {
+            state.changeState({ titles: [...res?.data] });
+            setTitles((e) => [...res?.data]);
+            removeDiscloser.onClose();
+          });
+        }}
+      />
+    );
+
+    const Edit = () => (
+      <ListsAddTitle
+        {...editDiscloser}
+        name="تعديل على عنوان"
+        content={props.name}
+        fun={(e: any) => {
+          titleUpdate({ id: props.id, title: e }).then(({ res, err }) => {
+            if (err) return;
+
+            state.changeState({
+              titles: [
+                ...titles.map((e) => (e.id == res?.data.id ? res?.data : e)),
+              ],
+            });
+            setTitles((e) => [
+              ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
+            ]);
+            discloser.onClose();
+          });
+        }}
+      />
+    );
+
+    return (
+      <HStack
+        as={motion.div}
+        whileHover={{ backgroundColor: "#020202" }}
+        spacing="10px"
+        justifyContent="space-between"
+        w="full"
+        alignItems="start"
+        p="10px"
+        bg="blackAlpha.400"
+        rounded="10px"
+      >
+        <Models {...editDiscloser} content={<Edit />} />
+        <Models {...removeDiscloser} content={<Remove />} />
+
+        <Text>{props.name}</Text>
+        <Stack
+          spacing={{ start: "10px", md: "0" }}
+          flexDir={{ start: "column", md: "row" }}
+        >
+          <Pen
+            h="40px"
+            w="40px"
+            p="10px"
+            bg="green.900"
+            color="green.100"
+            rounded="5px"
+            cursor="pointer"
+            onClick={editDiscloser.onOpen}
+          />
+          <Divider borderColor="transparent" w="10px" h="0px" />
+          <Historiq
+            h="40px"
+            w="40px"
+            p="10px"
+            bg="red.800"
+            color="red.100"
+            rounded="5px"
+            cursor="pointer"
+            onClick={removeDiscloser.onOpen}
+          />
+        </Stack>
+      </HStack>
+    );
+  };
 
   return (
     <VStack
-      maxW={{ start: "full", md: "46%" }}
+      w="full"
+      maxW={{ start: "full" }}
       alignItems="start"
       spacing="20px"
       bg="blackAlpha.400"
@@ -70,6 +172,155 @@ const Texts = () => {
       rounded="15px"
       style={{ margin: "10px" }}
     >
+      <Models {...discloser} content={<Add />} />
+      <Text
+        bg="green.900"
+        color="green.100"
+        p="20px"
+        py="10px"
+        rounded="15px"
+        fontSize="25px"
+      >
+        عناوين
+      </Text>
+      <HStack w="full" spacing={5}>
+        <Text cursor="pointer"> العدد {titles.length} </Text>
+        <Text
+          cursor="pointer"
+          p="10px"
+          bg="red.800"
+          color="red.100"
+          rounded="10px"
+        >
+          حذف الكل
+        </Text>
+        <Text
+          cursor="pointer"
+          p="10px"
+          bg="blue.800"
+          color="blue.100"
+          rounded="10px"
+          onClick={discloser.onOpen}
+        >
+          اضافة
+        </Text>
+      </HStack>
+      <VStack maxH="300px" w="full" overflowY="scroll">
+        {titles.map((e, i) => (
+          <TextItem key={i * 34} name={e.title} id={e.id} />
+        ))}
+      </VStack>
+    </VStack>
+  );
+};
+
+const Texts = (props: { selctedId: string }) => {
+  const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
+  const discloser = useDisclosure();
+
+  console.log("props.selctedId");
+  console.log(props.selctedId);
+
+  useState(() => {
+    captionGet(props.selctedId).then(({ res, err }) => {
+      state.changeState({ caption: res?.data });
+      setTitles(() => [...res?.data]);
+    });
+  });
+
+  const Add = () => (
+    <ListsAddTitle
+      {...discloser}
+      name="اضافة عنوان"
+      fun={(e: any) => {
+        captionAdd({ id: props.selctedId, data: [{ caption: e }] }).then(
+          ({ res, err }) => {
+            if (err) return;
+
+            state.changeState({ caption: [...res?.data] });
+            setTitles(() => [...res?.data]);
+            discloser.onClose();
+          }
+        );
+      }}
+    />
+  );
+  const TextItem = (props2: { name: string; id: number }) => {
+    const removeDiscloser = useDisclosure();
+
+    const Remove = () => (
+      <ListsRemove
+        {...removeDiscloser}
+        fun={() => {
+          captionDelete({ id: props.selctedId, data: [props2.id] }).then(
+            ({ res, err }) => {
+              if (err) return;
+
+              state.changeState({ titles: [...res?.data] });
+              setTitles((e) => [...res?.data]);
+              removeDiscloser.onClose();
+            }
+          );
+        }}
+      />
+    );
+
+    return (
+      <HStack
+        as={motion.div}
+        whileHover={{ backgroundColor: "#020202" }}
+        spacing="10px"
+        justifyContent="space-between"
+        w="full"
+        alignItems="start"
+        p="10px"
+        bg="blackAlpha.400"
+        rounded="10px"
+      >
+        <Models {...removeDiscloser} content={<Remove />} />
+        <Text>{props2.name}</Text>
+        <Stack
+          spacing={{ start: "10px", md: "0" }}
+          flexDir={{ start: "column", md: "row" }}
+        >
+          <Pen
+            h="40px"
+            w="40px"
+            p="10px"
+            bg="green.900"
+            color="green.100"
+            rounded="5px"
+            cursor="pointer"
+          />
+          <Divider borderColor="transparent" w="10px" h="0px" />
+          <Historiq
+            h="40px"
+            w="40px"
+            p="10px"
+            bg="red.800"
+            color="red.100"
+            rounded="5px"
+            cursor="pointer"
+            onClick={removeDiscloser.onOpen}
+          />
+        </Stack>
+      </HStack>
+    );
+  };
+
+  return (
+    <VStack
+      w="full"
+      maxW={{ start: "full" }}
+      alignItems="start"
+      spacing="20px"
+      bg="blackAlpha.400"
+      p="10px"
+      rounded="15px"
+      style={{ margin: "10px" }}
+    >
+      <Models {...discloser} content={<Add />} />
+
       <Text
         bg="green.900"
         color="green.100"
@@ -80,7 +331,7 @@ const Texts = () => {
       >
         النصوص
       </Text>
-      <HStack w="full" justifyContent="space-between">
+      <HStack w="full" spacing={5}>
         <Text cursor="pointer"> العدد 5 </Text>
         <Text
           cursor="pointer"
@@ -97,117 +348,83 @@ const Texts = () => {
           bg="blue.800"
           color="blue.100"
           rounded="10px"
+          onClick={discloser.onOpen}
         >
           اضافة
         </Text>
       </HStack>
-      <VStack maxH="300px" overflowY="scroll">
-        <TextItem />
-        <TextItem />
-        <TextItem />
-        <TextItem />
-        <TextItem />
+      <VStack maxH="300px" w="full" overflowY="scroll">
+        {titles.map((e, i) => (
+          <TextItem key={i * 34} name={e.caption} id={e.id} />
+        ))}
       </VStack>
     </VStack>
   );
 };
 
 const Titles = () => {
-  const TextItem = () => (
-    <HStack
-      as={motion.div}
-      whileHover={{ backgroundColor: "#020202" }}
-      spacing="10px"
-      justifyContent="space-between"
-      w="full"
-      alignItems="start"
-      p="10px"
-      bg="blackAlpha.400"
-      rounded="10px"
-    >
-      <Text>أي. والكساد تم, هو كلا تحرّك احداث الصينية.</Text>
-      <Stack
-        spacing={{ start: "10px", md: "0" }}
-        flexDir={{ start: "column", md: "row" }}
-        justifyContent="space-between"
-      >
-        <Pen
-          h="40px"
-          w="40px"
-          p="10px"
-          bg="green.900"
-          color="green.100"
-          rounded="5px"
-          cursor="pointer"
-        />
-        <Divider borderColor="transparent" w="10px" h="0px" />
-        <Historiq
-          h="40px"
-          w="40px"
-          p="10px"
-          bg="red.800"
-          color="red.100"
-          rounded="5px"
-          cursor="pointer"
-        />
-      </Stack>
-    </HStack>
-  );
+  const titles = state.useStore((e) => e.titles);
+  const selected = state.useStore((e) => e.selectedTitle);
 
   return (
-    <VStack
-      maxW={{ start: "full", md: "46%" }}
-      style={{ margin: "10px" }}
-      alignItems="start"
-      spacing="20px"
-      bg="blackAlpha.400"
-      p="10px"
-      rounded="15px"
-      w="full"
-    >
+    <Flex w="full" alignItems="center">
+      <Menu>
+        <MenuButton
+          variant="outline"
+          as={Button}
+          rightIcon={
+            <CustomAddIcon color="white" bg="whiteAlpha.100" children="-" />
+          }
+          rounded="20px"
+          _hover={{}}
+          border="none"
+          bg="whiteAlpha.100"
+          p="10px"
+          py="25px"
+          _active={{ backgroundColor: "whiteAlpha.200" }}
+        >
+          اختيار عنوان
+        </MenuButton>
+
+        <MenuList
+          bg="rgb(0,0,0,50%)"
+          backdropFilter="blur(30px)"
+          p="20px"
+          border="none"
+          rounded="20px"
+        >
+          {titles.map((e: any, i: any) => (
+            <MenuItem
+              key={i * 60}
+              bg={selected == e.id ? "gray" : "transparent"}
+              _hover={{ bg: "blackAlpha.500" }}
+              rounded="10px"
+              p="10px"
+              px="20px"
+              onClick={() => state.changeState({ selectedTitle: e.id })}
+            >
+              {e.title}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+      <Divider borderColor="transparent" w="20px" />
       <Text
-        bg="green.900"
-        color="green.100"
-        p="20px"
-        py="10px"
-        rounded="15px"
-        fontSize="25px"
+        p="10px"
+        bg="blue.0"
+        color="blue.1"
+        rounded="10px"
+        fontWeight="bold"
       >
-        العناوين
+        {titles.filter((e: any) => e.id == selected && e)[0]?.title}
       </Text>
-      <HStack w="full" justifyContent="space-between">
-        <Text cursor="pointer"> العدد 5 </Text>
-        <Text
-          cursor="pointer"
-          p="10px"
-          bg="red.800"
-          color="red.100"
-          rounded="10px"
-        >
-          حذف الكل
-        </Text>
-        <Text
-          cursor="pointer"
-          p="10px"
-          bg="blue.800"
-          color="blue.100"
-          rounded="10px"
-        >
-          اضافة
-        </Text>
-      </HStack>
-      <VStack maxH="300px" overflowY="scroll">
-        <TextItem />
-        <TextItem />
-        <TextItem />
-        <TextItem />
-        <TextItem />
-      </VStack>
-    </VStack>
+    </Flex>
   );
 };
 
-const PostsImages = () => {
+const PostsImages = (props: { selctedId: string }) => {
+  const [posts, setPosts] = useState<any[]>();
+
   return (
     <VStack
       maxW={{ start: "full", md: "46%" }}
@@ -263,7 +480,7 @@ const PostsImages = () => {
     </VStack>
   );
 };
-const ReelsImages = () => {
+const ReelsImages = (props: { selctedId: string }) => {
   return (
     <VStack
       maxW={{ start: "full", md: "46%" }}
@@ -321,12 +538,19 @@ const ReelsImages = () => {
 };
 
 export default () => {
+  const selected = state.useStore((e) => e.selectedTitle);
+
   return (
     <HStack w="full" flexWrap="wrap" justifyContent="space-between">
-      <Texts />
+      <TitleEdit />
       <Titles />
-      <PostsImages />
-      <ReelsImages />
+      {selected !== "" && (
+        <>
+          <Texts selctedId={selected} />
+          {/* <PostsImages selctedId={selected} />
+          <ReelsImages selctedId={selected} /> */}
+        </>
+      )}
     </HStack>
   );
 };

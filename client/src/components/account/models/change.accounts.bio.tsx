@@ -1,7 +1,26 @@
-import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
+import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
+import { bioChange } from "../../../utils/api/lists/bio.api";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
+  const toast = useToast();
+
+  const fun = () => {
+    bioChange().then(({ err }) => {
+      if (err)
+        return toast({
+          status: "error",
+          isClosable: true,
+          title: "خطا في الارسال",
+        });
+
+      toast({
+        status: "success",
+        isClosable: true,
+        title: "تم التغيير",
+      });
+    });
+  };
   return (
     <VStack w="full" spacing="50px">
       <HStack w="full" justifyContent="space-between">
@@ -24,6 +43,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
+          onClick={fun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

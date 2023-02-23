@@ -9,9 +9,75 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Account } from "../../../utils/api/accounts.api";
+import state from "../../../utils/state";
+import { ProgressLoadingCompnent } from "../../loading";
 import AccountsTableHeaderComponent from "./accounts.table.header.component";
+
+const Row = () => {
+  const account = state.useStore((e) => e.accounts);
+  const [accounts, setAccounts] = useState<Account[]>(account);
+  const [isLoading, setIsLoading] = useState(true);
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
+  const toast = useToast();
+
+  // const accounts: Account[] = state.useStore((e) => e.accounts);
+
+  // useState(
+  //   (!isLoading && setIsLoading(() => true),
+  //   accountGet(selectedGroup).then(({ err, res }) => {
+  //     if (err)
+  //       toast({
+  //         status: "error",
+  //         isClosable: true,
+  //         title: "لا توجد حسابات في المجموعة",
+  //       });
+  //     setAccounts(() => res?.data);
+  //     setIsLoading(() => false);
+  //   }))
+  // );
+
+  useEffect(() => {
+    // accountGet(selectedGroup).then(({ res }) => {
+    //   setAccounts(() => res?.data);
+    // });
+  }, [selectedGroup]);
+
+  return (
+    <Tbody>
+      {accounts?.map((e, i) => (
+        <Tr key={i * 12}>
+          <Td>
+            <Image
+              src={e.profile_pic}
+              h="75px"
+              minW="75"
+              w="75px"
+              rounded="10px"
+            />
+          </Td>
+          <Td textAlign="center">{e.username}</Td>
+          <Td textAlign="center"> {e.status} </Td>
+          <Td textAlign="center">
+            <Text p="10px" rounded="10px" bg="green.900" color="green.100">
+              {e.status}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <VStack>
+              <span>{e.created_date.slice(0, 12)}</span>
+              <span>{e.created_date.slice(13, 23)}</span>
+            </VStack>
+          </Td>
+        </Tr>
+      ))}
+    </Tbody>
+  );
+};
 
 export default () => {
   return (
@@ -43,46 +109,7 @@ export default () => {
             <Th textAlign="center">تاريخ الاضافة</Th>
           </Tr>
         </Thead>
-        <Tbody>
-          <Tr>
-            <Td>
-              <Image
-                src="/side.back.png"
-                h="75px"
-                minW="75"
-                w="75px"
-                rounded="10px"
-              />
-            </Td>
-            <Td textAlign="center">اسم الحساب</Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td textAlign="center">
-              <Text p="10px" rounded="10px" bg="green.900" color="green.100">
-                نشط
-              </Text>
-            </Td>
-            <Td isNumeric>
-              <VStack>
-                <span> 02/02/2023 </span>
-                <span>12:23</span>
-              </VStack>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Image src="/side.back.png" h="75px" w="75px" rounded="10px" />
-            </Td>
-            <Td textAlign="center">اسم الحساب</Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td textAlign="center"> نشط </Td>
-            <Td isNumeric>
-              <VStack>
-                <span> 02/02/2023 </span>
-                <span>12:23</span>
-              </VStack>
-            </Td>
-          </Tr>
-        </Tbody>
+        <Row />
       </Table>
     </VStack>
   );

@@ -15,6 +15,7 @@ import { InputProps } from "./login.inputs.component";
 export default () => {
   const [isError, setError] = useState({ name: "", place: "" });
   const [isLoading, setIsLoading] = useState(false);
+
   const [{ email, password }, setInputs] = useState({
     password: "",
     email: "",
@@ -25,10 +26,17 @@ export default () => {
   const login = () => {
     setIsLoading(() => true);
 
-    loginFun({ email, password }).then(async ({ res, err }) => {
+    loginFun(
+      new URLSearchParams({
+        username: email,
+        password,
+        grant_type: "",
+        scope: "",
+        client_id: "",
+        client_secret: "",
+      })
+    ).then(async ({ res, err }) => {
       setIsLoading(() => false);
-
-      console.log(err);
 
       if (!res?.data || err)
         return (
@@ -39,9 +47,14 @@ export default () => {
           toast({ status: "error", title: "خطا في الارسال", duration: 2000 })
         );
 
-      // function for response
+      localStorage.setItem(
+        "token",
+        `${res.data.token_type} ${res.data.access_token}`
+      );
+      window.location.replace("/");
     });
   };
+
   return (
     <VStack
       alignItems="center"

@@ -9,17 +9,20 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { GroupInutType } from "../../../utils/api/groups.api";
+import state from "../../../utils/state";
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
-import { Refresh, Settings } from "../../icons";
+import { Historiq, Refresh, Settings } from "../../icons";
 import Models from "../models";
 import AccountsAddGroup from "../models/accounts.add.group";
 import AccountsGroupSettings from "../models/accounts.group.settings";
+import RemoveGroup from "../models/remove.group";
 
 export default () => {
   const discloser = useDisclosure();
   const AddDiscloser = useDisclosure();
-
-  const groupNamesLists = ["1 المجموعات", "2 المجموعات", "3 المجموعات"];
+  const removeDiscloser = useDisclosure();
+  const groups: GroupInutType[] = state.useStore((e) => e.groups);
 
   return (
     <Stack
@@ -33,10 +36,13 @@ export default () => {
         content={<AccountsAddGroup {...AddDiscloser} />}
       />
       <Models
+        {...removeDiscloser}
+        content={<RemoveGroup {...removeDiscloser} />}
+      />
+      <Models
         {...discloser}
         content={<AccountsGroupSettings {...discloser} />}
       />
-
       <Flex alignItems="center">
         <Menu>
           <MenuButton
@@ -64,7 +70,7 @@ export default () => {
             border="none"
             rounded="20px"
           >
-            {groupNamesLists.map((e, i) => (
+            {groups.map((e, i) => (
               <MenuItem
                 key={i * 23}
                 bg="transparent"
@@ -72,8 +78,9 @@ export default () => {
                 rounded="10px"
                 p="10px"
                 px="20px"
+                onClick={() => state.changeState({ selectedGroup: e.id })}
               >
-                {e}​
+                {e.name}​
               </MenuItem>
             ))}
           </MenuList>
@@ -81,6 +88,20 @@ export default () => {
         <ActionIcon text="جديد" onClick={() => AddDiscloser.onOpen()} />
       </Flex>
       <HStack spacing="10px">
+        <HStack
+          w="40px"
+          h="40px"
+          rounded="10px"
+          spacing="0"
+          justifyContent="center"
+          alignContent="center"
+          bg="red.900"
+          color="red.100"
+          cursor="pointer"
+          onClick={removeDiscloser.onOpen}
+        >
+          <Historiq w="24px" h="24px" bg="" />
+        </HStack>
         <HStack
           w="40px"
           h="40px"

@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import { Add } from "../../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
 import { InputProps as Props } from "../../login/login.inputs.component";
-import { EditGroupInterface } from "./accounts.add.group";
+import { AccountsGroupInputs, EditGroupInterface } from "./accounts.add.group";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
@@ -17,201 +17,29 @@ const AccountsGroupElmntProps = {
   rounded: "15px",
 };
 
-const AccountsGroupInputs = (props: {
-  values: EditGroupInterface;
-  setVelaues: React.Dispatch<React.SetStateAction<EditGroupInterface>>;
-}) => {
-  return (
-    <Fragment>
-      <VStack {...AccountsGroupElmntProps} w="full">
-        <Text>اسم المجموعة</Text>
-        <AccountsSettingsInput
-          placeholder=" تعديل اسم المجموعة"
-          w="100%"
-          value={props.values.name}
-          onChange={({ target: { value } }) =>
-            props.setVelaues((e) => ({ ...e, name: value }))
-          }
-        />
-      </VStack>
-      <VStack {...AccountsGroupElmntProps}>
-        <Text> عدد الاعجابات</Text>
-        <HStack w="90%" justifyContent="space-between">
-          <Text>من</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.likes.from}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                likes: { from: parseInt(value), to: props.values.likes.to },
-              }))
-            }
-          />
-          <Text>الى</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.likes.to}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                likes: { to: parseInt(value), from: props.values.likes.from },
-              }))
-            }
-          />
-        </HStack>
-      </VStack>
-      <VStack {...AccountsGroupElmntProps}>
-        <Text>الفاصل الزمني</Text>
-        <HStack w="90%" justifyContent="space-between">
-          <Text>من</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.time.from}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                time: { from: parseInt(value), to: props.values.time.to },
-              }))
-            }
-          />
-          <Text>الى</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.time.to}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                time: { to: parseInt(value), from: props.values.time.from },
-              }))
-            }
-          />
-        </HStack>
-      </VStack>
-      <VStack {...AccountsGroupElmntProps}>
-        <Text>عدد التعليقات</Text>
-        <HStack w="90%" justifyContent="space-between">
-          <Text>من</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.comments.from}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                comments: {
-                  from: parseInt(value),
-                  to: props.values.comments.to,
-                },
-              }))
-            }
-          />
-          <Text>الى</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.comments.to}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                comments: {
-                  to: parseInt(value),
-                  from: props.values.comments.from,
-                },
-              }))
-            }
-          />
-        </HStack>
-      </VStack>
-      <VStack {...AccountsGroupElmntProps}>
-        <Text>الفاصل الزمني للتعليقات</Text>
-        <HStack w="90%" justifyContent="space-between">
-          <Text>من</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.comments_time.from}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                comments_time: {
-                  from: parseInt(value),
-                  to: props.values.comments_time.to,
-                },
-              }))
-            }
-          />
-          <Text>الى</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.comments_time.to}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                comments_time: {
-                  to: parseInt(value),
-                  from: props.values.comments_time.from,
-                },
-              }))
-            }
-          />
-        </HStack>
-      </VStack>
-      <VStack {...AccountsGroupElmntProps}>
-        <Text>عدد الاموجي لكل تعليق</Text>
-        <HStack w="90%" justifyContent="space-between">
-          <Text>من</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.emojis.from}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                emojis: {
-                  from: parseInt(value),
-                  to: props.values.emojis.to,
-                },
-              }))
-            }
-          />
-          <Text>الى</Text>
-          <AccountsSettingsInput
-            w="30%"
-            type="number"
-            value={props.values.emojis.to}
-            onChange={({ target: { value } }) =>
-              props.setVelaues((e) => ({
-                ...e,
-                emojis: {
-                  to: parseInt(value),
-                  from: props.values.emojis.from,
-                },
-              }))
-            }
-          />
-        </HStack>
-      </VStack>
-    </Fragment>
-  );
-};
-
 export default (props: { onClose: () => void }) => {
   const [values, setValues] = useState({
-    name: "_",
-    likes: { from: 0, to: 0 },
-    time: { from: 0, to: 0 },
-    comments: { from: 0, to: 0 },
-    comments_time: { from: 0, to: 0 },
-    emojis: { from: 0, to: 0 },
+    name: "",
+
+    likes_from: 0,
+    likes_to: 0,
+
+    comments_from: 0,
+    comments_to: 0,
+
+    time_between_likes_from: 0,
+    time_between_likes_to: 0,
+
+    time_between_comments_from: 0,
+    time_between_comments_to: 0,
+
+    emojis_number_from: 0,
+    emojis_number_to: 0,
   });
 
-  const sendFun = () => {};
+  const sendFun = () => {
+    console.log("here ");
+  };
 
   return (
     <VStack w="full" spacing="20px">

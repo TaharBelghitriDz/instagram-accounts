@@ -1,31 +1,11 @@
-import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
-import { namesChange } from "../../../utils/api/accounts.api";
+import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
 import { Add } from "../../icons";
 
-export default (props: { onClose: () => void }) => {
-  const toast = useToast();
-
-  const fun = () => {
-    namesChange().then(({ err }) => {
-      if (err)
-        return toast({
-          status: "error",
-          isClosable: true,
-          title: "خطا في الارسال",
-        });
-
-      toast({
-        status: "success",
-        isClosable: true,
-        title: "تم التغيير",
-      });
-    });
-  };
-
+export default (props: { onClose: () => void; fun: () => void }) => {
   return (
     <VStack w="full" spacing="50px">
       <HStack w="full" justifyContent="space-between">
-        <Text fontSize="30px"> تغيير اسماء الحسابات</Text>
+        <Text fontSize="30px"> تاكيد الحدف</Text>
         <CloseButton
           bg="white"
           color="black"
@@ -35,6 +15,7 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
+
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"
@@ -44,7 +25,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
-          onClick={fun}
+          onClick={() => props.fun()}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

@@ -1,6 +1,9 @@
 import { useSyncExternalStore } from "use-sync-external-store/shim";
 import { deepmerge } from "deepmerge-ts";
 import { GroupInutType } from "./api/groups.api";
+import { Proxies } from "./api/proxies.api";
+import { Account } from "./api/accounts.api";
+import { Post } from "../components/posts";
 
 const isObject = (item: any) =>
   typeof item === "object" && !Array.isArray(item);
@@ -70,6 +73,7 @@ function createState<T, R>(
     useStore: (field: (s: typeof state) => any) =>
       useSyncExternalStore(subscribe, () => field(newState)),
     sUpdate,
+    state: newState,
     ...newMethods,
   };
 }
@@ -77,7 +81,20 @@ function createState<T, R>(
 const state = {
   place: "الحسابات",
   listPlace: "names",
+  selectedGroup: "",
   groups: [] as GroupInutType[],
+  accounts: [] as Account[],
+  proxies: [] as Proxies[],
+  name: [] as { name: string; id: number }[],
+  bio: [] as { bio: string; id: number }[],
+  selcted: [] as number[],
+  profile_pics: [] as { profile_pic_link: string; id: number }[],
+  selectedPics: [] as number[],
+  postSelected: {} as { title: number; group: number },
+  titles: [] as { title: string; id: number }[],
+  selectedTitle: "",
+  captions: [] as { caption: string; id: number }[],
+  posts: [] as Post[],
 };
 
 export default createState(state, (currentState) => ({

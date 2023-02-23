@@ -1,15 +1,16 @@
 import { HStack, Td, Text, Tr, VStack } from "@chakra-ui/react";
 import { useState } from "react";
+import { Post } from ".";
 
-export default (props: { onClick: () => void }) => {
+export default (props: Post & { onClick: () => void }) => {
   const [remove, setRemove] = useState(false);
 
   return (
     <Tr bg={remove ? "red.900" : ""}>
-      <Td textAlign="center"> كود ماكس </Td>
-      <Td textAlign="center"> المجموعة 1 </Td>
-      <Td textAlign="center"> 10 دقائق </Td>
-      <Td textAlign="center"> بوسة </Td>
+      <Td textAlign="center">{props.title_id}</Td>
+      <Td textAlign="center">{props.group_id}</Td>
+      <Td textAlign="center"> {props.time_between_posting} </Td>
+      <Td textAlign="center"> {props.is_photo ? "post" : "reels"} </Td>
       <Td isNumeric>
         <VStack>
           <span> 02/02/2023 </span>

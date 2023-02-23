@@ -1,5 +1,6 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import state from "../../../../utils/state";
 import ListBodyComponentHeader from "../list.body.header/list.body.component.header";
 
 const Bio = (props: {
@@ -31,37 +32,39 @@ const Bio = (props: {
 );
 
 export default () => {
-  const [names, setNames] = useState([
-    {
-      name: "عض هو تكبّد وصافرات, شيء إذ جزيرتي والكساد, تم دول بشرية التبرعات. جيوب بينما أسابيع أن نفس, اتفاق جزيرتي الا أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك احداث الصينية. مع يعبأ الأبرياء هذه. أما فرنسا",
+  const namesState = state.useStore((e) => e.bio);
+
+  const [bio, setBio] = useState([
+    ...namesState.map((e: any) => ({
+      name: e.bio,
       selected: false,
-    },
-    {
-      name: "عض هو تكبّد وصافرات, شيء إذ جزيرتي والكساد, تم دول بشرية التبرعات. جيوب بينما أسابيع أن نفس, اتفاق جزيرتي الا أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك احداث الصينية. مع يعبأ الأبرياء هذه. أما فرنسا",
-      selected: false,
-    },
-    {
-      name: "عض هو تكبّد وصافرات, شيء إذ جزيرتي والكساد, تم دول بشرية التبرعات. جيوب بينما أسابيع أن نفس, اتفاق جزيرتي الا أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك احداث الصينية. مع يعبأ الأبرياء هذه. أما فرنسا",
-      selected: false,
-    },
-    {
-      name: "عض هو تكبّد وصافرات, شيء إذ جزيرتي والكساد, تم دول بشرية التبرعات. جيوب بينما أسابيع أن نفس, اتفاق جزيرتي الا أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك احداث الصينية. مع يعبأ الأبرياء هذه. أما فرنسا",
-      selected: false,
-    },
-    {
-      name: "عض هو تكبّد وصافرات, شيء إذ جزيرتي والكساد, تم دول بشرية التبرعات. جيوب بينما أسابيع أن نفس, اتفاق جزيرتي الا أي. ضرب عل الشهير الواقعة العالمية, الى للجزر والكساد تم, هو كلا تحرّك احداث الصينية. مع يعبأ الأبرياء هذه. أما فرنسا",
-      selected: false,
-    },
+      id: e.id,
+    })),
   ]);
+
+  useEffect(
+    () =>
+      setBio(() => [
+        ...namesState.map((e: any) => ({
+          name: e.bio,
+          selected: false,
+          id: e.id,
+        })),
+      ]),
+    [namesState]
+  );
+
+  console.log(namesState);
 
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader
-        names={names}
-        status={names.filter((e) => e.selected == false && e).length > 0}
+        place="bio"
+        names={bio}
+        status={bio.filter((e) => e.selected == false && e).length > 0}
         selectAll={(checked: boolean) => {
-          var newOne = names.map((e) => ((e.selected = checked), e));
-          return setNames(() => [...newOne]);
+          var newOne = bio.map((e) => ((e.selected = checked), e));
+          return setBio(() => [...newOne]);
         }}
       />
       <HStack
@@ -70,15 +73,15 @@ export default () => {
         justifyContent="space-around"
         p="10px"
       >
-        {names.map((e, i) => (
+        {bio.map((e, i) => (
           <Bio
             key={i * 34}
             selected={e.selected}
             name={e.name}
             onClick={() => {
-              var newOne = names;
+              var newOne = bio;
               newOne[i].selected = !newOne[i].selected;
-              return setNames(() => [...newOne]);
+              return setBio(() => [...newOne]);
             }}
           />
         ))}

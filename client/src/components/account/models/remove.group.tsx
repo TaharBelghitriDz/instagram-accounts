@@ -1,31 +1,37 @@
 import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
-import { namesChange } from "../../../utils/api/accounts.api";
+import { groupDelete } from "../../../utils/api/groups.api";
+import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
+
   const toast = useToast();
 
   const fun = () => {
-    namesChange().then(({ err }) => {
+    groupDelete(selectedGroup).then(({ err, res }) => {
       if (err)
         return toast({
           status: "error",
           isClosable: true,
-          title: "خطا في الارسال",
+          title: "خطا في العملية",
         });
-
-      toast({
-        status: "success",
-        isClosable: true,
-        title: "تم التغيير",
-      });
+      if (res?.data)
+        return (
+          toast({
+            status: "success",
+            isClosable: true,
+            title: "تمت العملية",
+          }),
+          state.changeState({ groups: res.data })
+        );
     });
   };
 
   return (
     <VStack w="full" spacing="50px">
       <HStack w="full" justifyContent="space-between">
-        <Text fontSize="30px"> تغيير اسماء الحسابات</Text>
+        <Text fontSize="30px"> حذف المجموعة </Text>
         <CloseButton
           bg="white"
           color="black"
@@ -35,6 +41,7 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
+
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"

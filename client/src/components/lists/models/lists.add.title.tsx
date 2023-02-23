@@ -1,31 +1,21 @@
-import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
-import { namesChange } from "../../../utils/api/accounts.api";
+import { CloseButton, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 import { Add } from "../../icons";
 
-export default (props: { onClose: () => void }) => {
-  const toast = useToast();
+export default (props: {
+  onClose: () => void;
+  fun: (e: string) => void;
+  name?: string;
+  content?: string;
+}) => {
+  console.log("heree ");
 
-  const fun = () => {
-    namesChange().then(({ err }) => {
-      if (err)
-        return toast({
-          status: "error",
-          isClosable: true,
-          title: "خطا في الارسال",
-        });
-
-      toast({
-        status: "success",
-        isClosable: true,
-        title: "تم التغيير",
-      });
-    });
-  };
+  const [value, setValue] = useState(props.content || "");
 
   return (
-    <VStack w="full" spacing="50px">
+    <VStack w="full" spacing="30px">
       <HStack w="full" justifyContent="space-between">
-        <Text fontSize="30px"> تغيير اسماء الحسابات</Text>
+        <Text fontSize="30px">{props.name || "إضافة اسم"}</Text>
         <CloseButton
           bg="white"
           color="black"
@@ -35,6 +25,15 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
+      <Textarea
+        bg="whiteAlpha.100"
+        border=""
+        rounded="10px"
+        rows={5}
+        placeholder="لصق النص هنا"
+        value={value}
+        onChange={({ target: { value } }) => setValue(() => value)}
+      />
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"
@@ -44,7 +43,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
-          onClick={fun}
+          onClick={() => props.fun(value)}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

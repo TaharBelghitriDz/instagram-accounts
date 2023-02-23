@@ -49,9 +49,6 @@ export default () => {
     ).then(async ({ res, err }) => {
       setIsLoading(() => false);
 
-      console.log(err);
-      console.log(res);
-
       if (!res?.data || err)
         return (
           setError(() => ({
@@ -65,12 +62,10 @@ export default () => {
         "token",
         `${res.data.token_type} ${res.data.access_token}`
       );
-
-      // console.log(localStorage.getItem("token"));
-
-      // function for response
+      window.location.replace("/");
     });
   };
+
   return (
     <Stack
       w="40%"

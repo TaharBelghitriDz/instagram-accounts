@@ -1,8 +1,17 @@
-import { CloseButton, HStack, Input, Text, VStack } from "@chakra-ui/react";
+import {
+  CloseButton,
+  HStack,
+  Input,
+  Text,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import React, { Fragment, useState } from "react";
 import { Add } from "../../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
 import { InputProps as Props } from "../../login/login.inputs.component";
+import { groupCreate, groupGet } from "../../../utils/api/groups.api";
+import state from "../../../utils/state";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
@@ -10,26 +19,21 @@ const AccountsSettingsInput = (props: defaultProps) => (
 
 export interface EditGroupInterface {
   name: string;
-  likes: {
-    from: number;
-    to: number;
-  };
-  time: {
-    from: number;
-    to: number;
-  };
-  comments: {
-    from: number;
-    to: number;
-  };
-  comments_time: {
-    from: number;
-    to: number;
-  };
-  emojis: {
-    from: number;
-    to: number;
-  };
+
+  likes_from: number;
+  likes_to: number;
+
+  comments_from: number;
+  comments_to: number;
+
+  time_between_likes_from: number;
+  time_between_likes_to: number;
+
+  time_between_comments_from: number;
+  time_between_comments_to: number;
+
+  emojis_number_from: number;
+  emojis_number_to: number;
 }
 
 const AccountsGroupElmntProps = {
@@ -40,7 +44,7 @@ const AccountsGroupElmntProps = {
   rounded: "15px",
 };
 
-const AccountsGroupInputs = (props: {
+export const AccountsGroupInputs = (props: {
   values: EditGroupInterface;
   setVelaues: React.Dispatch<React.SetStateAction<EditGroupInterface>>;
 }) => {
@@ -64,11 +68,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.likes.from}
+            value={props.values.likes_from}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                likes: { from: parseInt(value), to: props.values.likes.to },
+                likes_from: parseInt(value),
               }))
             }
           />
@@ -76,11 +80,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.likes.to}
+            value={props.values.likes_to}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                likes: { to: parseInt(value), from: props.values.likes.from },
+                likes_to: parseInt(value),
               }))
             }
           />
@@ -93,11 +97,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.time.from}
+            value={props.values.time_between_likes_from}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                time: { from: parseInt(value), to: props.values.time.to },
+                time_between_likes_from: parseInt(value),
               }))
             }
           />
@@ -105,11 +109,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.time.to}
+            value={props.values.time_between_likes_to}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                time: { to: parseInt(value), from: props.values.time.from },
+                time_between_likes_to: parseInt(value),
               }))
             }
           />
@@ -122,14 +126,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.comments.from}
+            value={props.values.comments_from}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                comments: {
-                  from: parseInt(value),
-                  to: props.values.comments.to,
-                },
+                comments_from: parseInt(value),
               }))
             }
           />
@@ -137,14 +138,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.comments.to}
+            value={props.values.comments_to}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                comments: {
-                  to: parseInt(value),
-                  from: props.values.comments.from,
-                },
+                comments_to: parseInt(value),
               }))
             }
           />
@@ -157,14 +155,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.comments_time.from}
+            value={props.values.time_between_comments_from}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                comments_time: {
-                  from: parseInt(value),
-                  to: props.values.comments_time.to,
-                },
+                time_between_comments_from: parseInt(value),
               }))
             }
           />
@@ -172,14 +167,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.comments_time.to}
+            value={props.values.time_between_comments_to}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                comments_time: {
-                  to: parseInt(value),
-                  from: props.values.comments_time.from,
-                },
+                time_between_comments_to: parseInt(value),
               }))
             }
           />
@@ -192,14 +184,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.emojis.from}
+            value={props.values.emojis_number_from}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                emojis: {
-                  from: parseInt(value),
-                  to: props.values.emojis.to,
-                },
+                emojis_number_from: parseInt(value),
               }))
             }
           />
@@ -207,14 +196,11 @@ const AccountsGroupInputs = (props: {
           <AccountsSettingsInput
             w="30%"
             type="number"
-            value={props.values.emojis.to}
+            value={props.values.emojis_number_to}
             onChange={({ target: { value } }) =>
               props.setVelaues((e) => ({
                 ...e,
-                emojis: {
-                  to: parseInt(value),
-                  from: props.values.emojis.from,
-                },
+                emojis_number_to: parseInt(value),
               }))
             }
           />
@@ -225,16 +211,46 @@ const AccountsGroupInputs = (props: {
 };
 
 export default (props: { onClose: () => void }) => {
+  const toast = useToast();
   const [values, setValues] = useState({
-    name: "_",
-    likes: { from: 0, to: 0 },
-    time: { from: 0, to: 0 },
-    comments: { from: 0, to: 0 },
-    comments_time: { from: 0, to: 0 },
-    emojis: { from: 0, to: 0 },
+    name: "",
+
+    likes_from: 0,
+    likes_to: 0,
+
+    comments_from: 0,
+    comments_to: 0,
+
+    time_between_likes_from: 0,
+    time_between_likes_to: 0,
+
+    time_between_comments_from: 0,
+    time_between_comments_to: 0,
+
+    emojis_number_from: 0,
+    emojis_number_to: 0,
   });
 
-  const sendFun = () => {};
+  const sendFun = () =>
+    groupCreate(values).then(({ err, res }) => {
+      if (err)
+        return toast({
+          status: "error",
+          isClosable: true,
+          title: "خطا في الارسال",
+        });
+
+      groupGet.then(({ err, res }) => {
+        if (err) return;
+        state.changeState({ groups: res?.data });
+      });
+      props.onClose();
+      return toast({
+        status: "success",
+        isClosable: true,
+        title: "تمت العملية",
+      });
+    });
 
   return (
     <VStack w="full" spacing="20px">
