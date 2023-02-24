@@ -39,7 +39,11 @@ export default () => {
     });
   });
 
-  useEffect(() => setPosts(() => [...postsState]), [postsState]);
+  useEffect(() => {
+    console.log("update");
+
+    setPosts(() => [...postsState]);
+  }, [postsState]);
 
   return (
     <VStack

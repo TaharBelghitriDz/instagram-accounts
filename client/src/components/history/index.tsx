@@ -54,6 +54,7 @@ export default () => {
   useState(() => {
     postsHistory.then(({ res, err }) => {
       if (err) return;
+      console.log(res);
 
       setHistory(() => [...res?.data]);
     });

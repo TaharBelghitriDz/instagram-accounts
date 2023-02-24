@@ -14,7 +14,7 @@ export const postsAdd = (data: any) =>
     data,
   });
 
-export const postsDelete = (id: string) =>
+export const postsDelete = (id: number) =>
   axiosFun({
     method: "DELETE",
     url: endpoint + "/posts/" + id,

@@ -1,16 +1,10 @@
 import {
   AlertDialog,
   AlertDialogBody,
-  Button,
   Checkbox,
   CloseButton,
-  Flex,
   HStack,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Stack,
   Text,
   useOutsideClick,
@@ -20,9 +14,9 @@ import { Fragment, useRef, useState } from "react";
 import { Add } from "../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
 import { InputProps as Props } from "../login/login.inputs.component";
-import { CustomAddIcon } from "../custom.button.component";
 import state from "../../utils/state";
-import { postsAdd } from "../../utils/api/posts.api";
+import { postsAdd, postsGet } from "../../utils/api/posts.api";
+import { Titles } from "./posts.titels";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
@@ -44,6 +38,7 @@ export default (props: { isOpen: boolean; onClose: () => void }) => {
   });
 
   window.scrollTo(0, 0);
+
   return (
     <AlertDialog
       {...props}
@@ -98,7 +93,6 @@ const Inputs = (props: { onClose: () => void }) => {
   const [selected, setSelected] = useState({ title: "", group: "" });
   const [value, setValue] = useState(10);
   const [isPhoto, setIsPhoto] = useState(true);
-  const posts = state.useStore((e) => e.posts);
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
 
@@ -108,10 +102,18 @@ const Inputs = (props: { onClose: () => void }) => {
     const time_between_posting = value;
     const is_photo = isPhoto;
     const body = { title_id, group_id, time_between_posting, is_photo };
+
     postsAdd(body).then(({ err, res }) => {
       if (err) return;
-      state.changeState({ posts: [...posts, ...res?.data] });
-      props.onClose();
+
+      return postsGet.then(({ err, res }) => {
+        console.log(res);
+
+        if (err) return;
+
+        state.changeState({ posts: res?.data });
+        props.onClose();
+      });
     });
   };
 
@@ -212,57 +214,5 @@ const Inputs = (props: { onClose: () => void }) => {
         </HStack>
       </HStack>
     </Fragment>
-  );
-};
-
-const Titles = (props: {
-  name: string;
-  value?: string;
-  names: { name: string; id: number }[];
-  fun: (str: string) => void;
-}) => {
-  return (
-    <Flex w="full">
-      <Menu>
-        <MenuButton
-          variant="outline"
-          as={Button}
-          rightIcon={
-            <CustomAddIcon color="white" bg="whiteAlpha.100" children="-" />
-          }
-          rounded="20px"
-          _hover={{}}
-          border="none"
-          bg="whiteAlpha.100"
-          p="10px"
-          py="25px"
-          _active={{ backgroundColor: "whiteAlpha.200" }}
-        >
-          {props.value || props.name}
-        </MenuButton>
-
-        <MenuList
-          bg="rgb(0,0,0,50%)"
-          backdropFilter="blur(30px)"
-          p="20px"
-          border="none"
-          rounded="20px"
-        >
-          {props.names.map((e: any, i: any) => (
-            <MenuItem
-              key={i * 60}
-              _hover={{ bg: "blackAlpha.500" }}
-              rounded="10px"
-              p="10px"
-              px="20px"
-              bg="transparent"
-              onClick={() => props.fun(e.name || e.title)}
-            >
-              {e.name || e.title}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-    </Flex>
   );
 };
