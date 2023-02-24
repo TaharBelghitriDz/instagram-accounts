@@ -10,9 +10,11 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { postsHistory } from "../../utils/api/posts.api";
 import { Add } from "../icons";
 
-const Rows = () => (
+const Rows = (props: History) => (
   <Tr>
     <Td textAlign="center" w="20%">
       <HStack spacing="10px" w="100%">
@@ -28,8 +30,8 @@ const Rows = () => (
         />
       </HStack>
     </Td>
-    <Td textAlign="center"> كود ماكس </Td>
-    <Td textAlign="center"> بوسة </Td>
+    <Td textAlign="center">{props.title}</Td>
+    <Td textAlign="center"> {props.is_photo ? "بوسة" : "ريلز"} </Td>
     <Td isNumeric>
       <VStack>
         <span> 02/02/2023 </span>
@@ -39,7 +41,24 @@ const Rows = () => (
   </Tr>
 );
 
+type History = {
+  title: string;
+  post_link: string;
+  is_photo: boolean;
+  created_time: string;
+};
+
 export default () => {
+  const [history, setHistory] = useState<History[]>([]);
+
+  useState(() => {
+    postsHistory.then(({ res, err }) => {
+      if (err) return;
+
+      setHistory(() => [...res?.data]);
+    });
+  });
+
   return (
     <VStack
       w="full"
@@ -73,9 +92,9 @@ export default () => {
           </Tr>
         </Thead>
         <Tbody>
-          <Rows />
-          <Rows />
-          <Rows />
+          {history.map((e, i) => (
+            <Rows {...e} />
+          ))}
         </Tbody>
       </Table>
     </VStack>
