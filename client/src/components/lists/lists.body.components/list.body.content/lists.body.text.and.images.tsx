@@ -53,7 +53,8 @@ const TitleEdit = () => {
   const discloser = useDisclosure();
 
   useState(() => {
-    titleGet.then(({ res }) => {
+    titleGet.then(({ res, err }) => {
+      if (err) return;
       state.changeState({ titles: res?.data });
       setTitles(() => [...res?.data]);
     });
@@ -422,7 +423,7 @@ const Titles = () => {
   );
 };
 
-const PostsImages = (props: { selctedId: string }) => {
+const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
   const [posts, setPosts] = useState<any[]>();
 
   return (
@@ -443,63 +444,7 @@ const PostsImages = (props: { selctedId: string }) => {
         rounded="15px"
         fontSize="25px"
       >
-        صور البوسة
-      </Text>
-      <HStack w="full" justifyContent="space-between">
-        <Text cursor="pointer"> العدد 5 </Text>
-        <Text
-          cursor="pointer"
-          p="10px"
-          bg="red.800"
-          color="red.100"
-          rounded="10px"
-        >
-          حذف الكل
-        </Text>
-        <Text
-          cursor="pointer"
-          p="10px"
-          bg="blue.800"
-          color="blue.100"
-          rounded="10px"
-        >
-          اضافة
-        </Text>
-      </HStack>
-      <HStack
-        maxH="300px"
-        overflowY="scroll"
-        w="full"
-        flexWrap="wrap"
-        justifyContent="space-evenly"
-      >
-        {picturs.map((e, i) => (
-          <Image src={e} key={i * 50} maxH="100px" style={{ margin: "5px" }} />
-        ))}
-      </HStack>
-    </VStack>
-  );
-};
-const ReelsImages = (props: { selctedId: string }) => {
-  return (
-    <VStack
-      maxW={{ start: "full", md: "46%" }}
-      alignItems="start"
-      spacing="20px"
-      bg="blackAlpha.400"
-      p="10px"
-      rounded="15px"
-      style={{ margin: "10px" }}
-    >
-      <Text
-        bg="green.900"
-        color="green.100"
-        p="20px"
-        py="10px"
-        rounded="15px"
-        fontSize="25px"
-      >
-        صور الريلز
+        {props.is_photo ? "صور البوسة" : "ريلز"}
       </Text>
       <HStack w="full" justifyContent="space-between">
         <Text cursor="pointer"> العدد 5 </Text>
@@ -547,8 +492,8 @@ export default () => {
       {selected !== "" && (
         <>
           <Texts selctedId={selected} />
-          {/* <PostsImages selctedId={selected} />
-          <ReelsImages selctedId={selected} /> */}
+          <PostsImages selctedId={selected} is_photo={true} />
+          <PostsImages selctedId={selected} is_photo={false} />
         </>
       )}
     </HStack>
