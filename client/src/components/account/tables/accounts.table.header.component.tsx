@@ -9,6 +9,7 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { stat } from "fs";
 import { GroupInutType } from "../../../utils/api/groups.api";
 import state from "../../../utils/state";
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
@@ -22,6 +23,7 @@ export default () => {
   const discloser = useDisclosure();
   const AddDiscloser = useDisclosure();
   const removeDiscloser = useDisclosure();
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups: GroupInutType[] = state.useStore((e) => e.groups);
 
   return (
@@ -60,7 +62,7 @@ export default () => {
             py="25px"
             _active={{ backgroundColor: "blue.900" }}
           >
-            المجموعات​
+            ​{selectedGroup == "" ? "المجموعات​" : selectedGroup}
           </MenuButton>
 
           <MenuList
