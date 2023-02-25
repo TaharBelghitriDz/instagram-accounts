@@ -16,15 +16,16 @@ export default (props: { onClose: () => void }) => {
           isClosable: true,
           title: "خطا في العملية",
         });
-      if (res?.data)
-        return (
-          toast({
-            status: "success",
-            isClosable: true,
-            title: "تمت العملية",
-          }),
-          state.changeState({ groups: res.data })
-        );
+
+      state.changeState({ selectedGroup: "" });
+      state.changeState({ groups: res?.data });
+
+      toast({
+        status: "success",
+        isClosable: true,
+        title: "تمت العملية",
+      });
+      props.onClose();
     });
   };
 

@@ -9,8 +9,8 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { stat } from "fs";
-import { GroupInutType } from "../../../utils/api/groups.api";
+import { useEffect } from "react";
+import { groupGet, GroupInutType } from "../../../utils/api/groups.api";
 import state from "../../../utils/state";
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
 import { Historiq, Refresh, Settings } from "../../icons";
@@ -25,6 +25,11 @@ export default () => {
   const removeDiscloser = useDisclosure();
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups: GroupInutType[] = state.useStore((e) => e.groups);
+
+  const refresh = () =>
+    groupGet.then(
+      ({ res }) => res && state.changeState({ groups: [...res?.data] })
+    );
 
   return (
     <Stack
@@ -62,7 +67,10 @@ export default () => {
             py="25px"
             _active={{ backgroundColor: "blue.900" }}
           >
-            ​{selectedGroup == "" ? "المجموعات​" : selectedGroup}
+            ​
+            {selectedGroup == ""
+              ? "المجموعات​"
+              : groups.filter((e: any) => e.id == selectedGroup && e)[0].name}
           </MenuButton>
 
           <MenuList
@@ -114,6 +122,7 @@ export default () => {
           bg="red.900"
           color="red.100"
           cursor="pointer"
+          onClick={refresh}
         >
           <Refresh w="24px" h="24px" bg="" />
         </HStack>

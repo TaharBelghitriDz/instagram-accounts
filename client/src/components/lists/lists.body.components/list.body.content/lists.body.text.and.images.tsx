@@ -11,6 +11,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
@@ -26,27 +27,14 @@ import {
   titleGet,
   titleUpdate,
 } from "../../../../utils/api/lists/titles.api";
+import { mediaDelete, mediaGet } from "../../../../utils/api/lists/media.api";
 import state from "../../../../utils/state";
 import { CustomAddIcon } from "../../../custom.button.component";
 import { Historiq, Pen } from "../../../icons";
 import Models from "../../models";
 import ListsAddTitle from "../../models/lists.add.title";
-import listsAddTitle from "../../models/lists.add.title";
 import ListsRemove from "../../models/lists.remove";
-
-const picturs: string[] = [
-  "https://source.unsplash.com/random/?instagram_reels&1",
-  "https://source.unsplash.com/random/?instagram_reels&2",
-  "https://source.unsplash.com/random/?instagram_reels&3",
-  "https://source.unsplash.com/random/?instagram_reels&4",
-  "https://source.unsplash.com/random/?instagram_reels&5",
-  "https://source.unsplash.com/random/?instagram_reels&6",
-  "https://source.unsplash.com/random/?instagram_reels&7",
-  "https://source.unsplash.com/random/?instagram_reels&8",
-  "https://source.unsplash.com/random/?instagram_reels&9",
-  "https://source.unsplash.com/random/?instagram_reels&10",
-  "https://source.unsplash.com/random/?instagram_reels&11",
-];
+import ListsAddPicture from "../../models/lists.add.picture";
 
 const TitleEdit = () => {
   const [titles, setTitles] = useState<{ title: string; id: number }[]>([]);
@@ -219,15 +207,14 @@ const Texts = (props: { selctedId: string }) => {
   const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
   const discloser = useDisclosure();
 
-  console.log("props.selctedId");
   console.log(props.selctedId);
 
-  useState(() => {
+  useEffect(() => {
     captionGet(props.selctedId).then(({ res, err }) => {
       state.changeState({ caption: res?.data });
       setTitles(() => [...res?.data]);
     });
-  });
+  }, [props.selctedId]);
 
   const Add = () => (
     <ListsAddTitle
@@ -333,7 +320,7 @@ const Texts = (props: { selctedId: string }) => {
         النصوص
       </Text>
       <HStack w="full" spacing={5}>
-        <Text cursor="pointer"> العدد 5 </Text>
+        <Text cursor="pointer"> العدد {titles.length} </Text>
         <Text
           cursor="pointer"
           p="10px"
@@ -424,7 +411,58 @@ const Titles = () => {
 };
 
 const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
-  const [posts, setPosts] = useState<any[]>();
+  const discloser = useDisclosure();
+  const toast = useToast();
+  const [posts, setPosts] = useState<any[]>([]);
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
+  const medias = state.useStore((e) => e.medias);
+
+  useEffect(() => {
+    mediaGet(props.selctedId).then(({ res, err }) => {
+      if (err) return;
+      console.log(res);
+
+      setPosts(() => [
+        ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
+      ]);
+    });
+  }, [selectedGroup, medias, props.selctedId]);
+
+  const addPictureModel = (
+    <ListsAddPicture
+      {...discloser}
+      for_title
+      is_photo={props.is_photo}
+      id={props.selctedId}
+    />
+  );
+
+  const remove = () => {
+    mediaDelete({
+      id: props.selctedId,
+      data: posts
+        .filter((e: any) => e.is_photo == props.is_photo && e)
+        .map((e) => e.id),
+    }).then(({ res, err }) => {
+      if (err)
+        return toast({
+          title: "خطا في الاتصال",
+          status: "error",
+          isClosable: true,
+        });
+
+      toast({
+        title: "تم العملية",
+        status: "success",
+        isClosable: true,
+      });
+
+      state.changeState({ medias: [...res?.data] });
+      setPosts(() => [
+        ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
+      ]);
+    });
+  };
 
   return (
     <VStack
@@ -436,6 +474,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
       rounded="15px"
       style={{ margin: "10px" }}
     >
+      <Models content={addPictureModel} {...discloser} />
       <Text
         bg="green.900"
         color="green.100"
@@ -454,6 +493,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
           bg="red.800"
           color="red.100"
           rounded="10px"
+          onClick={remove}
         >
           حذف الكل
         </Text>
@@ -463,6 +503,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
           bg="blue.800"
           color="blue.100"
           rounded="10px"
+          onClick={discloser.onOpen}
         >
           اضافة
         </Text>
@@ -473,9 +514,15 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
         w="full"
         flexWrap="wrap"
         justifyContent="space-evenly"
+        spacing={4}
       >
-        {picturs.map((e, i) => (
-          <Image src={e} key={i * 50} maxH="100px" style={{ margin: "5px" }} />
+        {posts?.map((e, i) => (
+          <Image
+            src={e.media_link}
+            key={i * 50}
+            maxH="100px"
+            style={{ margin: "5px" }}
+          />
         ))}
       </HStack>
     </VStack>

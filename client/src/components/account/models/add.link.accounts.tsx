@@ -1,12 +1,36 @@
-import { CloseButton, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
+import {
+  CloseButton,
+  HStack,
+  Text,
+  Textarea,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { botAddBioLink } from "../../../utils/api/bot.api";
+import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
+  const toast = useToast();
   const [value, setValue] = useState("");
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
 
-  const Fun = () => {
-    console.log(value.split("\n").map((e) => e.replace(/\s/g, "")));
+  const fun = () => {
+    botAddBioLink({ data: value, id: selectedGroup }).then(({ err, res }) => {
+      if (err)
+        return toast({
+          status: "error",
+          isClosable: true,
+          title: "خطا في الارسال",
+        });
+      toast({
+        status: "success",
+        isClosable: true,
+        title: "تمت العملية",
+      });
+      props.onClose();
+    });
   };
 
   return (
@@ -39,6 +63,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
+          onClick={fun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

@@ -1,12 +1,42 @@
-import { CloseButton, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
+import {
+  CloseButton,
+  HStack,
+  Text,
+  Textarea,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { accountAddToGroup } from "../../../utils/api/accounts.api";
+import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
   const [value, setValue] = useState("");
+  const toast = useToast();
+
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
 
   const Fun = () => {
-    console.log(value.split("\n").map((e) => e.replace(/\s/g, "")));
+    const accountsArray = value
+      .split("\n")
+      .map((e) => e.replace(/\s/g, "").split(":"));
+
+    const data = accountsArray.map((e) => ({
+      username: e[0],
+      email: e[1],
+      ig_password: e[2],
+      email_password: e[3],
+    }));
+
+    console.log(selectedGroup);
+    console.log(data);
+
+    accountAddToGroup({ id: selectedGroup, data }).then(({ err, res }) => {
+      if (err) return;
+      props.onClose();
+      toast({ status: "success", title: "done !" });
+    });
   };
 
   return (

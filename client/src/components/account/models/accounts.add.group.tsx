@@ -47,6 +47,7 @@ const AccountsGroupElmntProps = {
 export const AccountsGroupInputs = (props: {
   values: EditGroupInterface;
   setVelaues: React.Dispatch<React.SetStateAction<EditGroupInterface>>;
+  isEdite?: boolean;
 }) => {
   return (
     <Fragment>
@@ -211,6 +212,7 @@ export const AccountsGroupInputs = (props: {
 };
 
 export default (props: { onClose: () => void }) => {
+  const groups = state.useStore((e) => e.groups);
   const toast = useToast();
   const [values, setValues] = useState({
     name: "",
@@ -239,11 +241,13 @@ export default (props: { onClose: () => void }) => {
           isClosable: true,
           title: "خطا في الارسال",
         });
+      const newGroup = [...groups, res?.data];
 
-      groupGet.then(({ err, res }) => {
-        if (err) return;
-        state.changeState({ groups: res?.data });
-      });
+      // groupGet.then(({ err, res }) => {
+      //   if (err) return;
+      state.changeState({ groups: newGroup });
+      // // });
+
       props.onClose();
       return toast({
         status: "success",

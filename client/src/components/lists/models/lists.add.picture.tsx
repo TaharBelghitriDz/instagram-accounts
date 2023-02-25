@@ -11,12 +11,18 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { mediaAdd } from "../../../utils/api/lists/media.api";
 import { profilePicAdd } from "../../../utils/api/lists/profile.pics.api";
 import state from "../../../utils/state";
 import { Add } from "../../icons";
 
-export default (props: { onClose: () => void }) => {
+export default (props: {
+  onClose: () => void;
+  for_title?: boolean;
+  is_photo?: boolean;
+  id?: string;
+}) => {
   const toast = useToast();
   const [file, setFile] = useState<File>();
   const ref = useRef(null);
@@ -39,7 +45,17 @@ export default (props: { onClose: () => void }) => {
         toast({ status: "loading", duration: 1000, title: "جاري التحميل" });
         props.onClose();
 
-        profilePicAdd([{ profile_pic_link: picUrl }]).then(({ res, err }) => {
+        const uploadTo = () => {
+          if (props.for_title)
+            return mediaAdd({
+              id: props.id,
+              data: [{ is_photo: props.is_photo, media_link: picUrl }],
+            });
+
+          return profilePicAdd([{ profile_pic_link: picUrl }]);
+        };
+
+        uploadTo().then(({ res, err }) => {
           if (err)
             return toast({
               title: "خطا في التحميل",
@@ -47,7 +63,8 @@ export default (props: { onClose: () => void }) => {
               isClosable: true,
             });
 
-          state.changeState({ profile_pics: res?.data });
+          if (props.for_title) state.changeState({ medias: [...res?.data] });
+          else state.changeState({ profile_pics: res?.data });
 
           toast({
             title: "تم التحميل",

@@ -95,9 +95,15 @@ const state = {
   selectedTitle: "",
   captions: [] as { caption: string; id: number }[],
   posts: [] as Post[],
+  medias: [] as {
+    media_link: string;
+    is_photo: boolean;
+    id: number;
+    title_id: number;
+  }[],
 };
 
-export default createState(state, (currentState) => ({
+export default createState(state, ({ groups }) => ({
   changeView: (place) => ({ place }),
   changeListPlace: (listPlace) => ({ listPlace }),
   changeState: (s: Partial<typeof state>) => ({ ...s }),

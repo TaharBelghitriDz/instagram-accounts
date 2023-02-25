@@ -13,7 +13,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Account } from "../../../utils/api/accounts.api";
+import { Account, accountGet } from "../../../utils/api/accounts.api";
 import state from "../../../utils/state";
 import { ProgressLoadingCompnent } from "../../loading";
 import AccountsTableHeaderComponent from "./accounts.table.header.component";
@@ -25,7 +25,7 @@ const Row = () => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const toast = useToast();
 
-  // const accounts: Account[] = state.useStore((e) => e.accounts);
+  const accountsState: Account[] = state.useStore((e) => e.accounts);
 
   // useState(
   //   (!isLoading && setIsLoading(() => true),
@@ -41,10 +41,17 @@ const Row = () => {
   //   }))
   // );
 
+  useState(() => {
+    setAccounts(() => [...accountsState]);
+  });
+
   useEffect(() => {
-    // accountGet(selectedGroup).then(({ res }) => {
-    //   setAccounts(() => res?.data);
-    // });
+    accountGet(selectedGroup).then(({ res, err }) => {
+      if (err) return;
+      console.log(res);
+
+      setAccounts(() => [...res?.data]);
+    });
   }, [selectedGroup]);
 
   return (

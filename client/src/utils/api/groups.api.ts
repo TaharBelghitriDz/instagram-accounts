@@ -44,3 +44,11 @@ export const groupDelete = (id: string) =>
     },
     url: endpoint + "/groups/" + id,
   });
+
+export const groupsUpdate = (e: { id: string; data: any }) =>
+  axiosFun({
+    method: "PATCH",
+    url: endpoint + "/groups/" + e.id,
+    headers: { authorization: localStorage.getItem("token") },
+    data: e.data,
+  });

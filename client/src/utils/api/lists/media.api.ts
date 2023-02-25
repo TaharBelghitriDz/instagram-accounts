@@ -15,7 +15,7 @@ export const mediaAdd = ({ id, data }: any) =>
     data,
   });
 
-export const mediaUpdate = ({ id, data }: any) =>
+export const mediaDelete = ({ id, data }: any) =>
   axiosFun({
     method: "DELETE",
     url: endpoint + "/medias/" + id,
