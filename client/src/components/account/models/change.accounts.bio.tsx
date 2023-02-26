@@ -1,12 +1,14 @@
 import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
 import { bioChange } from "../../../utils/api/lists/bio.api";
+import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
   const toast = useToast();
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
 
   const fun = () => {
-    bioChange().then(({ err }) => {
+    bioChange(selectedGroup).then(({ err }) => {
       if (err)
         return toast({
           status: "error",

@@ -45,11 +45,26 @@ export const accountAddToGroup = (args: { data: any; id: number }) =>
     data: args.data,
   });
 
-export const namesChange = () =>
+export const namesChange = (data: any) =>
   axiosFun({
     method: "GET",
     headers: { Authorization: localStorage.getItem("token") },
-    url: endpoint + "/actions/change-names/" + state.state.selectedGroup,
+    url: endpoint + "/actions/change-names/" + data,
+  });
+
+export const accoutGetById = (data: any) =>
+  axiosFun({
+    method: "GET",
+    headers: { Authorization: localStorage.getItem("token") },
+    url: endpoint + "/accounts/account/" + data,
+  });
+
+export const accoutUpdate = (args: any) =>
+  axiosFun({
+    method: "PATCH",
+    headers: { Authorization: localStorage.getItem("token") },
+    url: endpoint + "/accounts/" + args.id,
+    data: args.data,
   });
 
 export const initialData = groupGet

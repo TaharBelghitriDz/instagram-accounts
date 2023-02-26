@@ -23,9 +23,9 @@ export const biographiesAdd = (data: any) =>
     data,
   });
 
-export const bioChange = () =>
+export const bioChange = (data: any) =>
   axiosFun({
     method: "GET",
-    url: endpoint + "/actions/change-bios/" + state.state.selectedGroup,
+    url: endpoint + "/actions/change-bios/" + data,
     headers: { authorization: localStorage.getItem("token") },
   });

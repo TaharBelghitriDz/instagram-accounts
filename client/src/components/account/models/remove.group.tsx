@@ -5,6 +5,7 @@ import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
+  const groups = state.useStore((e) => e.groups);
 
   const toast = useToast();
 
@@ -42,7 +43,9 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
-
+      <Text fontSize="4xl">
+        {groups.filter((e: any) => e.id == selectedGroup && e)[0].name}
+      </Text>
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"

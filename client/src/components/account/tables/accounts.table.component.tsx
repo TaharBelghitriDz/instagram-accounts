@@ -5,41 +5,26 @@ import {
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
-  useToast,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { Account, accountGet } from "../../../utils/api/accounts.api";
 import state from "../../../utils/state";
-import { ProgressLoadingCompnent } from "../../loading";
+import Models from "../models";
+import AccountsDetails from "../models/accounts.details";
+import accountsDetails from "../models/accounts.details";
 import AccountsTableHeaderComponent from "./accounts.table.header.component";
 
-const Row = () => {
+const Row = (props: { onClick: (e: any) => void }) => {
   const account = state.useStore((e) => e.accounts);
+
   const [accounts, setAccounts] = useState<Account[]>(account);
-  const [isLoading, setIsLoading] = useState(true);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
-  const toast = useToast();
-
   const accountsState: Account[] = state.useStore((e) => e.accounts);
-
-  // useState(
-  //   (!isLoading && setIsLoading(() => true),
-  //   accountGet(selectedGroup).then(({ err, res }) => {
-  //     if (err)
-  //       toast({
-  //         status: "error",
-  //         isClosable: true,
-  //         title: "لا توجد حسابات في المجموعة",
-  //       });
-  //     setAccounts(() => res?.data);
-  //     setIsLoading(() => false);
-  //   }))
-  // );
 
   useState(() => {
     setAccounts(() => [...accountsState]);
@@ -48,7 +33,6 @@ const Row = () => {
   useEffect(() => {
     accountGet(selectedGroup).then(({ res, err }) => {
       if (err) return;
-      console.log(res);
 
       setAccounts(() => [...res?.data]);
     });
@@ -57,7 +41,14 @@ const Row = () => {
   return (
     <Tbody>
       {accounts?.map((e, i) => (
-        <Tr key={i * 12}>
+        <Tr
+          key={i * 12}
+          onClick={() => {
+            console.log(e.id);
+
+            props.onClick(e.id);
+          }}
+        >
           <Td>
             <Image
               src={e.profile_pic}
@@ -87,6 +78,9 @@ const Row = () => {
 };
 
 export default () => {
+  const discloser = useDisclosure();
+  const [selctedAccount, setSelectedAccount] = useState(100);
+
   return (
     <VStack
       w="full"
@@ -99,6 +93,10 @@ export default () => {
       overflowX="auto"
     >
       <AccountsTableHeaderComponent />
+      <Models
+        content={<AccountsDetails {...discloser} id={selctedAccount} />}
+        {...discloser}
+      />
       <Table
         variant="simple"
         colorScheme="whiteAlpha"
@@ -116,7 +114,14 @@ export default () => {
             <Th textAlign="center">تاريخ الاضافة</Th>
           </Tr>
         </Thead>
-        <Row />
+        <Row
+          {...discloser}
+          onClick={(e: any) => {
+            setSelectedAccount(() => e);
+
+            discloser.onOpen();
+          }}
+        />
       </Table>
     </VStack>
   );
