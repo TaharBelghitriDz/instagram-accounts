@@ -11,20 +11,17 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Account, accountGet } from "../../../utils/api/accounts.api";
 import state from "../../../utils/state";
 import Models from "../models";
 import AccountsDetails from "../models/accounts.details";
-import accountsDetails from "../models/accounts.details";
 import AccountsTableHeaderComponent from "./accounts.table.header.component";
 
 const Row = (props: { onClick: (e: any) => void }) => {
-  const account = state.useStore((e) => e.accounts);
-
-  const [accounts, setAccounts] = useState<Account[]>(account);
-  const selectedGroup = state.useStore((e) => e.selectedGroup);
   const accountsState: Account[] = state.useStore((e) => e.accounts);
+  const [accounts, setAccounts] = useState<Account[]>(accountsState);
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
 
   useState(() => {
     setAccounts(() => [...accountsState]);
@@ -44,8 +41,6 @@ const Row = (props: { onClick: (e: any) => void }) => {
         <Tr
           key={i * 12}
           onClick={() => {
-            console.log(e.id);
-
             props.onClick(e.id);
           }}
         >

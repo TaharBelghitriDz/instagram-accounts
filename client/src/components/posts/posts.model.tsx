@@ -15,8 +15,9 @@ import { Add } from "../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
 import { InputProps as Props } from "../login/login.inputs.component";
 import state from "../../utils/state";
-import { postsAdd, postsGet } from "../../utils/api/posts.api";
+import { postsAdd, postsGet, postsUpdate } from "../../utils/api/posts.api";
 import { Titles } from "./posts.titels";
+import { Post } from ".";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
@@ -30,7 +31,11 @@ const AccountsGroupElmntProps = {
   rounded: "15px",
 };
 
-export default (props: { isOpen: boolean; onClose: () => void }) => {
+export default (props: {
+  isOpen: boolean;
+  onClose: () => void;
+  post?: Post;
+}) => {
   const ref = useRef(null);
   useOutsideClick({
     ref: ref,
@@ -80,7 +85,7 @@ export default (props: { isOpen: boolean; onClose: () => void }) => {
             style={{ margin: "30px" }}
           >
             <VStack w="full" spacing="30px">
-              <Inputs onClose={props.onClose} />
+              <Inputs onClose={props.onClose} post={props.post} />
             </VStack>
           </Stack>
         </Stack>
@@ -89,12 +94,25 @@ export default (props: { isOpen: boolean; onClose: () => void }) => {
   );
 };
 
-const Inputs = (props: { onClose: () => void }) => {
-  const [selected, setSelected] = useState({ title: "", group: "" });
-  const [value, setValue] = useState(10);
-  const [isPhoto, setIsPhoto] = useState(true);
+const Inputs = (props: { onClose: () => void; post?: Post }) => {
+  props.post && console.log(props.post);
+
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
+
+  const [selected, setSelected] = useState(
+    !props.post
+      ? { title: "", group: "" }
+      : {
+          title: titles.filter((e: any) => e.id == props.post?.title_id && e)[0]
+            .title,
+          group: groups.filter((e: any) => e.id == props.post?.group_id && e)[0]
+            .name,
+        }
+  );
+
+  const [value, setValue] = useState(props.post?.time_between_posting || 10);
+  const [isPhoto, setIsPhoto] = useState<boolean>(props.post?.is_photo || true);
 
   const fun = () => {
     const title_id = titles.filter((e: any) => e.title == selected.title)[0].id;
@@ -103,18 +121,34 @@ const Inputs = (props: { onClose: () => void }) => {
     const is_photo = isPhoto;
     const body = { title_id, group_id, time_between_posting, is_photo };
 
-    postsAdd(body).then(({ err, res }) => {
-      if (err) return;
-
-      return postsGet.then(({ err, res }) => {
-        console.log(res);
-
+    if (props.post)
+      return postsAdd(body).then(({ err, res }) => {
         if (err) return;
 
-        state.changeState({ posts: res?.data });
-        props.onClose();
+        return postsGet.then(({ err, res }) => {
+          console.log(res);
+
+          if (err) return;
+
+          state.changeState({ posts: res?.data });
+          props.onClose();
+        });
       });
-    });
+
+    postsUpdate({ data: body, id: (props.post as any).id }).then(
+      ({ err, res }) => {
+        if (err) return;
+
+        return postsGet.then(({ err, res }) => {
+          console.log(res);
+
+          if (err) return;
+
+          state.changeState({ posts: res?.data });
+          props.onClose();
+        });
+      }
+    );
   };
 
   return (

@@ -4,7 +4,7 @@ import { Post } from ".";
 import state from "../../utils/state";
 import PostsRemoveModel from "./posts.remove.model";
 
-export default (props: Post & { onClick: () => void }) => {
+export default (props: Post & { onClick: (e: any) => void }) => {
   const discoler = useDisclosure();
   const titlesState = state.useStore((e) => e.titles);
   const groupsState = state.useStore((e) => e.groups);

@@ -13,6 +13,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import { Add } from "../../icons";
 import { accoutGetById, accoutUpdate } from "../../../utils/api/accounts.api";
 import { ProgressLoadingCompnent } from "../../loading";
+import state from "../../../utils/state";
 
 const Account = {
   username: "",
@@ -31,6 +32,29 @@ const Account = {
 export default (props: { onClose: () => void; id: number }) => {
   const [isLoading, setLoading] = useState(true);
   const toast = useToast();
+
+  const accountsState = state.useStore((e) => e.accounts);
+
+  useEffect(() => {
+    console.log("accountsState");
+    console.log(accountsState);
+    state.changeState({
+      accounts: [
+        {
+          created_date: "2023-02-24T21:31:52.894563",
+          email: "email",
+          email_password: "emailPassword",
+          id: 1,
+          ig_password: "password",
+          is_active: null,
+          note: null,
+          proxy: null,
+          status: null,
+          username: "tahar à1 updat1",
+        },
+      ],
+    });
+  }, []);
 
   const [values, setValues] = useState({
     username: "",
@@ -60,6 +84,20 @@ export default (props: { onClose: () => void; id: number }) => {
         status: "success",
         isClosable: true,
       });
+      console.log(accountsState);
+
+      // console.log(
+      //   accountsState.map((e: any) => (e.id == res?.data.id ? res?.data : e))
+      // );
+
+      // state.changeState({
+      //   accounts: [
+      //     ...accountsState.map((e: any) =>
+      //       e.id == res?.data.id ? res?.data : e
+      //     ),
+      //   ],
+      // });
+      props.onClose();
     });
   };
 

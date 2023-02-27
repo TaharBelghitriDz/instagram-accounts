@@ -20,7 +20,7 @@ export const captionUpdate = (data: any) =>
     method: "PATCH",
     url: endpoint + "/caption/" + data.id,
     headers: { authorization: localStorage.getItem("token") },
-    data: { title: data.title },
+    data: { caption: data.title },
   });
 
 export const captionDelete = (data: any) =>

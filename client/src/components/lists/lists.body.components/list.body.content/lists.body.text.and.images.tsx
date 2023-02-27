@@ -20,6 +20,7 @@ import {
   captionAdd,
   captionDelete,
   captionGet,
+  captionUpdate,
 } from "../../../../utils/api/lists/captions.api";
 import {
   titleAdd,
@@ -207,8 +208,6 @@ const Texts = (props: { selctedId: string }) => {
   const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
   const discloser = useDisclosure();
 
-  console.log(props.selctedId);
-
   useEffect(() => {
     captionGet(props.selctedId).then(({ res, err }) => {
       state.changeState({ caption: res?.data });
@@ -235,6 +234,7 @@ const Texts = (props: { selctedId: string }) => {
   );
   const TextItem = (props2: { name: string; id: number }) => {
     const removeDiscloser = useDisclosure();
+    const editDiscloser = useDisclosure();
 
     const Remove = () => (
       <ListsRemove
@@ -253,6 +253,28 @@ const Texts = (props: { selctedId: string }) => {
       />
     );
 
+    const Edit = () => (
+      <ListsAddTitle
+        {...editDiscloser}
+        name="تعديل على النبدة"
+        content={props2.name}
+        fun={(e: any) => {
+          captionUpdate({ id: props2.id, title: e }).then(({ res, err }) => {
+            if (err) return;
+
+            // state.changeState({
+            //   titles: [
+            //     ...titles.map((e) => (e.id == res?.data.id ? res?.data : e)),
+            //   ],
+            // });
+            setTitles((e) => [
+              ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
+            ]);
+            discloser.onClose();
+          });
+        }}
+      />
+    );
     return (
       <HStack
         as={motion.div}
@@ -266,6 +288,8 @@ const Texts = (props: { selctedId: string }) => {
         rounded="10px"
       >
         <Models {...removeDiscloser} content={<Remove />} />
+        <Models {...editDiscloser} content={<Edit />} />
+
         <Text>{props2.name}</Text>
         <Stack
           spacing={{ start: "10px", md: "0" }}
@@ -279,6 +303,7 @@ const Texts = (props: { selctedId: string }) => {
             color="green.100"
             rounded="5px"
             cursor="pointer"
+            onClick={editDiscloser.onOpen}
           />
           <Divider borderColor="transparent" w="10px" h="0px" />
           <Historiq
@@ -486,7 +511,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
         {props.is_photo ? "صور البوسة" : "ريلز"}
       </Text>
       <HStack w="full" justifyContent="space-between">
-        <Text cursor="pointer"> العدد 5 </Text>
+        <Text cursor="pointer"> العدد {posts.length} </Text>
         <Text
           cursor="pointer"
           p="10px"

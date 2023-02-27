@@ -31,6 +31,8 @@ export default () => {
 
   const [posts, setPosts] = useState<Post[]>([...postsState]);
   const discloser = useDisclosure();
+  const editDiscloser = useDisclosure();
+  const [selectedPost, setSelectedPost] = useState("");
 
   useState(() => {
     postsGet.then(({ err, res }) => {
@@ -40,8 +42,6 @@ export default () => {
   });
 
   useEffect(() => {
-    console.log("update");
-
     setPosts(() => [...postsState]);
   }, [postsState]);
 
@@ -57,11 +57,13 @@ export default () => {
       overflowX="auto"
       spacing="10px"
     >
-      {/* header */}
-
       <Table />
 
       <PostsModel {...discloser} />
+      <PostsModel
+        {...editDiscloser}
+        post={posts.filter((e) => e.id?.toString() == selectedPost && e)[0]}
+      />
 
       <HStack
         spacing="10px"
@@ -96,7 +98,14 @@ export default () => {
         </Thead>
         <Tbody>
           {posts?.map((e, i) => (
-            <PostsRows {...e} key={i * 45} onClick={() => discloser.onOpen()} />
+            <PostsRows
+              {...e}
+              key={i * 45}
+              onClick={() => {
+                setSelectedPost(() => e.id?.toString() || "");
+                editDiscloser.onOpen();
+              }}
+            />
           ))}
         </Tbody>
       </Table>
