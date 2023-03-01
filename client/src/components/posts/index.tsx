@@ -64,7 +64,7 @@ export default () => {
         {...editDiscloser}
         post={posts.filter((e) => e.id?.toString() == selectedPost && e)[0]}
       />
-
+      {/* 
       <HStack
         spacing="10px"
         bg="green.0"
@@ -76,7 +76,7 @@ export default () => {
       >
         <Text>اضافة</Text>
         <CustomAddIcon />
-      </HStack>
+      </HStack> */}
 
       <Table
         variant="simple"
@@ -89,7 +89,7 @@ export default () => {
         <Thead pt="20px">
           <Tr>
             <Th textAlign="center">العنوان</Th>
-            <Th textAlign="center"> كلمة المرور</Th>
+            <Th textAlign="center"> المجموعة</Th>
             <Th textAlign="center">النشر كل</Th>
             <Th textAlign="center">النوع</Th>
             <Th textAlign="center">تاريخ الاضافة</Th>
