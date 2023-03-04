@@ -182,7 +182,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           }}
         />
       </HStack>
-      <VStack {...AccountsGroupElmntProps}>
+      {/* <VStack {...AccountsGroupElmntProps}>
         <Text> نشر كل</Text>
         <HStack w="90%" justifyContent="" spacing="10px">
           <AccountsSettingsInput
@@ -195,7 +195,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           />
           <Text>دقيقة</Text>
         </HStack>
-      </VStack>
+      </VStack> */}
       <VStack {...AccountsGroupElmntProps}>
         <Text>اختيار النوع</Text>
         <HStack spacing="10px">
