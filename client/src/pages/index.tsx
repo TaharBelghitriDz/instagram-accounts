@@ -8,12 +8,13 @@ import listsPage from "./lists.page";
 import proxiesPage from "./proxies.page";
 
 export default (props: { place: string }) => {
-  const place = state.useStore((e) => e.place);
+  const place = state.useStore((e) => (e.place == "/" ? "الحسابات" : e.place));
 
   let Comp = Box;
 
   const changeUrl = (str: string) => window.history.pushState("", "", str);
 
+  if (place == "/") changeUrl("/acconts"), (Comp = AccountsPage);
   if (place == "الحسابات") changeUrl("/acconts"), (Comp = AccountsPage);
   if (place == "البروكسيات") changeUrl("/proxies"), (Comp = proxiesPage);
   if (place == "القوائم") changeUrl("/lists"), (Comp = listsPage);
