@@ -20,6 +20,7 @@ export default (props: { place: string }) => {
   if (place == "النشر") changeUrl("/posts"), (Comp = posts);
   if (place == "سجل النشر") changeUrl("/history"), (Comp = history);
 
+  if (props.place == "/") Comp = AccountsPage;
   if (props.place == "/accounts") Comp = AccountsPage;
   if (props.place == "/proxies") Comp = proxiesPage;
   if (props.place == "/lists") Comp = listsPage;
