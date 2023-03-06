@@ -10,23 +10,38 @@ import proxiesPage from "./proxies.page";
 export default (props: { place: string }) => {
   const place = state.useStore((e) => (e.place == "/" ? "الحسابات" : e.place));
 
+  const changeState = (place: string) => state.changeState({ place });
+
   let Comp = Box;
 
   const changeUrl = (str: string) => window.history.pushState("", "", str);
 
-  if (place == "/") changeUrl("/acconts"), (Comp = AccountsPage);
-  if (place == "الحسابات") changeUrl("/acconts"), (Comp = AccountsPage);
-  if (place == "البروكسيات") changeUrl("/proxies"), (Comp = proxiesPage);
-  if (place == "القوائم") changeUrl("/lists"), (Comp = listsPage);
-  if (place == "النشر") changeUrl("/posts"), (Comp = posts);
-  if (place == "سجل النشر") changeUrl("/history"), (Comp = history);
+  if (place == "/")
+    changeState("الحسابات"), changeUrl("/accounts"), (Comp = AccountsPage);
 
-  if (props.place == "/") Comp = AccountsPage;
-  if (props.place == "/accounts") Comp = AccountsPage;
-  if (props.place == "/proxies") Comp = proxiesPage;
-  if (props.place == "/lists") Comp = listsPage;
-  if (props.place == "/posts") Comp = posts;
-  if (props.place == "/history") Comp = history;
+  if (place == "الحسابات")
+    changeState("الحسابات"), changeUrl("/accounts"), (Comp = AccountsPage);
+
+  if (place == "البروكسيات")
+    changeState("البروكسيات"), changeUrl("/proxies"), (Comp = proxiesPage);
+
+  if (place == "القوائم")
+    changeState("القوائم"), changeUrl("/lists"), (Comp = listsPage);
+
+  if (place == "النشر")
+    changeState("النشر"), changeUrl("/posts"), (Comp = posts);
+
+  if (place == "سجل النشر")
+    changeState("سجل النشر"), changeUrl("/history"), (Comp = history);
+
+  if (props.place == "/") changeState("الحسابات"), (Comp = AccountsPage);
+  if (props.place == "/accounts")
+    changeState("الحسابات"), (Comp = AccountsPage);
+  if (props.place == "/proxies")
+    changeState("البروكسيات"), (Comp = proxiesPage);
+  if (props.place == "/lists") changeState("القوائم"), (Comp = listsPage);
+  if (props.place == "/posts") changeState("النشر"), (Comp = posts);
+  if (props.place == "/history") changeState("سجل النشر"), (Comp = history);
 
   return (
     <VStack
