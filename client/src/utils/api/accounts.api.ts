@@ -72,6 +72,7 @@ export const initialData = groupGet
     if (err) return;
 
     await state.changeState({ groups: res?.data });
+    await state.changeState({ selectedGroup: res?.data[0]?.id });
 
     return res?.data[0]?.id;
   })

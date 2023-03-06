@@ -207,6 +207,37 @@ export const AccountsGroupInputs = (props: {
           />
         </HStack>
       </VStack>
+      <VStack {...AccountsGroupElmntProps}>
+        <Text>النشر كل</Text>
+        <HStack w="90%" justifyContent="space-between">
+          <Text>من</Text>
+          <AccountsSettingsInput
+            w="30%"
+            type="number"
+            placeholder="0"
+            // value={props.values.emojis_number_from}
+            // onChange={({ target: { value } }) =>
+            //   props.setVelaues((e) => ({
+            //     ...e,
+            //     emojis_number_from: parseInt(value),
+            //   }))
+            // }
+          />
+          <Text>الى</Text>
+          <AccountsSettingsInput
+            w="30%"
+            type="number"
+            placeholder="0"
+            // value={props.values.emojis_number_to}
+            // onChange={({ target: { value } }) =>
+            //   props.setVelaues((e) => ({
+            //     ...e,
+            //     emojis_number_to: parseInt(value),
+            //   }))
+            // }
+          />
+        </HStack>
+      </VStack>
     </Fragment>
   );
 };

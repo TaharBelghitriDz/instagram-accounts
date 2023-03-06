@@ -4,6 +4,7 @@ import {
   Flex,
   HStack,
   Image,
+  Input,
   Menu,
   MenuButton,
   MenuItem,
@@ -40,6 +41,8 @@ import ListsAddPicture from "../../models/lists.add.picture";
 const TitleEdit = () => {
   const [titles, setTitles] = useState<{ title: string; id: number }[]>([]);
   const discloser = useDisclosure();
+  const titlesState = state.useStore((e) => e.titles);
+  const [search, setSearch] = useState("");
 
   useState(() => {
     titleGet.then(({ res, err }) => {
@@ -64,6 +67,29 @@ const TitleEdit = () => {
       }}
     />
   );
+
+  const Search = () => {
+    return (
+      <Input
+        w="full"
+        bg="whiteAlpha.100"
+        border=""
+        rounded="10px"
+        placeholder="بحث عن عنوان"
+        value={search}
+        onChange={({ target: { value } }) => {
+          setSearch(() => value);
+
+          setTitles(() =>
+            titlesState.filter((e: any) => {
+              const isThere = e.title.split(value).length > 1;
+              if (isThere) return e;
+            })
+          );
+        }}
+      />
+    );
+  };
 
   const TextItem = (props: { name: string; id: number }) => {
     const editDiscloser = useDisclosure();
@@ -118,7 +144,7 @@ const TitleEdit = () => {
         rounded="10px"
       >
         <Models {...editDiscloser} content={<Edit />} />
-        <Models {...removeDiscloser} content={<Remove />} />
+        {/* <Models {...removeDiscloser} content={<Remove />} /> */}
 
         <Text>{props.name}</Text>
         <Stack
@@ -173,9 +199,10 @@ const TitleEdit = () => {
       >
         عناوين
       </Text>
-      <HStack w="full" spacing={5}>
-        <Text cursor="pointer"> العدد {titles.length} </Text>
-        <Text
+      <Flex flexDir={{ base: "column", md: "row" }} w="full">
+        <HStack w="full" spacing={5}>
+          <Text cursor="pointer"> العدد {titles.length} </Text>
+          {/* <Text
           cursor="pointer"
           p="10px"
           bg="red.800"
@@ -183,18 +210,37 @@ const TitleEdit = () => {
           rounded="10px"
         >
           حذف الكل
-        </Text>
-        <Text
-          cursor="pointer"
-          p="10px"
-          bg="blue.800"
-          color="blue.100"
+        </Text> */}
+          <Text
+            cursor="pointer"
+            p="10px"
+            bg="blue.800"
+            color="blue.100"
+            rounded="10px"
+            onClick={discloser.onOpen}
+          >
+            اضافة
+          </Text>
+        </HStack>
+        <Input
+          w="full"
+          bg="whiteAlpha.100"
+          border=""
           rounded="10px"
-          onClick={discloser.onOpen}
-        >
-          اضافة
-        </Text>
-      </HStack>
+          placeholder="بحث عن عنوان"
+          value={search}
+          onChange={({ target: { value } }) => {
+            setSearch(() => value);
+
+            setTitles(() =>
+              titlesState.filter((e: any) => {
+                const isThere = e.title.split(value).length > 1;
+                if (isThere) return e;
+              })
+            );
+          }}
+        />
+      </Flex>
       <VStack maxH="300px" w="full" overflowY="scroll">
         {titles.map((e, i) => (
           <TextItem key={i * 34} name={e.title} id={e.id} />

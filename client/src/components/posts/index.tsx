@@ -36,6 +36,9 @@ export default () => {
 
   useState(() => {
     postsGet.then(({ err, res }) => {
+      console.log("res");
+      console.log(res);
+
       if (err) return;
       setPosts(() => res?.data);
     });
@@ -88,6 +91,7 @@ export default () => {
         <TableCaption h="0px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
+            <Th textAlign="center">نسخ الرابط</Th>
             <Th textAlign="center">العنوان</Th>
             <Th textAlign="center"> المجموعة</Th>
             <Th textAlign="center">النشر كل</Th>

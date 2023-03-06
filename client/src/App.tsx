@@ -63,7 +63,7 @@ function App() {
           p={{ start: "10px", lg: "20px" }}
         />
 
-        <Pages place="/" />
+        <Pages place={location} />
       </Stack>
     </Stack>
   );

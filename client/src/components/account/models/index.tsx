@@ -36,6 +36,8 @@ export default (props: {
         alignItems="center"
         justifyContent="center"
         bg={{ start: "rgb(0,0,0,70%)" }}
+        maxH="full"
+        overflowY="auto"
       >
         <Stack
           w="full"

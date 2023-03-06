@@ -12,11 +12,19 @@ export default (props: { place: string }) => {
 
   let Comp = Box;
 
-  if (place == "الحسابات") Comp = AccountsPage;
-  if (place == "البروكسيات") Comp = proxiesPage;
-  if (place == "القوائم") Comp = listsPage;
-  if (place == "النشر") Comp = posts;
-  if (place == "سجل النشر") Comp = history;
+  const changeUrl = (str: string) => window.history.pushState("", "", str);
+
+  if (place == "الحسابات") changeUrl("/acconts"), (Comp = AccountsPage);
+  if (place == "البروكسيات") changeUrl("/proxies"), (Comp = proxiesPage);
+  if (place == "القوائم") changeUrl("/lists"), (Comp = listsPage);
+  if (place == "النشر") changeUrl("/posts"), (Comp = posts);
+  if (place == "سجل النشر") changeUrl("/history"), (Comp = history);
+
+  if (props.place == "/accounts") Comp = AccountsPage;
+  if (props.place == "/proxies") Comp = proxiesPage;
+  if (props.place == "/lists") Comp = listsPage;
+  if (props.place == "/posts") Comp = posts;
+  if (props.place == "/history") Comp = history;
 
   return (
     <VStack

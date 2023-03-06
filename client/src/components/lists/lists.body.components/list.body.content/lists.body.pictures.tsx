@@ -54,6 +54,8 @@ const Picture = (props: { src: string; id: number }) => {
         onClick={toggle}
         h="1000px"
         maxH={{ start: "80px", md: "150px" }}
+        maxW={{ start: "200px", md: "200px" }}
+        objectFit="cover"
         rounded="10px"
       />
     </Box>
