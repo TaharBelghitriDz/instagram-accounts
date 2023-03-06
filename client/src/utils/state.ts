@@ -79,7 +79,7 @@ function createState<T, R>(
 }
 
 const state = {
-  place: "الحسابات",
+  place: "/",
   listPlace: "names",
   selectedGroup: "",
   groups: [] as GroupInutType[],
