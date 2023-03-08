@@ -35,6 +35,8 @@ const Row = (props: { onClick: (e: any) => void }) => {
     });
   }, [selectedGroup]);
 
+  console.log(accounts);
+
   return (
     <Tbody>
       {accounts?.map((e, i) => (
@@ -54,7 +56,7 @@ const Row = (props: { onClick: (e: any) => void }) => {
             />
           </Td>
           <Td textAlign="center">{e.username}</Td>
-          <Td textAlign="center"> {e.status} </Td>
+          <Td textAlign="center"> {e.is_active ? "مفعل" : "غير مفعل"} </Td>
           <Td textAlign="center">
             <Text p="10px" rounded="10px" bg="green.900" color="green.100">
               {e.status}

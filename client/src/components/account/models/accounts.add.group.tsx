@@ -34,6 +34,9 @@ export interface EditGroupInterface {
 
   emojis_number_from: number;
   emojis_number_to: number;
+
+  time_between_posting_from: number;
+  time_between_posting_to: number;
 }
 
 const AccountsGroupElmntProps = {
@@ -215,26 +218,26 @@ export const AccountsGroupInputs = (props: {
             w="30%"
             type="number"
             placeholder="0"
-            // value={props.values.emojis_number_from}
-            // onChange={({ target: { value } }) =>
-            //   props.setVelaues((e) => ({
-            //     ...e,
-            //     emojis_number_from: parseInt(value),
-            //   }))
-            // }
+            value={props.values.time_between_posting_from}
+            onChange={({ target: { value } }) =>
+              props.setVelaues((e) => ({
+                ...e,
+                time_between_posting_from: parseInt(value),
+              }))
+            }
           />
           <Text>الى</Text>
           <AccountsSettingsInput
             w="30%"
             type="number"
             placeholder="0"
-            // value={props.values.emojis_number_to}
-            // onChange={({ target: { value } }) =>
-            //   props.setVelaues((e) => ({
-            //     ...e,
-            //     emojis_number_to: parseInt(value),
-            //   }))
-            // }
+            value={props.values.time_between_posting_to}
+            onChange={({ target: { value } }) =>
+              props.setVelaues((e) => ({
+                ...e,
+                time_between_posting_to: parseInt(value),
+              }))
+            }
           />
         </HStack>
       </VStack>
@@ -262,10 +265,20 @@ export default (props: { onClose: () => void }) => {
 
     emojis_number_from: 0,
     emojis_number_to: 0,
+
+    time_between_posting_from: 0,
+    time_between_posting_to: 0,
   });
 
   const sendFun = () =>
     groupCreate(values).then(({ err, res }) => {
+      if (values.name == "")
+        return toast({
+          status: "error",
+          title: "يجب عليك اختيار اسم",
+          isClosable: true,
+        });
+
       if (err)
         return toast({
           status: "error",

@@ -46,6 +46,9 @@ export default (props: { onClose: () => void }) => {
 
     emojis_number_from: 0,
     emojis_number_to: 0,
+
+    time_between_posting_from: 0,
+    time_between_posting_to: 0,
   });
 
   useState(() => {
@@ -55,11 +58,9 @@ export default (props: { onClose: () => void }) => {
   });
 
   const fun = () => {
-    console.log(values);
-
     groupsUpdate({ id: selectedGroup, data: values }).then(({ err, res }) => {
       if (err) return;
-      console.log(res);
+
       const newGroup = groups.map((e: any) => {
         if (e.id != selectedGroup) return e;
         return res?.data;

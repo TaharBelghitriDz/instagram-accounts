@@ -67,6 +67,22 @@ export const accoutUpdate = (args: any) =>
     data: args.data,
   });
 
+export const accountsActivate = (data: any) =>
+  axiosFun({
+    method: "POST",
+    headers: { Authorization: localStorage.getItem("token") },
+    url: endpoint + "/actions/activate-accounts",
+    data,
+  });
+
+export const accountsDesactivate = (data: any) =>
+  axiosFun({
+    method: "POST",
+    headers: { Authorization: localStorage.getItem("token") },
+    url: endpoint + "/actions/deactivate-accounts",
+    data,
+  });
+
 export const initialData = groupGet
   .then(async ({ res, err }) => {
     if (err) return;
