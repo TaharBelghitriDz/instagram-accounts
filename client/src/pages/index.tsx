@@ -8,40 +8,43 @@ import listsPage from "./lists.page";
 import proxiesPage from "./proxies.page";
 
 export default (props: { place: string }) => {
-  const place = state.useStore((e) => (e.place == "/" ? "الحسابات" : e.place));
+  const place = state.useStore((e) => e.place);
 
-  const changeState = (place: string) => state.changeState({ place });
+  const changeState = (place: string) => state.changeState({ place: place });
 
   let Comp = Box;
 
+  if (place == "/") {
+    if (props.place == "/accounts")
+      changeState("الحسابات"), (Comp = AccountsPage);
+    else if (props.place == "/proxies")
+      changeState("البروكسيات"), (Comp = proxiesPage);
+    else if (props.place == "/lists")
+      changeState("القوائم"), (Comp = listsPage);
+    else if (props.place == "/posts") changeState("النشر"), (Comp = posts);
+    else if (props.place == "/history")
+      changeState("سجل النشر"), (Comp = history);
+    else changeState("الحسابات"), (Comp = AccountsPage);
+  }
+
   const changeUrl = (str: string) => window.history.pushState("", "", str);
 
-  if (place == "/")
-    changeState("الحسابات"), changeUrl("/accounts"), (Comp = AccountsPage);
+  if (place != "/") {
+    if (place == "الحسابات")
+      changeState("الحسابات"), changeUrl("/accounts"), (Comp = AccountsPage);
 
-  if (place == "الحسابات")
-    changeState("الحسابات"), changeUrl("/accounts"), (Comp = AccountsPage);
+    if (place == "البروكسيات")
+      changeState("البروكسيات"), changeUrl("/proxies"), (Comp = proxiesPage);
 
-  if (place == "البروكسيات")
-    changeState("البروكسيات"), changeUrl("/proxies"), (Comp = proxiesPage);
+    if (place == "القوائم")
+      changeState("القوائم"), changeUrl("/lists"), (Comp = listsPage);
 
-  if (place == "القوائم")
-    changeState("القوائم"), changeUrl("/lists"), (Comp = listsPage);
+    if (place == "النشر")
+      changeState("النشر"), changeUrl("/posts"), (Comp = posts);
 
-  if (place == "النشر")
-    changeState("النشر"), changeUrl("/posts"), (Comp = posts);
-
-  if (place == "سجل النشر")
-    changeState("سجل النشر"), changeUrl("/history"), (Comp = history);
-
-  if (props.place == "/") changeState("الحسابات"), (Comp = AccountsPage);
-  if (props.place == "/accounts")
-    changeState("الحسابات"), (Comp = AccountsPage);
-  if (props.place == "/proxies")
-    changeState("البروكسيات"), (Comp = proxiesPage);
-  if (props.place == "/lists") changeState("القوائم"), (Comp = listsPage);
-  if (props.place == "/posts") changeState("النشر"), (Comp = posts);
-  if (props.place == "/history") changeState("سجل النشر"), (Comp = history);
+    if (place == "سجل النشر")
+      changeState("سجل النشر"), changeUrl("/history"), (Comp = history);
+  }
 
   return (
     <VStack
