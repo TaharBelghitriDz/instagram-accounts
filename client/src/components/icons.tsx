@@ -57,3 +57,9 @@ export const Navbar = createIcon({
   viewBox: "0 0 24 24",
   d: "M3 4h18v2H3V4zm6 7h12v2H9v-2zm-6 7h18v2H3v-2z",
 });
+
+export const Go = createIcon({
+  displayName: "Go",
+  viewBox: "0 0 24 24",
+  d: "M18.172 7H11a6 6 0 100 12h9v2h-9a8 8 0 010-16h7.172l-2.536-2.536L17.05 1.05 22 6l-4.95 4.95-1.414-1.414L18.172 7z",
+});

@@ -54,8 +54,6 @@ export default () => {
     [namesState]
   );
 
-  console.log(namesState);
-
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader

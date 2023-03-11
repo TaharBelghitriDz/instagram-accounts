@@ -104,11 +104,22 @@ export default () => {
         <TableCaption h="20px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            <Th textAlign="center">صورة الحساب</Th>
-            <Th textAlign="center">اسم الحساب</Th>
-            <Th textAlign="center">حالة الحساب</Th>
-            <Th textAlign="center">وضع الحساب</Th>
-            <Th textAlign="center">تاريخ الاضافة</Th>
+            <Th />
+            <Th color="white" textAlign="center">
+              صورة الحساب
+            </Th>
+            <Th color="white" textAlign="center">
+              اسم الحساب
+            </Th>
+            <Th color="white" textAlign="center">
+              حالة الحساب
+            </Th>
+            <Th color="white" textAlign="center">
+              وضع الحساب
+            </Th>
+            <Th color="white" textAlign="center">
+              تاريخ الاضافة
+            </Th>
           </Tr>
         </Thead>
         <Row

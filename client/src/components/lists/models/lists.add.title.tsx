@@ -8,8 +8,6 @@ export default (props: {
   name?: string;
   content?: string;
 }) => {
-  console.log("heree ");
-
   const [value, setValue] = useState(props.content || "");
 
   return (

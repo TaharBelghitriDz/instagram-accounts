@@ -29,7 +29,11 @@ export const CustomAddIcon = (props: ChakraProps & PropsWithChildren) => (
   </Stack>
 );
 
-export const ActionIcon = (props: { text: string; onClick: () => void }) => (
+export const ActionIcon = (props: {
+  text: string;
+  onClick: () => void;
+  color?: string;
+}) => (
   <Stack justifyContent="center" alignItems="center" p="10px">
     <HStack
       userSelect="none"
@@ -38,7 +42,7 @@ export const ActionIcon = (props: { text: string; onClick: () => void }) => (
       boxShadow="0px 0px 20px -5px #00FFB200"
       spacing="20px"
       p="10px"
-      bg="green.0"
+      bg={props.color || "green.0"}
       rounded="20px"
       color="green.1"
       cursor="pointer"

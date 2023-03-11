@@ -43,7 +43,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
       </Td> */}
       <Td textAlign="center">{titles.title}</Td>
       <Td textAlign="center">{groups.name}</Td>
-      <Td textAlign="center"> {props.time_between_posting} </Td>
+      {/* <Td textAlign="center"> {props.time_between_posting} </Td> */}
       <Td textAlign="center"> {props.is_photo ? "post" : "reels"} </Td>
       <Td isNumeric>
         <VStack>

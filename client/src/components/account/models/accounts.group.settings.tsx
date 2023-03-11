@@ -1,4 +1,11 @@
-import { CloseButton, HStack, Input, Text, VStack } from "@chakra-ui/react";
+import {
+  CloseButton,
+  HStack,
+  Input,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import { Add } from "../../icons";
 import { InputProps as defaultProps } from "@chakra-ui/react";
@@ -12,6 +19,9 @@ import {
 import state from "../../../utils/state";
 import { Post } from "../../posts";
 import { groupGet, groupsUpdate } from "../../../utils/api/groups.api";
+import Models from "../../lists/models";
+import removeGroup from "./remove.group";
+import RemoveGroup from "./remove.group";
 
 const AccountsSettingsInput = (props: defaultProps) => (
   <Input {...props} {...Props} _hover={{}} _placeholder={{ color: "gray" }} />
@@ -28,6 +38,7 @@ const AccountsGroupElmntProps = {
 export default (props: { onClose: () => void }) => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups = state.useStore((e) => e.groups);
+  const discloser = useDisclosure();
 
   const [values, setValues] = useState({
     name: "",
@@ -71,6 +82,8 @@ export default (props: { onClose: () => void }) => {
     });
   };
 
+  const Remove = <RemoveGroup {...discloser} />;
+
   return (
     <VStack w="full" spacing="20px">
       <HStack w="full" justifyContent="space-between">
@@ -84,6 +97,25 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
+
+      <Models {...discloser} content={Remove} />
+
+      <Text
+        w="full"
+        rounded="20px"
+        textAlign="center"
+        style={{ margin: "20px 0 20px 0" }}
+        py="10px"
+        bg="red.600"
+        cursor="pointer"
+        onClick={() => {
+          discloser.onOpen();
+          // props.onClose();
+        }}
+      >
+        حذف المجموعة
+      </Text>
+
       <AccountsGroupInputs isEdite values={values} setVelaues={setValues} />
 
       <HStack w="full" justifyContent="space-between">

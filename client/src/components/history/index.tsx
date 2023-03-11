@@ -12,14 +12,22 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { postsHistory } from "../../utils/api/posts.api";
-import { Add } from "../icons";
+import { Go } from "../icons";
 
 const Rows = (props: History) => (
   <Tr>
     <Td textAlign="center" w="20%">
-      <HStack spacing="10px" w="100%">
-        <Text>نسخ الرابط</Text>
-        <Add
+      <HStack
+        spacing="10px"
+        w="100%"
+        bg="green.0"
+        p="10px"
+        rounded="20px"
+        cursor="pointer"
+        color="green.1"
+      >
+        <Text textAlign="start">ذهاب للمنشور</Text>
+        <Go
           h="30px"
           w="30px"
           p="5px"
@@ -113,10 +121,16 @@ export default () => {
         <TableCaption h="0px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            <Th />
-            <Th textAlign="center">العنوان</Th>
-            <Th textAlign="center"> النوع</Th>
-            <Th textAlign="center">تاريخ الاضافة</Th>
+            <Th color="white" />
+            <Th color="white" textAlign="center">
+              العنوان
+            </Th>
+            <Th color="white" textAlign="center">
+              النوع
+            </Th>
+            <Th color="white" textAlign="center">
+              تاريخ النشر
+            </Th>
           </Tr>
         </Thead>
         <Tbody>

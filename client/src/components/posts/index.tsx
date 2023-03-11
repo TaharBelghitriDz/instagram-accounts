@@ -92,11 +92,18 @@ export default () => {
         <Thead pt="20px">
           <Tr>
             {/* <Th textAlign="center">نسخ الرابط</Th> */}
-            <Th textAlign="center">العنوان</Th>
-            <Th textAlign="center"> المجموعة</Th>
-            <Th textAlign="center">النشر كل</Th>
-            <Th textAlign="center">النوع</Th>
-            <Th textAlign="center">تاريخ الاضافة</Th>
+            <Th color="white" textAlign="center">
+              العنوان
+            </Th>
+            <Th color="white" textAlign="center">
+              المجموعة
+            </Th>
+            <Th color="white" textAlign="center">
+              النوع
+            </Th>
+            <Th color="white" textAlign="center">
+              تاريخ الاضافة
+            </Th>
             <Th />
           </Tr>
         </Thead>

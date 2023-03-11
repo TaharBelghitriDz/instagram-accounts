@@ -97,11 +97,21 @@ export default () => {
         <Thead pt="20px">
           <Tr>
             <Th />
-            <Th textAlign="center">اسم</Th>
-            <Th textAlign="center">كلمة المرور</Th>
-            <Th textAlign="center">المضيف</Th>
-            <Th textAlign="center">المدخل</Th>
-            <Th textAlign="center">تاريخ الاضافة</Th>
+            <Th color="white" textAlign="center">
+              اسم
+            </Th>
+            <Th color="white" textAlign="center">
+              كلمة المرور
+            </Th>
+            <Th color="white" textAlign="center">
+              المضيف
+            </Th>
+            <Th color="white" textAlign="center">
+              المدخل
+            </Th>
+            <Th color="white" textAlign="center">
+              تاريخ الاضافة
+            </Th>
           </Tr>
         </Thead>
         <Tbody>

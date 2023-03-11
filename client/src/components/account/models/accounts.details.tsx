@@ -84,7 +84,7 @@ export default (props: { onClose: () => void; id: number }) => {
         status: "success",
         isClosable: true,
       });
-      console.log(accountsState);
+      // console.log(accountsState);
 
       // console.log(
       //   accountsState.map((e: any) => (e.id == res?.data.id ? res?.data : e))

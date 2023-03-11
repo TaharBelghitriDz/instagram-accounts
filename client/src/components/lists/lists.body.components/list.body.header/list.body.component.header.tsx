@@ -38,9 +38,12 @@ export default (props: {
 
   const addData = (value: string) => {
     const values =
-      props.place == "name"
-        ? value.split("\n").map((e) => ({ name: e }))
-        : [{ bio: value }];
+      // props.place == "name"
+      //   ?
+      value
+        .split("\n")
+        .map((e) => (props.place == "name" ? { name: e } : { bio: e }));
+    // : [{ bio: value }];
 
     const fun =
       props.place == "name" ? namesAdd(values) : biographiesAdd(values);
@@ -54,8 +57,6 @@ export default (props: {
           isClosable: true,
           title: "خطا في الارسال",
         });
-      console.log("__");
-      console.log(res?.data);
 
       if (props.place == "name") return state.changeState({ name: res?.data });
       if (props.place == "bio") return state.changeState({ bio: res?.data });
