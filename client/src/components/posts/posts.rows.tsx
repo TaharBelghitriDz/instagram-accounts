@@ -29,7 +29,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
 
   return (
     <Tr>
-      <Td>
+      {/* <Td>
         <Text
           bg="green.0"
           color="green.1"
@@ -40,7 +40,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
         >
           نسخ
         </Text>
-      </Td>
+      </Td> */}
       <Td textAlign="center">{titles.title}</Td>
       <Td textAlign="center">{groups.name}</Td>
       <Td textAlign="center"> {props.time_between_posting} </Td>
@@ -54,7 +54,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
       </Td>
       <Td>
         <HStack spacing="10px">
-          <Text
+          {/* <Text
             p="10px"
             rounded="xl"
             cursor="pointer"
@@ -63,7 +63,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
             onClick={props.onClick}
           >
             تعديل
-          </Text>
+          </Text> */}
           <Text
             p="10px"
             rounded="xl"

@@ -95,7 +95,7 @@ export const AccountsGroupInputs = (props: {
         </HStack>
       </VStack>
       <VStack {...AccountsGroupElmntProps}>
-        <Text>الفاصل الزمني</Text>
+        <Text>الفاصل الزمني للاعجابات</Text>
         <HStack w="90%" justifyContent="space-between">
           <Text>من</Text>
           <AccountsSettingsInput
@@ -211,7 +211,7 @@ export const AccountsGroupInputs = (props: {
         </HStack>
       </VStack>
       <VStack {...AccountsGroupElmntProps}>
-        <Text>النشر كل</Text>
+        <Text>الفاصل الزمني للنشر</Text>
         <HStack w="90%" justifyContent="space-between">
           <Text>من</Text>
           <AccountsSettingsInput
