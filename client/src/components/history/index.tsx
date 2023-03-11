@@ -48,17 +48,44 @@ type History = {
   created_time: string;
 };
 
+const fakeData = [
+  {
+    title: "title 01",
+    post_link: "post link ",
+    is_photo: true,
+    created_time: "2023-03-11T11:19:36.499Z",
+  },
+  {
+    title: "title à2",
+    post_link: "post link ",
+    is_photo: false,
+    created_time: "2023-03-11T11:19:36.499Z",
+  },
+  {
+    title: "title 03",
+    post_link: "post link ",
+    is_photo: true,
+    created_time: "2023-03-11T11:19:36.499Z",
+  },
+  {
+    title: "title à4",
+    post_link: "post link ",
+    is_photo: false,
+    created_time: "2023-03-11T11:19:36.499Z",
+  },
+];
+
 export default () => {
-  const [history, setHistory] = useState<History[]>([]);
+  const [history, setHistory] = useState<History[]>(fakeData);
 
-  useState(() => {
-    postsHistory.then(({ res, err }) => {
-      if (err) return;
-      console.log(res);
+  // useState(() => {
+  //   postsHistory.then(({ res, err }) => {
+  //     if (err) return;
+  //     console.log(res);
 
-      setHistory(() => [...res?.data]);
-    });
-  });
+  //     setHistory(() => [...res?.data]);
+  //   });
+  // });
 
   return (
     <VStack
