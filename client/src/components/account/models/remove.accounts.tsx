@@ -1,11 +1,39 @@
-import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
+import { CloseButton, HStack, Text, useToast, VStack } from "@chakra-ui/react";
+import { accountsDelete } from "../../../utils/api/accounts.api";
 import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
   const selectedCheckBox = state.useStore((e) => e.selectedAccounts);
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
 
-  const fun = () => {};
+  const toast = useToast();
+
+  const fun = () => {
+    if (selectedCheckBox.length < 1)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "يرجى اختيار حسابات للحدف",
+      });
+
+    accountsDelete({ id: selectedGroup, data: selectedCheckBox }).then(
+      ({ err, res }) => {
+        if (err)
+          return toast({
+            status: "error",
+            isClosable: true,
+            title: "يرجى اختيار حسابات للحدف",
+          });
+        props.onClose();
+        return toast({
+          status: "success",
+          isClosable: true,
+          title: "تم الحدف",
+        });
+      }
+    );
+  };
 
   return (
     <VStack w="full" spacing="50px">
