@@ -1,7 +1,10 @@
 import { CloseButton, HStack, Text, VStack } from "@chakra-ui/react";
+import state from "../../../utils/state";
 import { Add } from "../../icons";
 
 export default (props: { onClose: () => void }) => {
+  const selectedCheckBox = state.useStore((e) => e.selectedAccounts);
+
   const fun = () => {};
 
   return (
