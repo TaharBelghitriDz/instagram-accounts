@@ -17,6 +17,7 @@ import { Historiq, Refresh, Settings } from "../../icons";
 import Models from "../models";
 import AccountsAddGroup from "../models/accounts.add.group";
 import AccountsGroupSettings from "../models/accounts.group.settings";
+import RemoveAccounts from "../models/remove.accounts";
 import RemoveGroup from "../models/remove.group";
 
 export default () => {
@@ -39,13 +40,17 @@ export default () => {
       flexDir={{ start: "column", md: "row" }}
     >
       <Models
+        content={<RemoveAccounts {...removeDiscloser} />}
+        {...removeDiscloser}
+      />
+      <Models
         {...AddDiscloser}
         content={<AccountsAddGroup {...AddDiscloser} />}
       />
-      <Models
+      {/* <Models
         {...removeDiscloser}
         content={<RemoveGroup {...removeDiscloser} />}
-      />
+      /> */}
       <Models
         {...discloser}
         content={<AccountsGroupSettings {...discloser} />}
