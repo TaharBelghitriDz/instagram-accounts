@@ -82,6 +82,7 @@ const state = {
   place: "/",
   listPlace: "names",
   selectedGroup: "",
+  selectedAccounts: [],
   groups: [] as GroupInutType[],
   accounts: [] as Account[],
   proxies: [] as Proxies[],
