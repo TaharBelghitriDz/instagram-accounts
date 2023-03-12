@@ -17,7 +17,7 @@ import { Account, accountGet } from "../../../utils/api/accounts.api";
 import state from "../../../utils/state";
 import Models from "../models";
 import AccountsDetails from "../models/accounts.details";
-import RemoveAccounts from "../models/remove.accounts";
+
 import AccountsTableHeaderComponent from "./accounts.table.header.component";
 
 const Row = (props: {
