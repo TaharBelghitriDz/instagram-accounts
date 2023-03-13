@@ -19,7 +19,7 @@ export default () => {
     e: ComponentType<any>;
     discloser: typeof discloser;
   }) => <args.e {...args.discloser} />;
-  console.log(selctedPics);
+  // console.log(selctedPics);
 
   const remove = () => {
     profilePicDelete(selctedPics).then(({ err, res }) => {

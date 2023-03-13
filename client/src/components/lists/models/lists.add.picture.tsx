@@ -30,57 +30,68 @@ export default (props: {
   if (file) console.log((file as any)[0].name);
 
   const fun = async () => {
-    const formData = new FormData();
-    formData.append("image", (file as any)[0]);
+    props.onClose();
+    toast({
+      status: "loading",
+      duration: 1000,
+      title: "جاري التحميل",
+      isClosable: true,
+    });
 
-    await axios({
-      method: "POST",
-      url: "https://api.imgbb.com/1/upload?key=1a35d76d15a4a8c56e74013014094285",
-      data: formData,
-    })
-      .then((e) => {
-        const picUrl = e.data.data.display_url;
+    const filesArray: File[] = [];
+    Object.values(file as any).forEach(async (e) => {
+      if (typeof e !== "number") filesArray.push(e as any);
+    });
 
-        console.log(picUrl);
-        toast({ status: "loading", duration: 1000, title: "جاري التحميل" });
-        props.onClose();
+    const upload = async (file: File) => {
+      const formData = new FormData();
+      formData.append("image", file);
 
-        const uploadTo = () => {
-          if (props.for_title)
-            return mediaAdd({
-              id: props.id,
-              data: [{ is_photo: props.is_photo, media_link: picUrl }],
-            });
+      return await axios({
+        method: "POST",
+        url: "https://api.imgbb.com/1/upload?key=1a35d76d15a4a8c56e74013014094285",
+        data: formData,
+      })
+        .then((e) => {
+          const picUrl = e.data.data.display_url;
 
-          return profilePicAdd([{ profile_pic_link: picUrl }]);
-        };
-
-        uploadTo().then(({ res, err }) => {
-          if (err)
-            return toast({
-              title: "خطا في التحميل",
-              status: "error",
+          const uploadTo = () => {
+            if (props.for_title)
+              return mediaAdd({
+                id: props.id,
+                data: [{ is_photo: props.is_photo, media_link: picUrl }],
+              });
+            return profilePicAdd([{ profile_pic_link: picUrl }]);
+          };
+          uploadTo().then(({ res, err }) => {
+            if (err)
+              return toast({
+                title: "خطا في التحميل",
+                status: "error",
+                isClosable: true,
+              });
+            if (props.for_title) state.changeState({ medias: [...res?.data] });
+            else state.changeState({ profile_pics: res?.data });
+            toast({
+              title: "تم التحميل",
+              status: "success",
               isClosable: true,
             });
-
-          if (props.for_title) state.changeState({ medias: [...res?.data] });
-          else state.changeState({ profile_pics: res?.data });
-
+            props.onClose();
+          });
+        })
+        .catch((e) => {
           toast({
-            title: "تم التحميل",
-            status: "success",
+            title: "خطا في التحميل",
+            status: "error",
             isClosable: true,
           });
-          props.onClose();
         });
-      })
-      .catch((e) => {
-        toast({
-          title: "خطا في التحميل",
-          status: "error",
-          isClosable: true,
-        });
-      });
+    };
+
+    for (const file of filesArray as any) {
+      await upload(file);
+    }
   };
 
   const upload = () => {
@@ -121,6 +132,7 @@ export default (props: {
         aria-hidden="true"
         accept="image/*"
         ref={ref}
+        multiple
         onChange={({ target: { files } }) => setFile(() => files as any[0])}
       />
 

@@ -64,6 +64,9 @@ export default (props: {
   };
 
   const removeData = () => {
+    // console.log("selcted");
+    // console.log(selcted);
+
     const fun =
       props.place == "name" ? namesDelete(selcted) : biographiesDelete(selcted);
 
@@ -76,8 +79,8 @@ export default (props: {
           title: "خطا في الارسال",
         });
 
-      console.log(selcted);
-      console.log(res?.data);
+      // console.log(selcted);
+      // console.log(res?.data);
 
       if (props.place == "name") return state.changeState({ name: res?.data });
       if (props.place == "bio") return state.changeState({ bio: res?.data });

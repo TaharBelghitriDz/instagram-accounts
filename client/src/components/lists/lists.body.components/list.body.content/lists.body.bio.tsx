@@ -9,6 +9,7 @@ const Bio = (props: {
   selected: boolean;
 }) => (
   <HStack
+    w="full"
     style={{ margin: "10px" }}
     spacing="10px"
     border={props.selected ? "solid 1px transparent" : "solid 1px gray"}
@@ -18,8 +19,8 @@ const Bio = (props: {
     color={props.selected ? "red" : "white"}
     bg={props.selected ? "red.900" : ""}
     onClick={props.onClick}
-    alignItems="center"
-    justifyContent="center"
+    alignItems="start"
+    justifyContent="space-between"
   >
     <Text>{props.name}</Text>
     <Box
@@ -54,6 +55,10 @@ export default () => {
     [namesState]
   );
 
+  useEffect(() => {
+    state.changeState({ selcted: bio.filter((e) => e.id).map((e) => e.id) });
+  }, [bio]);
+
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader
@@ -70,6 +75,7 @@ export default () => {
         flexWrap="wrap"
         justifyContent="space-around"
         p="10px"
+        w="full"
       >
         {bio.map((e, i) => (
           <Bio

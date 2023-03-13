@@ -252,6 +252,7 @@ const TitleEdit = () => {
 
 const Texts = (props: { selctedId: string }) => {
   const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
+  const [reload, setReaload] = useState(false);
   const discloser = useDisclosure();
 
   useEffect(() => {
@@ -259,7 +260,7 @@ const Texts = (props: { selctedId: string }) => {
       state.changeState({ caption: res?.data });
       setTitles(() => [...res?.data]);
     });
-  }, [props.selctedId]);
+  }, [props.selctedId, reload]);
 
   const Add = () => (
     <ListsAddTitle
@@ -290,8 +291,8 @@ const Texts = (props: { selctedId: string }) => {
             ({ res, err }) => {
               if (err) return;
 
-              state.changeState({ titles: [...res?.data] });
-              setTitles((e) => [...res?.data]);
+              setReaload((e) => !e);
+
               removeDiscloser.onClose();
             }
           );
@@ -604,7 +605,12 @@ export default () => {
   const selected = state.useStore((e) => e.selectedTitle);
 
   return (
-    <HStack w="full" flexWrap="wrap" justifyContent="space-between">
+    <HStack
+      w="full"
+      flexWrap="wrap"
+      justifyContent="space-between"
+      alignItems="start"
+    >
       <TitleEdit />
       <Titles />
       {selected !== "" && (
