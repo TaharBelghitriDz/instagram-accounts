@@ -22,7 +22,11 @@ const Bio = (props: {
     alignItems="start"
     justifyContent="space-between"
   >
-    <Text>{props.name}</Text>
+    <VStack alignItems="start" spacing={0}>
+      {props.name.split("\n").map((e, i) => (
+        <Text key={i}>{e}</Text>
+      ))}
+    </VStack>
     <Box
       border="solid 2px red"
       bg={props.selected ? "red" : "transparent"}
