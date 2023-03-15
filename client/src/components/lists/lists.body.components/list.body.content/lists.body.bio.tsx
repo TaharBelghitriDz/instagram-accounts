@@ -60,7 +60,9 @@ export default () => {
   );
 
   useEffect(() => {
-    state.changeState({ selcted: bio.filter((e) => e.id).map((e) => e.id) });
+    state.changeState({
+      selcted: bio.filter((e) => e.selected && e.id).map((e) => e.id),
+    });
   }, [bio]);
 
   return (
@@ -89,6 +91,7 @@ export default () => {
             onClick={() => {
               var newOne = bio;
               newOne[i].selected = !newOne[i].selected;
+
               return setBio(() => [...newOne]);
             }}
           />
