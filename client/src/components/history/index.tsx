@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { postsHistory } from "../../utils/api/posts.api";
+import { date } from "../../utils/dates";
 import { Go } from "../icons";
 
 const Rows = (props: History) => (
@@ -25,6 +26,7 @@ const Rows = (props: History) => (
         rounded="20px"
         cursor="pointer"
         color="green.1"
+        onClick={() => window.open(props.post_link, "_blank")}
       >
         <Text textAlign="start">ذهاب للمنشور</Text>
         <Go
@@ -42,8 +44,12 @@ const Rows = (props: History) => (
     <Td textAlign="center"> {props.is_photo ? "بوسة" : "ريلز"} </Td>
     <Td isNumeric>
       <VStack>
-        <span> 02/02/2023 </span>
-        <span>12:23</span>
+        <span style={{ textAlign: "center" }}>
+          {date(props.created_time as string, "day")}
+        </span>
+        <span style={{ textAlign: "center" }}>
+          {date(props.created_time as string, "time")}
+        </span>
       </VStack>
     </Td>
   </Tr>
@@ -59,25 +65,25 @@ type History = {
 const fakeData = [
   {
     title: "title 01",
-    post_link: "post link ",
+    post_link: "",
     is_photo: true,
     created_time: "2023-03-11T11:19:36.499Z",
   },
   {
     title: "title à2",
-    post_link: "post link ",
+    post_link: "",
     is_photo: false,
     created_time: "2023-03-11T11:19:36.499Z",
   },
   {
     title: "title 03",
-    post_link: "post link ",
+    post_link: "",
     is_photo: true,
     created_time: "2023-03-11T11:19:36.499Z",
   },
   {
     title: "title à4",
-    post_link: "post link ",
+    post_link: "",
     is_photo: false,
     created_time: "2023-03-11T11:19:36.499Z",
   },
@@ -86,14 +92,13 @@ const fakeData = [
 export default () => {
   const [history, setHistory] = useState<History[]>(fakeData);
 
-  // useState(() => {
-  //   postsHistory.then(({ res, err }) => {
-  //     if (err) return;
-  //     console.log(res);
-
-  //     setHistory(() => [...res?.data]);
-  //   });
-  // });
+  useState(() => {
+    postsHistory.then(({ res, err }) => {
+      if (err) return;
+      if (res?.data.length < 1) return setHistory(() => fakeData);
+      return setHistory(() => [...res?.data]);
+    });
+  });
 
   return (
     <VStack
@@ -135,7 +140,7 @@ export default () => {
         </Thead>
         <Tbody>
           {history.map((e, i) => (
-            <Rows {...e} />
+            <Rows key={i} {...e} />
           ))}
         </Tbody>
       </Table>
