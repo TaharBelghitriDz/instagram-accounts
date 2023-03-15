@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Proxies, proxiesGet } from "../../../utils/api/proxies.api";
+import { date } from "../../../utils/dates";
 import state from "../../../utils/state";
 import ProxiesTableHeader from "./proxies.table.header";
 
@@ -39,8 +40,12 @@ const TableBodyRow = (
       <Td textAlign="center">{props.port}</Td>
       <Td isNumeric>
         <VStack>
-          <span>{props.created_date?.slice(0, 12)}</span>
-          <span>{props.created_date?.slice(13, 23)}</span>
+          <span style={{ textAlign: "center" }}>
+            {date(props.created_date as string, "day")}
+          </span>
+          <span style={{ textAlign: "center" }}>
+            {date(props.created_date as string, "time")}
+          </span>
         </VStack>
       </Td>
     </Tr>
