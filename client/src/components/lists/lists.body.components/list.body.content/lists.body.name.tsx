@@ -56,7 +56,9 @@ export default () => {
   );
 
   useEffect(() => {
-    state.changeState({ selcted: names.filter((e) => e.id).map((e) => e.id) });
+    state.changeState({
+      selcted: names.filter((e) => e.selected && e.id).map((e) => e.id),
+    });
   }, [names]);
 
   return (
