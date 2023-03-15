@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Account, accountGet } from "../../../utils/api/accounts.api";
+import { date } from "../../../utils/dates";
 import state from "../../../utils/state";
 import Models from "../models";
 import AccountsDetails from "../models/accounts.details";
@@ -74,8 +75,12 @@ const Row = (props: {
           </Td>
           <Td onClick={() => props.onClick(e.id)} isNumeric>
             <VStack>
-              <span>{e.created_date.slice(0, 12)}</span>
-              <span>{e.created_date.slice(13, 23)}</span>
+              <span style={{ textAlign: "center" }}>
+                {date(e.created_date, "day")}
+              </span>
+              <span style={{ textAlign: "center" }}>
+                {date(e.created_date, "time")}
+              </span>
             </VStack>
           </Td>
         </Tr>
