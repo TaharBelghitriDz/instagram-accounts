@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ const Row = (props: {
   onClick: (e: any) => void;
   onCheckBox: (e: number) => void;
 }) => {
+  const toast = useToast();
   const accountsState: Account[] = state.useStore((e) => e.accounts);
   const [accounts, setAccounts] = useState<Account[]>(accountsState);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
@@ -34,11 +36,26 @@ const Row = (props: {
   });
 
   useEffect(() => {
-    accountGet(selectedGroup).then(({ res, err }) => {
-      if (err) return;
+    if (selectedGroup != "") {
+      toast({
+        status: "loading",
+        title: " تحميل الحسابات",
+        isClosable: true,
+        duration: 2000,
+      });
 
-      setAccounts(() => [...res?.data]);
-    });
+      accountGet(selectedGroup).then(({ res, err }) => {
+        if (err) return;
+
+        setAccounts(() => [...res?.data]);
+        return toast({
+          status: "success",
+          title: "تم تحميل",
+          isClosable: true,
+          duration: 2000,
+        });
+      });
+    }
   }, [selectedGroup]);
 
   return (

@@ -83,7 +83,7 @@ export default () => {
           alignItems="start"
           justifyContent="center"
         >
-          <Text
+          {/* <Text
             p="20px"
             bg="rgb(260,260,260,10%)"
             rounded="10px"
@@ -93,7 +93,7 @@ export default () => {
             يننمي يي تيت ي تي يت ي ي ي ي ينيك ثص صنى صا صض ا صاثض صثصثنضصصc
             يننمي يي تيت ي تي يت ي ي ي ي ينيك ثص صنى صا صض ا صاثض صثصثنضصصc
             يننمي يي تيت
-          </Text>
+          </Text> */}
         </VStack>
       </Stack>
 
@@ -105,13 +105,13 @@ export default () => {
         p="20px"
         rounded="20px"
       >
-        <Text fontSize="30px" w="full">
+        {/* <Text fontSize="30px" w="full">
           مرحبا بك مجددا
         </Text>
         <Text color="whiteAlpha.400" pb="20px">
           صنى صا صض ا صاثض صثصثنضصصc يننمي يي تيت ي تي يت ي ي ي ي ينيك ثص صنى صا
           صض ا صاثض صثصثنض
-        </Text>
+        </Text> */}
         <Input
           {...InputProps}
           placeholder="الايمايل"

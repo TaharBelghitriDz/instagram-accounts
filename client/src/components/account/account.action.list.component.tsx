@@ -51,7 +51,7 @@ export default () => {
         text="تغيير وضع الحسابات​"
         onClick={() => view(changeAccountsStatus)}
       />
-      <ActionIcon text="حذف الحسابات​" onClick={() => view(removeAccounts)} />
+      {/* <ActionIcon text="حذف الحسابات​" onClick={() => view(removeAccounts)} /> */}
     </HStack>
   );
 };

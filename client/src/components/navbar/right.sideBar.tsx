@@ -11,11 +11,12 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import state from "../../utils/state";
-import { Historiq, List, Pen, Proxy, UserIcon } from "../icons";
+import { Historiq, List, Logout, Pen, Proxy, UserIcon } from "../icons";
 
 export default (props: {
   name: string;
   icon: ChakraComponent<"svg", IconProps>;
+  onClick?: () => void;
 }) => {
   const [isHoverd, setHover] = useState(false);
 
@@ -25,7 +26,9 @@ export default (props: {
       onHoverStart={() => setHover(() => true)}
       onHoverEnd={() => setHover(() => false)}
       animate={{ backgroundColor: isHoverd ? "#0F366A" : "#0F366A00" }}
-      onClick={() => state.changeView(props.name)}
+      onClick={() =>
+        props.onClick ? props.onClick() : state.changeView(props.name)
+      }
       w="full"
       cursor="pointer"
       p="10px"
@@ -76,5 +79,13 @@ export const sideBarItems = [
   {
     name: "سجل النشر",
     icon: Historiq,
+  },
+  {
+    name: "تسجيل الخروج",
+    icon: Logout,
+    onClick() {
+      localStorage.removeItem("token");
+      location.reload();
+    },
   },
 ];
