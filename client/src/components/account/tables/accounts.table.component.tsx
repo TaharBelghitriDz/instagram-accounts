@@ -30,33 +30,46 @@ const Row = (props: {
   const accountsState: Account[] = state.useStore((e) => e.accounts);
   const [accounts, setAccounts] = useState<Account[]>(accountsState);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
+  const groups = state.useStore((e) => e.groups);
+  const refreshAccounts = state.useStore((e) => e.refreshAccounts);
 
   useState(() => {
     setAccounts(() => [...accountsState]);
   });
 
-  useEffect(() => {
+  const getData = (refresh?: boolean) => {
     if (selectedGroup != "") {
-      toast({
-        status: "loading",
-        title: " تحميل الحسابات",
-        isClosable: true,
-        duration: 2000,
-      });
-
-      accountGet(selectedGroup).then(({ res, err }) => {
-        if (err) return;
-
-        setAccounts(() => [...res?.data]);
-        return toast({
-          status: "success",
-          title: "تم تحميل",
+      if (!refresh)
+        toast({
+          status: "loading",
+          title: " تحميل الحسابات",
           isClosable: true,
           duration: 2000,
         });
+
+      accountGet(selectedGroup).then(({ res, err }) => {
+        if (!refresh)
+          toast({
+            status: "success",
+            title: "تم تحميل",
+            isClosable: true,
+            duration: 2000,
+          });
+
+        if (err) return;
+
+        setAccounts(() => [...res?.data]);
       });
     }
-  }, [selectedGroup]);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedGroup, groups]);
+
+  useEffect(() => {
+    getData(true);
+  }, [refreshAccounts]);
 
   return (
     <Tbody>
@@ -72,7 +85,7 @@ const Row = (props: {
           </Td>
           <Td onClick={() => props.onCheckBox(e.id)}>
             <Image
-              src={e.profile_pic}
+              src={e.profile_pic_link}
               h="75px"
               minW="75"
               w="75px"
@@ -109,12 +122,17 @@ const Row = (props: {
 export default () => {
   const discloser = useDisclosure();
   const [selctedAccount, setSelectedAccount] = useState(0);
+  const refresh = state.useStore((e) => e.refreshAccounts);
   // const [selectedCheckBox, setselectedCheckBox] = useState<number[]>([]);
 
   const selectedCheckBox = state.useStore((e) => e.selectedAccounts);
 
   const setselectedCheckBox = (e: number[]) =>
     state.changeState({ selectedAccounts: e });
+
+  useEffect(() => {
+    state.changeState({ selectedAccounts: [] });
+  }, [refresh]);
 
   const CheckBox = (id: number) => {
     // console.log(selectedCheckBox);

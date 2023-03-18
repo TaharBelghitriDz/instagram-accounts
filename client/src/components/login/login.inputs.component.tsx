@@ -92,7 +92,7 @@ export default () => {
         </Text> */}
         <Input
           {...InputProps}
-          placeholder="الايمايل"
+          placeholder="اسم المستخدم"
           value={email}
           onChange={({ target: { value } }) =>
             setInputs((e) => ({ ...e, email: value }))

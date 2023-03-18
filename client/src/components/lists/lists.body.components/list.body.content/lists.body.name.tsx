@@ -43,17 +43,15 @@ export default () => {
     })),
   ]);
 
-  useEffect(
-    () =>
-      setNames(() => [
-        ...namesState.map((e: any) => ({
-          name: e.name,
-          selected: false,
-          id: e.id,
-        })),
-      ]),
-    [namesState]
-  );
+  useEffect(() => {
+    setNames(() => [
+      ...namesState.map((e: any) => ({
+        name: e.name,
+        selected: false,
+        id: e.id,
+      })),
+    ]);
+  }, [namesState]);
 
   useEffect(() => {
     state.changeState({
@@ -61,6 +59,12 @@ export default () => {
     });
   }, [names]);
 
+  useEffect(() => {
+    namesGet.then(({ err, res }) => {
+      if (err) return;
+      state.changeState({ name: res?.data });
+    });
+  }, []);
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">
       <ListBodyComponentHeader

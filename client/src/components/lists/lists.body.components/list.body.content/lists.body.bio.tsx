@@ -1,5 +1,6 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { biographiesGet } from "../../../../utils/api/lists/bio.api";
 import state from "../../../../utils/state";
 import ListBodyComponentHeader from "../list.body.header/list.body.component.header";
 
@@ -64,6 +65,13 @@ export default () => {
       selcted: bio.filter((e) => e.selected && e.id).map((e) => e.id),
     });
   }, [bio]);
+
+  useEffect(() => {
+    biographiesGet.then(({ err, res }) => {
+      if (err) return;
+      state.changeState({ bio: res?.data });
+    });
+  }, []);
 
   return (
     <VStack spacing="0px" w="full" bg="#323232" rounded="20px" p="0px">

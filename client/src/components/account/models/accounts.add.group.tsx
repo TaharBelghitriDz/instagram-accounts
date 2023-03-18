@@ -271,7 +271,7 @@ export default (props: { onClose: () => void }) => {
   });
 
   const sendFun = () =>
-    groupCreate(values).then(({ err, res }) => {
+    groupCreate(values).then(async ({ err, res }) => {
       if (values.name == "")
         return toast({
           status: "error",
@@ -289,7 +289,10 @@ export default (props: { onClose: () => void }) => {
 
       // groupGet.then(({ err, res }) => {
       //   if (err) return;
+
       state.changeState({ groups: newGroup });
+
+      await state.changeState({ selectedGroup: "" });
       // // });
 
       props.onClose();

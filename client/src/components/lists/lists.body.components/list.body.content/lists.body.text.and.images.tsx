@@ -38,6 +38,8 @@ import ListsAddTitle from "../../models/lists.add.title";
 import ListsRemove from "../../models/lists.remove";
 import ListsAddPicture from "../../models/lists.add.picture";
 
+const refresh = () => state.changeState({ refreshtextsAndImages: Date.now() });
+
 const TitleEdit = () => {
   const [titles, setTitles] = useState<{ title: string; id: number }[]>([]);
   const discloser = useDisclosure();
@@ -48,7 +50,9 @@ const TitleEdit = () => {
     titleGet.then(({ res, err }) => {
       if (err) return;
       state.changeState({ titles: res?.data });
+
       setTitles(() => [...res?.data]);
+      refresh();
     });
   });
 
@@ -62,6 +66,8 @@ const TitleEdit = () => {
 
           state.changeState({ titles: [...titles, res?.data] });
           setTitles((e) => [...e, res?.data]);
+          refresh();
+
           discloser.onClose();
         });
       }}
@@ -125,6 +131,8 @@ const TitleEdit = () => {
             setTitles((e) => [
               ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
             ]);
+            refresh();
+
             discloser.onClose();
           });
         }}
@@ -317,6 +325,7 @@ const Texts = (props: { selctedId: string }) => {
             setTitles((e) => [
               ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
             ]);
+            refresh();
             discloser.onClose();
           });
         }}
@@ -498,6 +507,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
         ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
       ]);
     });
+    refresh();
   }, [selectedGroup, medias, props.selctedId]);
 
   const addPictureModel = (
@@ -603,6 +613,7 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
 
 export default () => {
   const selected = state.useStore((e) => e.selectedTitle);
+  state.useStore((e) => e.refreshtextsAndImages);
 
   return (
     <HStack

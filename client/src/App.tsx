@@ -8,7 +8,7 @@ import { initialData } from "./utils/api/accounts.api";
 
 function App() {
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const location = window.location.pathname;
 
@@ -17,18 +17,17 @@ function App() {
   const token = localStorage.getItem("token");
   if (!token && location != "/login") window.location.replace("/login");
 
-  if (token)
+  token &&
     useState(() =>
       initialData.then((res) => {
-        console.log("loaded");
-
-        if (!res)
-          return toast({
-            status: "error",
-            isClosable: true,
-            description: "خطا في الاتصال",
-          });
-
+        // if (!res)
+        //   return (
+        //     toast({
+        //       status: "warning",
+        //       isClosable: true,
+        //       description: "لا توجد مجموعات ",
+        //     }),
+        //)
         setIsLoading(() => false);
       })
     );

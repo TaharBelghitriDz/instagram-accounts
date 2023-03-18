@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Post } from ".";
+import { date } from "../../utils/dates";
 import state from "../../utils/state";
 import PostsRemoveModel from "./posts.remove.model";
 
@@ -47,8 +48,12 @@ export default (props: Post & { onClick: (e: any) => void }) => {
       <Td textAlign="center"> {props.is_photo ? "post" : "reels"} </Td>
       <Td isNumeric>
         <VStack>
-          <span> 02/02/2023 </span>
-          <span>12:23</span>
+          <span style={{ textAlign: "center" }}>
+            {date(props.created_date, "day")}
+          </span>
+          <span style={{ textAlign: "center" }}>
+            {date(props.created_date, "time")}
+          </span>
           <PostsRemoveModel post_id={props.id as number} {...discoler} />
         </VStack>
       </Td>

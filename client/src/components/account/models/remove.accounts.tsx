@@ -26,6 +26,9 @@ export default (props: { onClose: () => void }) => {
             title: "يرجى اختيار حسابات للحدف",
           });
         props.onClose();
+
+        state.changeState({ refreshAccounts: Date.now() });
+
         return toast({
           status: "success",
           isClosable: true,

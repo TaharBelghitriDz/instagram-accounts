@@ -19,9 +19,9 @@ export default (props: { onClose: () => void }) => {
 
   const add = () => {
     const valueArray = value
-      .replace(/ /g, "")
       .split("\n")
-      .map((e) => e.split(":"));
+      .filter((e) => e != "" && e)
+      .map((e) => e.replace(/\s/g, "").split(":"));
 
     let proxies: Proxies[] = [];
 

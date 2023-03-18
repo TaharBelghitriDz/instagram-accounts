@@ -83,6 +83,8 @@ const state = {
   listPlace: "names",
   selectedGroup: "",
   selectedAccounts: [],
+  refreshAccounts: 0,
+  refreshtextsAndImages: 0,
   groups: [] as GroupInutType[],
   accounts: [] as Account[],
   proxies: [] as Proxies[],

@@ -18,6 +18,8 @@ export default (props: { onClose: () => void }) => {
 
   const fun = () => {
     botAddBioLink({ data: value, id: selectedGroup }).then(({ err, res }) => {
+      console.log(err);
+
       if (err)
         return toast({
           status: "error",

@@ -24,6 +24,7 @@ export type Post = {
   time_between_posting: number;
   is_photo: true;
   id?: number;
+  created_date: string;
 };
 
 export default () => {
@@ -34,15 +35,12 @@ export default () => {
   const editDiscloser = useDisclosure();
   const [selectedPost, setSelectedPost] = useState("");
 
-  useState(() => {
+  useEffect(() => {
     postsGet.then(({ err, res }) => {
-      console.log("res");
-      console.log(res);
-
       if (err) return;
-      setPosts(() => res?.data);
+      setPosts(() => [...res?.data]);
     });
-  });
+  }, []);
 
   useEffect(() => {
     setPosts(() => [...postsState]);

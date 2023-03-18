@@ -1,7 +1,8 @@
 import { Stack, Text, VStack } from "@chakra-ui/react";
 
-export default (props: { text: string }) => {
-  const randomNumber = Math.floor(Math.random() * 9) + 1;
+export default (props: { text: string; index?: number }) => {
+  const randomNumber = props.index || 0;
+
   return (
     <Stack
       alignItems="center"

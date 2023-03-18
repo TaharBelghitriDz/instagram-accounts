@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   useOutsideClick,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { Fragment, useRef, useState } from "react";
@@ -95,10 +96,19 @@ export default (props: {
 };
 
 const Inputs = (props: { onClose: () => void; post?: Post }) => {
-  props.post && console.log(props.post);
-
+  const toast = useToast();
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
+
+  console.log(titles);
+
+  groups.length < 1 &&
+    (props.onClose(),
+    toast({ status: "error", isClosable: true, title: "اضف مجموعات" }));
+
+  titles.length < 1 &&
+    (props.onClose(),
+    toast({ status: "error", isClosable: true, title: "اضف عناوين" }));
 
   const [selected, setSelected] = useState(
     !props.post
@@ -121,7 +131,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
     const is_photo = isPhoto;
     const body = { title_id, group_id, time_between_posting, is_photo };
 
-    if (props.post)
+    if (!props.post)
       return postsAdd(body).then(({ err, res }) => {
         if (err) return;
 

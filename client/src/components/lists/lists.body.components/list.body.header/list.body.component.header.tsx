@@ -39,7 +39,10 @@ export default (props: {
   const addData = (value: string) => {
     const values =
       props.place == "name"
-        ? value.split("\n").map((e) => ({ name: e }))
+        ? value
+            .split("\n")
+            .filter((e) => e != "" && e)
+            .map((e) => ({ name: e }))
         : [{ bio: value }];
 
     const fun =

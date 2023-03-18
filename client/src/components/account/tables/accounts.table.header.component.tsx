@@ -75,7 +75,7 @@ export default () => {
             ​
             {selectedGroup == ""
               ? "المجموعات​"
-              : groups.filter((e: any) => e.id == selectedGroup && e)[0].name}
+              : groups.filter((e: any) => e.id == selectedGroup && e)[0]?.name}
           </MenuButton>
 
           <MenuList

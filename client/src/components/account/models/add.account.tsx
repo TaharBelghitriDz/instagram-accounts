@@ -20,6 +20,7 @@ export default (props: { onClose: () => void }) => {
   const Fun = () => {
     const accountsArray = value
       .split("\n")
+      .filter((e) => e != "" && e)
       .map((e) => e.replace(/\s/g, "").split(":"));
 
     const data = accountsArray.map((e) => ({
@@ -29,12 +30,15 @@ export default (props: { onClose: () => void }) => {
       email_password: e[3],
     }));
 
-    console.log(selectedGroup);
-    console.log(data);
-
     accountAddToGroup({ id: selectedGroup, data }).then(({ err, res }) => {
-      if (err) return;
+      if (err)
+        return (
+          props.onClose(),
+          toast({ status: "error", title: "خطا في تسميت الحسابات" })
+        );
+
       props.onClose();
+      state.changeState({ refreshAccounts: Date.now() });
       toast({ status: "success", title: "done !" });
     });
   };

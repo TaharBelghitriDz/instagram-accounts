@@ -11,7 +11,7 @@ export type Account = {
   email: string;
   ig_password: string;
   email_password: string;
-  profile_pic: string;
+  profile_pic_link: string;
   note: string;
   proxy: string;
   id: number;
@@ -95,29 +95,32 @@ export const initialData = groupGet
   .then(async ({ res, err }) => {
     if (err) return;
 
+    if (res?.data.length < 1) return;
+
     await state.changeState({ groups: res?.data });
     await state.changeState({ selectedGroup: res?.data[0]?.id });
 
     return res?.data[0]?.id;
   })
   .then((id) => {
-    return Promise.all([
-      id ? accountGet(id) : { err: true, res: undefined },
-      titleGet,
-      postsGet,
-      namesGet,
-      biographiesGet,
-    ]).then((result) => {
-      const errors = result.map((e) => !e.err);
-      if (errors.includes(false)) return;
+    if (id)
+      return Promise.all([
+        id ? accountGet(id) : { err: true, res: undefined },
+        titleGet,
+        postsGet,
+        namesGet,
+        biographiesGet,
+      ]).then((result) => {
+        const errors = result.map((e) => !e.err);
+        if (errors.includes(false)) return;
 
-      // console.log({ name: result[3].res?.data });
+        // console.log({ name: result[3].res?.data });
 
-      return state.changeState({
-        accounts: result[0].res?.data,
-        name: result[3].res?.data,
-        bio: result[4].res?.data,
-        titles: result[1].res?.data,
+        return state.changeState({
+          accounts: result[0].res?.data,
+          name: result[3].res?.data,
+          bio: result[4].res?.data,
+          titles: result[1].res?.data,
+        });
       });
-    });
   });
