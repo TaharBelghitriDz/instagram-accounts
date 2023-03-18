@@ -1,5 +1,5 @@
 import { HStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Account, accountGet } from "../../utils/api/accounts.api";
 import state from "../../utils/state";
 import CircleChartComponent from "../circle.chart.component";
@@ -56,11 +56,15 @@ export default () => {
       rounded="20px"
       flexWrap="wrap"
     >
-      <CircleChartComponent text="نشط" index={index("نشط")} />
-      <CircleChartComponent text="موقوف" index={index("موقوف")} />
-      <CircleChartComponent text="خطأ" index={index("خطأ")} />
-      <CircleChartComponent text="مفعل​" index={index("مفعل​")} />
-      <CircleChartComponent text="غير مفعل​" index={index("غير مفعل​")} />
+      {selectedGroup && (
+        <Fragment>
+          <CircleChartComponent text="نشط" index={index("نشط")} />
+          <CircleChartComponent text="موقوف" index={index("موقوف")} />
+          <CircleChartComponent text="خطأ" index={index("خطأ")} />
+          <CircleChartComponent text="مفعل​" index={index("مفعل​")} />
+          <CircleChartComponent text="غير مفعل​" index={index("غير مفعل​")} />
+        </Fragment>
+      )}
     </HStack>
   );
 };

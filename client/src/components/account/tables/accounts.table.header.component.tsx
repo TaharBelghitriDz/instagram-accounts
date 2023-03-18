@@ -9,7 +9,6 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { groupGet, GroupInutType } from "../../../utils/api/groups.api";
 import state from "../../../utils/state";
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
@@ -18,7 +17,6 @@ import Models from "../models";
 import AccountsAddGroup from "../models/accounts.add.group";
 import AccountsGroupSettings from "../models/accounts.group.settings";
 import RemoveAccounts from "../models/remove.accounts";
-import RemoveGroup from "../models/remove.group";
 
 export default () => {
   const discloser = useDisclosure();
@@ -102,50 +100,52 @@ export default () => {
         </Menu>
         <ActionIcon text="جديد" onClick={() => AddDiscloser.onOpen()} />
       </Flex>
-      <HStack spacing="10px">
-        <HStack
-          w="40px"
-          h="40px"
-          rounded="10px"
-          spacing="0"
-          justifyContent="center"
-          alignContent="center"
-          bg="red.900"
-          color="red.100"
-          cursor="pointer"
-          onClick={removeDiscloser.onOpen}
-        >
-          <Historiq w="24px" h="24px" bg="" />
+      {selectedGroup && (
+        <HStack spacing="10px">
+          <HStack
+            w="40px"
+            h="40px"
+            rounded="10px"
+            spacing="0"
+            justifyContent="center"
+            alignContent="center"
+            bg="red.900"
+            color="red.100"
+            cursor="pointer"
+            onClick={removeDiscloser.onOpen}
+          >
+            <Historiq w="24px" h="24px" bg="" />
+          </HStack>
+          <HStack
+            w="40px"
+            h="40px"
+            rounded="10px"
+            spacing="0"
+            justifyContent="center"
+            alignContent="center"
+            bg="red.900"
+            color="red.100"
+            cursor="pointer"
+            onClick={refresh}
+          >
+            <Refresh w="24px" h="24px" bg="" />
+          </HStack>
+          <HStack
+            w="40px"
+            h="40px"
+            rounded="10px"
+            spacing="0"
+            justifyContent="center"
+            alignContent="center"
+            bg="red.900"
+            color="red.100"
+            cursor="pointer"
+            onClick={() => discloser.onOpen()}
+          >
+            <Settings w="24px" h="24px" bg="" />
+          </HStack>
         </HStack>
-        <HStack
-          w="40px"
-          h="40px"
-          rounded="10px"
-          spacing="0"
-          justifyContent="center"
-          alignContent="center"
-          bg="red.900"
-          color="red.100"
-          cursor="pointer"
-          onClick={refresh}
-        >
-          <Refresh w="24px" h="24px" bg="" />
-        </HStack>
-        <HStack
-          w="40px"
-          h="40px"
-          rounded="10px"
-          spacing="0"
-          justifyContent="center"
-          alignContent="center"
-          bg="red.900"
-          color="red.100"
-          cursor="pointer"
-          onClick={() => discloser.onOpen()}
-        >
-          <Settings w="24px" h="24px" bg="" />
-        </HStack>
-      </HStack>
+      )}
     </Stack>
   );
 };

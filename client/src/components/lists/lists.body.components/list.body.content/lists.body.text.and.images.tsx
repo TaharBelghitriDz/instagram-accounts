@@ -106,8 +106,10 @@ const TitleEdit = () => {
         {...removeDiscloser}
         fun={() => {
           titleDelete(props.id).then(({ res, err }) => {
+            if (err) return removeDiscloser.onClose();
+
             state.changeState({ titles: [...res?.data] });
-            setTitles((e) => [...res?.data]);
+            setTitles(() => [...res?.data]);
             removeDiscloser.onClose();
           });
         }}
@@ -152,7 +154,7 @@ const TitleEdit = () => {
         rounded="10px"
       >
         <Models {...editDiscloser} content={<Edit />} />
-        {/* <Models {...removeDiscloser} content={<Remove />} /> */}
+        <Models {...removeDiscloser} content={<Remove />} />
 
         <Text>{props.name}</Text>
         <Stack

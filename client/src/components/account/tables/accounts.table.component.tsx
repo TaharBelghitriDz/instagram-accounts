@@ -123,6 +123,7 @@ export default () => {
   const discloser = useDisclosure();
   const [selctedAccount, setSelectedAccount] = useState(0);
   const refresh = state.useStore((e) => e.refreshAccounts);
+  const selectedGroup = state.useStore((e) => e.selectedGroup);
   // const [selectedCheckBox, setselectedCheckBox] = useState<number[]>([]);
 
   const selectedCheckBox = state.useStore((e) => e.selectedAccounts);
@@ -190,18 +191,20 @@ export default () => {
             </Th>
           </Tr>
         </Thead>
-        <Row
-          {...discloser}
-          selected={selectedCheckBox}
-          onClick={(e: any) => {
-            setSelectedAccount(() => e);
+        {selectedGroup && (
+          <Row
+            {...discloser}
+            selected={selectedCheckBox}
+            onClick={(e: any) => {
+              setSelectedAccount(() => e);
 
-            discloser.onOpen();
-          }}
-          onCheckBox={(id: number) => {
-            CheckBox(id);
-          }}
-        />
+              discloser.onOpen();
+            }}
+            onCheckBox={(id: number) => {
+              CheckBox(id);
+            }}
+          />
+        )}
       </Table>
     </VStack>
   );

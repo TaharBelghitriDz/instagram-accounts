@@ -97,6 +97,7 @@ export default (props: {
 
 const Inputs = (props: { onClose: () => void; post?: Post }) => {
   const toast = useToast();
+  const postsstate = state.useStore((e) => e.posts);
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
 
@@ -125,24 +126,39 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
   const [isPhoto, setIsPhoto] = useState<boolean>(props.post?.is_photo || true);
 
   const fun = () => {
-    const title_id = titles.filter((e: any) => e.title == selected.title)[0].id;
-    const group_id = groups.filter((e: any) => e.name == selected.group)[0].id;
+    let title_id = titles.filter((e: any) => e.title == selected.title);
+    let group_id = groups.filter((e: any) => e.name == selected.group);
     const time_between_posting = value;
     const is_photo = isPhoto;
-    const body = { title_id, group_id, time_between_posting, is_photo };
+    const is_active = true;
+
+    if (!title_id[0] || !group_id[0]) {
+      !title_id[0] &&
+        toast({ status: "error", isClosable: true, title: "اختر عنوان" });
+      !group_id[0] &&
+        toast({ status: "error", isClosable: true, title: "اختر مجموعة" });
+
+      return;
+    }
+
+    title_id = title_id[0].id;
+    group_id = group_id[0].id;
+    const body = {
+      title_id,
+      group_id,
+      time_between_posting,
+      is_photo,
+      is_active,
+    };
 
     if (!props.post)
-      return postsAdd(body).then(({ err, res }) => {
+      return postsAdd(body).then(async ({ err, res }) => {
         if (err) return;
 
-        return postsGet.then(({ err, res }) => {
-          console.log(res);
+        let newState = [...postsstate, res?.data];
 
-          if (err) return;
-
-          state.changeState({ posts: res?.data });
-          props.onClose();
-        });
+        state.changeState({ posts: [...newState] });
+        props.onClose();
       });
 
     postsUpdate({ data: body, id: (props.post as any).id }).then(
@@ -150,8 +166,6 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
         if (err) return;
 
         return postsGet.then(({ err, res }) => {
-          console.log(res);
-
           if (err) return;
 
           state.changeState({ posts: res?.data });

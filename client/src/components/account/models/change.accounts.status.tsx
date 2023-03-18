@@ -41,7 +41,8 @@ export default (props: { onClose: () => void }) => {
           return (
             props.onClose(), toast({ status: "error", title: "خطا في الاتصال" })
           );
-        else return props.onClose();
+        props.onClose();
+        state.changeState({ refreshAccounts: Date.now() });
       };
 
       if (value) accountsActivate(accountsId).then(resFun);

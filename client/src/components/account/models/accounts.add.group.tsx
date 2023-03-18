@@ -289,18 +289,32 @@ export default (props: { onClose: () => void }) => {
 
       // groupGet.then(({ err, res }) => {
       //   if (err) return;
-
       state.changeState({ groups: newGroup });
 
       await state.changeState({ selectedGroup: "" });
+
+      // groupGet.then(({ err, res }) => {
+      //   if (err) return;
+      //   console.log(res?.data);
+
+      //   const selectedOne = res?.data.filter(
+      //     (e: any) => e.name == values.name && e
+      //   );
+
+      //   console.log(selectedOne);
+
+      //   // state.changeState({ selectedGroup: values.name });
+      // });
+
       // // });
 
       props.onClose();
-      return toast({
+      toast({
         status: "success",
         isClosable: true,
         title: "تمت العملية",
       });
+      if (groups.length == 0) location.reload();
     });
 
   return (
