@@ -1,5 +1,5 @@
 import { CloseButton, HStack, Input, Text, VStack } from "@chakra-ui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Add } from "../../icons";
 
 import { InputProps as defaultProps } from "@chakra-ui/react";
@@ -17,18 +17,29 @@ const AccountsGroupElmntProps = {
   rounded: "15px",
 };
 
-const AccountsGroupInputs = () => {
+const AccountsGroupInputs = (props: { values: string; setValue: any }) => {
   return (
     <Fragment>
       <VStack {...AccountsGroupElmntProps} w="full">
         <Text>عدد الحسابات في كل بروكسي</Text>
-        <AccountsSettingsInput type="number" w="100%" />
+        <AccountsSettingsInput
+          type="number"
+          w="100%"
+          value={props.values}
+          onChange={({ target: { value } }) => props.setValue(() => value)}
+        />
       </VStack>
     </Fragment>
   );
 };
 
 export default (props: { onClose: () => void }) => {
+  const [values, setValue] = useState(localStorage.getItem("proxy") || "");
+
+  const fun = () => {
+    localStorage.setItem("proxy", values);
+  };
+
   return (
     <VStack w="full" spacing="20px">
       <HStack w="full" justifyContent="space-between">
@@ -42,7 +53,7 @@ export default (props: { onClose: () => void }) => {
           onClick={() => props.onClose()}
         />
       </HStack>
-      <AccountsGroupInputs />
+      <AccountsGroupInputs values={values} setValue={setValue} />
       <HStack w="full" justifyContent="space-between">
         <HStack
           spacing="20px"
@@ -52,6 +63,7 @@ export default (props: { onClose: () => void }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
+          onClick={fun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />
