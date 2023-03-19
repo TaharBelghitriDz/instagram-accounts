@@ -23,7 +23,7 @@ export const axiosFun = (config: AxiosRequestConfig<any>) => {
 
   setTimeout(() => {
     controller.abort();
-  }, 20);
+  }, 2000);
 
   return axios({ ...config, signal: controller.signal })
     .then((res) => ({ res }))
