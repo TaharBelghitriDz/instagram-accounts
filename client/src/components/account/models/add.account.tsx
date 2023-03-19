@@ -25,8 +25,8 @@ export default (props: { onClose: () => void }) => {
 
     const data = accountsArray.map((e) => ({
       username: e[0],
-      ig_password: e[2],
-      email: e[1],
+      ig_password: e[1],
+      email: e[2],
       email_password: e[3],
     }));
 
