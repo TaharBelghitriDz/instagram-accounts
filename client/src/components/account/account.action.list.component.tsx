@@ -56,7 +56,7 @@ export default () => {
           />
         </>
       )}
-      {/* <ActionIcon text="حذف الحسابات​" onClick={() => view(removeAccounts)} /> */}
+      <ActionIcon text="حذف الحسابات​" onClick={() => view(removeAccounts)} />
     </HStack>
   );
 };
