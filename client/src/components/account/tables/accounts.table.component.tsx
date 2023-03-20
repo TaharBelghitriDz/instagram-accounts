@@ -1,4 +1,5 @@
 import {
+  Box,
   Checkbox,
   Image,
   Table,
@@ -33,9 +34,9 @@ const Row = (props: {
   const groups = state.useStore((e) => e.groups);
   const refreshAccounts = state.useStore((e) => e.refreshAccounts);
 
-  useState(() => {
-    setAccounts(() => [...accountsState]);
-  });
+  // useState(() => {
+  //   setAccounts(() => [...accountsState]);
+  // });
 
   const getData = (refresh?: boolean) => {
     if (selectedGroup != "") {
@@ -71,16 +72,39 @@ const Row = (props: {
     getData(true);
   }, [refreshAccounts]);
 
+  const Selected = (props: { selected: boolean; onClick: () => void }) => {
+    if (props.selected)
+      return (
+        <Box
+          h="30px"
+          w="30px"
+          rounded="10px"
+          bg="red"
+          cursor="pointer"
+          border="3px solid red "
+          onClick={props.onClick}
+        />
+      );
+    return (
+      <Box
+        h="30px"
+        w="30px"
+        rounded="10px"
+        cursor="pointer"
+        border="3px solid red "
+        onClick={props.onClick}
+      />
+    );
+  };
+
   return (
     <Tbody>
       {accounts?.map((e, i) => (
         <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
           <Td>
-            <Checkbox
-              checked={props.selected.includes(e.id)}
-              onChange={({ target: { checked } }) => {
-                props.onCheckBox(e.id);
-              }}
+            <Selected
+              selected={props.selected.includes(e.id)}
+              onClick={() => props.onCheckBox(e.id)}
             />
           </Td>
           <Td onClick={() => props.onCheckBox(e.id)}>
