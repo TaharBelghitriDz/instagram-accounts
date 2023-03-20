@@ -17,6 +17,7 @@ export default (props: {
     ref: ref,
     handler: () => props.onClose(),
   });
+  // window.scrollTo(0, 0);
 
   return (
     <AlertDialog
