@@ -7,12 +7,15 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Account, accountGet } from "../../../utils/api/accounts.api";
 import { groupGet, GroupInutType } from "../../../utils/api/groups.api";
 import state from "../../../utils/state";
 import { ActionIcon, CustomAddIcon } from "../../custom.button.component";
-import { Historiq, Refresh, Settings } from "../../icons";
+import { Historiq, Refresh, Settings, UserIcon } from "../../icons";
 import Models from "../models";
 import AccountsAddGroup from "../models/accounts.add.group";
 import AccountsGroupSettings from "../models/accounts.group.settings";
@@ -25,10 +28,26 @@ export default () => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups: GroupInutType[] = state.useStore((e) => e.groups);
 
+  const [accounts, setAccounts] = useState<Account[]>([]);
+
+  useEffect(() => {
+    accountGet(selectedGroup).then(({ res, err }) => {
+      if (err) return;
+
+      setAccounts(() => [...res?.data]);
+    });
+  }, [selectedGroup]);
+
   const refresh = () =>
     groupGet.then(
       ({ res }) => res && state.changeState({ groups: [...res?.data] })
     );
+
+  const selectAll = () => {
+    console.log(accounts.map((e) => e.id));
+
+    state.changeState({ selectedAccounts: accounts.map((e) => e.id) });
+  };
 
   return (
     <Stack
@@ -102,6 +121,21 @@ export default () => {
       </Flex>
       {selectedGroup && (
         <HStack spacing="10px">
+          <HStack
+            h="40px"
+            rounded="10px"
+            spacing="0"
+            justifyContent="center"
+            alignContent="center"
+            bg="red.900"
+            color="red.100"
+            cursor="pointer"
+            onClick={selectAll}
+            px="10px"
+          >
+            <Text>تحديد الكل</Text>
+            <UserIcon w="24px" h="24px" bg="" />
+          </HStack>
           <HStack
             w="40px"
             h="40px"
