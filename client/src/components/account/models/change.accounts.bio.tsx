@@ -7,8 +7,16 @@ export default (props: { onClose: () => void }) => {
   const toast = useToast();
   const selectedGroup = state.useStore((e) => e.selectedGroup);
 
+  const selectedAccounts = state.useStore((e) => e.selectedAccounts);
+
   const fun = () => {
-    bioChange(selectedGroup).then(({ err }) => {
+    if (selectedAccounts.length == 0)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "حدد الحسابات اولا",
+      });
+    bioChange({ id: selectedGroup, data: selectedAccounts }).then(({ err }) => {
       if (err)
         return toast({
           status: "error",

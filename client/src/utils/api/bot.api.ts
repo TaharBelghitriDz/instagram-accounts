@@ -1,4 +1,3 @@
-import state from "../state";
 import { axiosFun, endpoint } from "./costant";
 
 export const botAddBioLink = (data: any) =>
@@ -6,4 +5,5 @@ export const botAddBioLink = (data: any) =>
     method: "GET",
     headers: { Authorization: localStorage.getItem("token") },
     url: endpoint + "/actions/add-bio-link/" + data.id + "?link=" + data.data,
+    data: data.ids,
   });

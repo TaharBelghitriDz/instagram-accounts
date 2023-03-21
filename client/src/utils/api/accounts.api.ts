@@ -53,13 +53,16 @@ export const accountsDelete = (args: { data: any; id: number }) =>
     data: args.data,
   });
 
-export const namesChange = (data: any) =>
-  axiosFun({
+export const namesChange = (data: any) => {
+  console.log(data);
+
+  return axiosFun({
     method: "GET",
     headers: { Authorization: localStorage.getItem("token") },
-    url: endpoint + "/actions/change-names/" + data,
+    url: endpoint + "/actions/change-names",
+    data,
   });
-
+};
 export const accoutGetById = (data: any) =>
   axiosFun({
     method: "GET",

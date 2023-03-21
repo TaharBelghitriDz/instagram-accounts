@@ -26,6 +26,7 @@ export const profilePicAdd = (data: any) =>
 export const profilePicChange = (data: any) =>
   axiosFun({
     method: "GET",
-    url: endpoint + "/actions/change-profile-pics/" + data,
+    url: endpoint + "/actions/change-profile-pics",
     headers: { authorization: localStorage.getItem("token") },
+    data: data.data,
   });

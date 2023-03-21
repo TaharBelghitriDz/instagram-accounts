@@ -16,8 +16,21 @@ export default (props: { onClose: () => void }) => {
   const [value, setValue] = useState("");
   const selectedGroup = state.useStore((e) => e.selectedGroup);
 
+  const selectedAccounts = state.useStore((e) => e.selectedAccounts);
+
   const fun = () => {
-    botAddBioLink({ data: value, id: selectedGroup }).then(({ err, res }) => {
+    if (selectedAccounts.length == 0)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "حدد الحسابات اولا",
+      });
+
+    botAddBioLink({
+      data: value,
+      id: selectedGroup,
+      ids: selectedAccounts,
+    }).then(({ err, res }) => {
       console.log(err);
 
       if (err)

@@ -19,7 +19,7 @@ import { Add } from "../../icons";
 export default (props: { onClose: () => void }) => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups = state.useStore((e) => e.groups);
-  const accounts = state.useStore((e) => e.accounts);
+
   const toast = useToast();
   const [value, setValue] = useState(true);
 
@@ -27,14 +27,21 @@ export default (props: { onClose: () => void }) => {
     if (e.id == selectedGroup) return e;
   })[0];
 
+  const selectedAccounts = state.useStore((e) => e.selectedAccounts);
+
   const fun = () => {
+    if (selectedAccounts.length == 0)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "حدد الحسابات اولا",
+      });
+
     accountGet(selectedGroup).then(({ err, res }) => {
       if (err)
         return (
           props.onClose(), toast({ status: "error", title: "خطا في الاتصال" })
         );
-
-      const accountsId = res?.data.map((e: any) => e.id);
 
       const resFun = ({ res, err }: any) => {
         if (err)
@@ -45,8 +52,8 @@ export default (props: { onClose: () => void }) => {
         state.changeState({ refreshAccounts: Date.now() });
       };
 
-      if (value) accountsActivate(accountsId).then(resFun);
-      else accountsDesactivate(accountsId).then(resFun);
+      if (value) accountsActivate(selectedAccounts).then(resFun);
+      else accountsDesactivate(selectedAccounts).then(resFun);
     });
   };
 

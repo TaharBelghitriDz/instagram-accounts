@@ -7,23 +7,34 @@ export default (props: { onClose: () => void }) => {
   const toast = useToast();
   const selectedGroup = state.useStore((e) => e.selectedGroup);
 
+  const selectedAccounts = state.useStore((e) => e.selectedAccounts);
+
   const fun = () => {
-    profilePicChange(selectedGroup).then(({ err }) => {
-      console.log(err);
-
-      if (err)
-        return toast({
-          status: "error",
-          isClosable: true,
-          title: "خطا في الارسال",
-        });
-
-      toast({
-        status: "success",
+    if (selectedAccounts.length == 0)
+      return toast({
+        status: "error",
         isClosable: true,
-        title: "تم التغيير",
+        title: "حدد الحسابات اولا",
       });
-    });
+
+    profilePicChange({ id: selectedGroup, data: selectedAccounts }).then(
+      ({ err }) => {
+        console.log(err);
+
+        if (err)
+          return toast({
+            status: "error",
+            isClosable: true,
+            title: "خطا في الارسال",
+          });
+
+        toast({
+          status: "success",
+          isClosable: true,
+          title: "تم التغيير",
+        });
+      }
+    );
   };
 
   return (
