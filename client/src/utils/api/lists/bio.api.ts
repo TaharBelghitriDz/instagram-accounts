@@ -25,7 +25,7 @@ export const biographiesAdd = (data: any) =>
 
 export const bioChange = (data: any) =>
   axiosFun({
-    method: "GET",
+    method: "POST",
     url: endpoint + "/actions/change-bios",
     headers: { authorization: localStorage.getItem("token") },
     data: data.data,

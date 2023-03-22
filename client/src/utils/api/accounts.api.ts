@@ -57,7 +57,7 @@ export const namesChange = (data: any) => {
   console.log(data);
 
   return axiosFun({
-    method: "GET",
+    method: "POST",
     headers: { Authorization: localStorage.getItem("token") },
     url: endpoint + "/actions/change-names",
     data,
