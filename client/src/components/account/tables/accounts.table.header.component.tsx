@@ -27,6 +27,7 @@ export default () => {
   const removeDiscloser = useDisclosure();
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups: GroupInutType[] = state.useStore((e) => e.groups);
+  const selectedAccountsState = state.useStore((e) => e.selectedAccounts);
 
   const [accounts, setAccounts] = useState<Account[]>([]);
 
@@ -44,9 +45,12 @@ export default () => {
     );
 
   const selectAll = () => {
-    console.log(accounts.map((e) => e.id));
+    const allIds = accounts.map((e) => e.id);
 
-    state.changeState({ selectedAccounts: accounts.map((e) => e.id) });
+    if (allIds.length == selectedAccountsState.length)
+      return state.changeState({ selectedAccounts: [] });
+
+    state.changeState({ selectedAccounts: allIds });
   };
 
   return (
