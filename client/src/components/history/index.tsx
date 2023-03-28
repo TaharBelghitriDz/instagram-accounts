@@ -96,7 +96,7 @@ export default () => {
     postsHistory.then(({ res, err }) => {
       if (err) return;
       if (res?.data.length < 1) return setHistory(() => fakeData);
-      return setHistory(() => [...res?.data]);
+      return setHistory(() => [...res?.data].reverse());
     });
   });
 

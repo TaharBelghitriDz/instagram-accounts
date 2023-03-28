@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import state from "../../utils/state";
 import { ActionIcon } from "../custom.button.component";
 import Models from "./models";
+import accountsExport from "./models/accounts.export ";
 import addAccount from "./models/add.account";
 import AddAccount from "./models/add.account";
 import addLinkAccounts from "./models/add.link.accounts";
@@ -32,7 +33,6 @@ export default () => {
       <Models {...discloser} content={Content} />
       {selctedGroup && (
         <>
-          {" "}
           <ActionIcon
             text="تغيير اسم الحسابات​"
             onClick={() => view(ChangeAccountsNames)}
@@ -54,9 +54,15 @@ export default () => {
             text="تغيير وضع الحسابات​"
             onClick={() => view(changeAccountsStatus)}
           />
+
+          <ActionIcon text="تصدير" onClick={() => view(accountsExport)} />
+
+          <ActionIcon
+            text="حذف الحسابات​"
+            onClick={() => view(removeAccounts)}
+          />
         </>
       )}
-      <ActionIcon text="حذف الحسابات​" onClick={() => view(removeAccounts)} />
     </HStack>
   );
 };

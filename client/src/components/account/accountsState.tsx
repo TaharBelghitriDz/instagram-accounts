@@ -8,6 +8,7 @@ export default () => {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const [accounts, setAccounts] = useState<string[]>([""]);
   const groups = state.useStore((e) => e.groups);
+  const selectedView = state.useStore((e) => e.accountsView);
 
   const refreshAccounts = state.useStore((e) => e.refreshAccounts);
 
@@ -46,6 +47,18 @@ export default () => {
     return number;
   };
 
+  const sum = (selected: string) =>
+    accounts.filter((e) => e == selected && e).length;
+
+  const onclick = (type: string) => {
+    if (selectedView.includes(type))
+      return state.changeAccountsView(
+        selectedView.filter((e: string) => e != type && e)
+      );
+
+    state.changeAccountsView([...selectedView, type]);
+  };
+
   return (
     <HStack
       w="full"
@@ -58,11 +71,36 @@ export default () => {
     >
       {selectedGroup && (
         <Fragment>
-          <CircleChartComponent text="نشط" index={index("نشط")} />
-          <CircleChartComponent text="موقوف" index={index("موقوف")} />
-          <CircleChartComponent text="خطأ" index={index("خطأ")} />
-          <CircleChartComponent text="مفعل​" index={index("مفعل​")} />
-          <CircleChartComponent text="غير مفعل​" index={index("غير مفعل​")} />
+          <CircleChartComponent
+            text="نشط"
+            index={index("نشط")}
+            sum={sum("نشط")}
+            onclick={() => onclick("نشط")}
+          />
+          <CircleChartComponent
+            text="موقوف"
+            index={index("موقوف")}
+            sum={sum("موقوف")}
+            onclick={() => onclick("موقوف")}
+          />
+          <CircleChartComponent
+            text="خطأ"
+            index={index("خطأ")}
+            sum={sum("خطأ")}
+            onclick={() => onclick("خطأ")}
+          />
+          <CircleChartComponent
+            text="مفعل​"
+            index={index("مفعل​")}
+            sum={sum("مفعل​")}
+            onclick={() => onclick("مفعل​")}
+          />
+          <CircleChartComponent
+            text="غير مفعل​"
+            index={index("غير مفعل​")}
+            sum={sum("غير مفعل​")}
+            onclick={() => onclick("غير مفعل​")}
+          />
         </Fragment>
       )}
     </HStack>

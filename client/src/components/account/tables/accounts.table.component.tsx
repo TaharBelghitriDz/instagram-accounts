@@ -33,10 +33,12 @@ const Row = (props: {
   const selectedGroup = state.useStore((e) => e.selectedGroup);
   const groups = state.useStore((e) => e.groups);
   const refreshAccounts = state.useStore((e) => e.refreshAccounts);
+  const selectedView = state.useStore((e) => e.accountsView);
+  const [accountsView, setAccountsView] = useState<Account[]>(accountsState);
 
-  // useState(() => {
-  //   setAccounts(() => [...accountsState]);
-  // });
+  useEffect(() => {
+    setAccountsView(() => [...accounts]);
+  }, [accounts]);
 
   const getData = (refresh?: boolean) => {
     if (selectedGroup != "") {
@@ -72,6 +74,21 @@ const Row = (props: {
     getData(true);
   }, [refreshAccounts]);
 
+  useEffect(() => {
+    if (selectedView.length == 0) return setAccountsView(() => [...accounts]);
+
+    const selectedAccounts = accounts
+      .map((e) => ({ ...e, is_active: !e.is_active ? "مفعل​" : "غير مفعل​" }))
+      .filter(
+        (e) =>
+          (selectedView.includes(e.status) ||
+            selectedView.includes(e.is_active)) &&
+          e
+      );
+
+    setAccountsView(() => [...selectedAccounts]);
+  }, [selectedView, selectedView == undefined]);
+
   const Selected = (props: { selected: boolean; onClick: () => void }) => {
     if (props.selected)
       return (
@@ -99,7 +116,7 @@ const Row = (props: {
 
   return (
     <Tbody>
-      {accounts?.map((e, i) => (
+      {accountsView?.map((e, i) => (
         <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
           <Td>
             <Selected

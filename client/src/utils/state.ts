@@ -82,6 +82,7 @@ const state = {
   place: "/",
   listPlace: "names",
   selectedGroup: "",
+  accountsView: [] as string[] | undefined,
   selectedAccounts: [],
   refreshAccounts: 0,
   refreshtextsAndImages: 0,
@@ -110,4 +111,7 @@ export default createState(state, ({ groups }) => ({
   changeView: (place) => ({ place }),
   changeListPlace: (listPlace) => ({ listPlace }),
   changeState: (s: Partial<typeof state>) => ({ ...s }),
+  changeAccountsView: (accountsView: string[] | undefined) => ({
+    accountsView,
+  }),
 }));

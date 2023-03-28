@@ -1,14 +1,29 @@
 import { Stack, Text, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import state from "../utils/state";
 
-export default (props: { text: string; index?: number }) => {
+export default (props: {
+  text: string;
+  onclick: () => void;
+  index?: number;
+  sum: number;
+}) => {
   const randomNumber = props.index || 0;
+  const accountsView = state.useStore((e) => e.accountsView);
+  const isSelected = accountsView.includes(props.text);
 
   return (
     <Stack
+      as={motion.div}
+      animate={isSelected ? { scale: 1.2 } : {}}
+      bg={isSelected ? "black" : ""}
+      rounded="full"
       alignItems="center"
       justifyContent="center"
       pos="relative"
       spacing="0"
+      cursor="pointer"
+      onClick={props.onclick}
     >
       <VStack
         pos="absolute"
@@ -17,9 +32,11 @@ export default (props: { text: string; index?: number }) => {
         w="full"
         justifyContent="center"
         alignItems="center"
+        spacing={0}
       >
         <Text>{props.text}</Text>
         <Text>{randomNumber}0%</Text>
+        <Text>{props.sum}</Text>
       </VStack>
       <svg
         width="120"
