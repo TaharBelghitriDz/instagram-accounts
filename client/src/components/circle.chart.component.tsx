@@ -4,9 +4,9 @@ import state from "../utils/state";
 
 export default (props: {
   text: string;
-  onclick: () => void;
+  onclick?: () => void;
   index?: number;
-  sum: number;
+  sum?: number;
 }) => {
   const randomNumber = props.index || 0;
   const accountsView = state.useStore((e) => e.accountsView);

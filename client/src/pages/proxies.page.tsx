@@ -13,9 +13,14 @@ export default () => (
       rounded="20px"
       flexWrap="wrap"
     >
-      <CircleChartComponent text="مكتمل" />
-      <CircleChartComponent text="شاغر​" />
-      <CircleChartComponent text=" الاستخدام" />
+      <CircleChartComponent sum={0} index={0} onclick={() => {}} text="مكتمل" />
+      <CircleChartComponent sum={0} index={0} onclick={() => {}} text="شاغر​" />
+      <CircleChartComponent
+        sum={0}
+        index={0}
+        onclick={() => {}}
+        text=" الاستخدام"
+      />
     </HStack>
     <ProxiesTableBody />
   </Fragment>
