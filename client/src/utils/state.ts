@@ -83,6 +83,7 @@ const state = {
   listPlace: "names",
   selectedGroup: "",
   accountsView: [] as string[] | undefined,
+
   selectedAccounts: [],
   refreshAccounts: 0,
   refreshtextsAndImages: 0,

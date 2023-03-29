@@ -61,7 +61,15 @@ const Row = (props: {
 
         if (err) return;
 
-        setAccounts(() => [...res?.data]);
+        setAccounts(() =>
+          [...res?.data].map((e) => {
+            if (typeof e.is_active == "string") return e;
+
+            if (!e.is_active) e.is_active = "غير مفعل​";
+            else e.is_active = "مفعل​";
+            return e;
+          })
+        );
       });
     }
   };
@@ -77,17 +85,13 @@ const Row = (props: {
   useEffect(() => {
     if (selectedView.length == 0) return setAccountsView(() => [...accounts]);
 
-    const selectedAccounts = accounts
-      .map((e) => ({ ...e, is_active: !e.is_active ? "مفعل​" : "غير مفعل​" }))
-      .filter(
-        (e) =>
-          (selectedView.includes(e.status) ||
-            selectedView.includes(e.is_active)) &&
-          e
-      );
+    const selectedAccounts = accounts.filter((e) => {
+      if (selectedView.includes(e.status) || selectedView.includes(e.is_active))
+        return e;
+    });
 
     setAccountsView(() => [...selectedAccounts]);
-  }, [selectedView, selectedView == undefined]);
+  }, [selectedView]);
 
   const Selected = (props: { selected: boolean; onClick: () => void }) => {
     if (props.selected)
@@ -116,7 +120,7 @@ const Row = (props: {
 
   return (
     <Tbody>
-      {accountsView?.map((e, i) => (
+      {accountsView?.reverse().map((e, i) => (
         <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
           <Td>
             <Selected
@@ -137,7 +141,7 @@ const Row = (props: {
             {e.username}
           </Td>
           <Td onClick={() => props.onClick(e.id)} textAlign="center">
-            {e.is_active ? "مفعل" : "غير مفعل"}{" "}
+            {e.is_active}
           </Td>
           <Td onClick={() => props.onClick(e.id)} textAlign="center">
             <Text p="10px" rounded="10px" bg="green.900" color="green.100">
@@ -165,6 +169,9 @@ export default () => {
   const [selctedAccount, setSelectedAccount] = useState(0);
   const refresh = state.useStore((e) => e.refreshAccounts);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const selectedView = state.useStore((e) => e.accountsView);
+
   // const [selectedCheckBox, setselectedCheckBox] = useState<number[]>([]);
 
   const selectedCheckBox = state.useStore((e) => e.selectedAccounts);
@@ -176,8 +183,32 @@ export default () => {
     state.changeState({ selectedAccounts: [] });
   }, [refresh]);
 
+  useEffect(() => {
+    accountGet(selectedGroup).then(({ res, err }) => {
+      if (err) return;
+
+      setAccounts(() =>
+        [...res?.data].map((e) => {
+          if (typeof e.is_active == "string") return e;
+
+          if (!e.is_active) e.is_active = "غير مفعل​";
+          else e.is_active = "مفعل​";
+          return e;
+        })
+      );
+    });
+  }, [selectedGroup]);
+
   const CheckBox = (id: number) => {
-    // console.log(selectedCheckBox);
+    // const selectedAccounts = accounts
+    //   .filter((e) => {
+    //     if (
+    //       selectedView.includes(e.is_active) ||
+    //       selectedView.includes(e.status)
+    //     )
+    //       return e;
+    //   })
+    //   .map((e) => e.id);
 
     if (!selectedCheckBox.includes(id))
       return setselectedCheckBox([...selectedCheckBox, id]);
@@ -214,7 +245,7 @@ export default () => {
         <TableCaption h="20px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            <Th />
+            <Th color="white">{"تم تحديد " + selectedCheckBox.length}</Th>
             <Th color="white" textAlign="center">
               صورة الحساب
             </Th>

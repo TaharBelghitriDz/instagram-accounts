@@ -5,10 +5,10 @@ import {
   HStack,
   Image,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  // Menu,
+  // MenuButton,
+  // MenuItem,
+  // MenuList,
   Stack,
   Text,
   useDisclosure,
@@ -37,6 +37,7 @@ import Models from "../../models";
 import ListsAddTitle from "../../models/lists.add.title";
 import ListsRemove from "../../models/lists.remove";
 import ListsAddPicture from "../../models/lists.add.picture";
+import ListsImageTextModel from "../../models/lists.image.text.model";
 
 const refresh = () => state.changeState({ refreshtextsAndImages: Date.now() });
 
@@ -46,7 +47,7 @@ const TitleEdit = () => {
   const titlesState = state.useStore((e) => e.titles);
   const [search, setSearch] = useState("");
 
-  useState(() => {
+  useEffect(() => {
     titleGet.then(({ res, err }) => {
       if (err) return;
       state.changeState({ titles: res?.data });
@@ -54,7 +55,7 @@ const TitleEdit = () => {
       setTitles(() => [...res?.data]);
       refresh();
     });
-  });
+  }, []);
 
   const Add = () => (
     <ListsAddTitle
@@ -74,32 +75,33 @@ const TitleEdit = () => {
     />
   );
 
-  const Search = () => {
-    return (
-      <Input
-        w="full"
-        bg="whiteAlpha.100"
-        border=""
-        rounded="10px"
-        placeholder="بحث عن عنوان"
-        value={search}
-        onChange={({ target: { value } }) => {
-          setSearch(() => value);
+  // const Search = () => {
+  //   return (
+  //     <Input
+  //       w="full"
+  //       bg="whiteAlpha.100"
+  //       border=""
+  //       rounded="10px"
+  //       placeholder="بحث عن عنوان"
+  //       value={search}
+  //       onChange={({ target: { value } }) => {
+  //         setSearch(() => value);
 
-          setTitles(() =>
-            titlesState.filter((e: any) => {
-              const isThere = e.title.split(value).length > 1;
-              if (isThere) return e;
-            })
-          );
-        }}
-      />
-    );
-  };
+  //         setTitles(() =>
+  //           titlesState.filter((e: any) => {
+  //             const isThere = e.title.split(value).length > 1;
+  //             if (isThere) return e;
+  //           })
+  //         );
+  //       }}
+  //     />
+  //   );
+  // };
 
   const TextItem = (props: { name: string; id: number }) => {
     const editDiscloser = useDisclosure();
     const removeDiscloser = useDisclosure();
+    const detailsDiscloser = useDisclosure();
 
     const Remove = () => (
       <ListsRemove
@@ -152,11 +154,24 @@ const TitleEdit = () => {
         p="10px"
         bg="blackAlpha.400"
         rounded="10px"
+        // onClick={() => detailsDiscloser.onOpen()}
       >
         <Models {...editDiscloser} content={<Edit />} />
         <Models {...removeDiscloser} content={<Remove />} />
+        <ListsImageTextModel
+          {...detailsDiscloser}
+          name={props.name}
+          id={props.id.toString()}
+        />
 
-        <Text>{props.name}</Text>
+        <Text
+          onClick={() => detailsDiscloser.onOpen()}
+          w="full"
+          h="40px"
+          cursor="pointer"
+        >
+          {props.name}
+        </Text>
         <Stack
           spacing={{ start: "10px", md: "0" }}
           flexDir={{ start: "column", md: "row" }}
@@ -193,8 +208,8 @@ const TitleEdit = () => {
       maxW={{ start: "full" }}
       alignItems="start"
       spacing="20px"
-      bg="blackAlpha.400"
-      p="10px"
+      // bg="blackAlpha.400"
+      // p="10px"
       rounded="15px"
       style={{ margin: "10px" }}
     >
@@ -251,7 +266,7 @@ const TitleEdit = () => {
           }}
         />
       </Flex>
-      <VStack maxH="300px" w="full" overflowY="scroll">
+      <VStack w="full" overflowY="auto">
         {titles.map((e, i) => (
           <TextItem key={i * 34} name={e.title} id={e.id} />
         ))}
@@ -260,9 +275,9 @@ const TitleEdit = () => {
   );
 };
 
-const Texts = (props: { selctedId: string }) => {
+export const Texts = (props: { selctedId: string }) => {
   const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
-  const [reload, setReaload] = useState(false);
+  // const [reload, setReaload] = useState(false);
   const discloser = useDisclosure();
 
   useEffect(() => {
@@ -270,7 +285,7 @@ const Texts = (props: { selctedId: string }) => {
       state.changeState({ caption: res?.data });
       setTitles(() => [...res?.data]);
     });
-  }, [props.selctedId, reload]);
+  }, [props.selctedId]);
 
   const Add = () => (
     <ListsAddTitle
@@ -301,7 +316,7 @@ const Texts = (props: { selctedId: string }) => {
             ({ res, err }) => {
               if (err) return;
 
-              setReaload((e) => !e);
+              // setReaload((e) => !e);
 
               removeDiscloser.onClose();
             }
@@ -327,7 +342,7 @@ const Texts = (props: { selctedId: string }) => {
             setTitles((e) => [
               ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
             ]);
-            refresh();
+            // refresh();
             discloser.onClose();
           });
         }}
@@ -349,10 +364,7 @@ const Texts = (props: { selctedId: string }) => {
         <Models {...editDiscloser} content={<Edit />} />
 
         <Text>{props2.name}</Text>
-        <Stack
-          spacing={{ start: "10px", md: "0" }}
-          flexDir={{ start: "column", md: "row" }}
-        >
+        <Stack spacing={{ start: "10px" }} flexDir={{ start: "column" }}>
           <Pen
             h="40px"
             w="40px"
@@ -433,67 +445,70 @@ const Texts = (props: { selctedId: string }) => {
   );
 };
 
-const Titles = () => {
-  const titles = state.useStore((e) => e.titles);
-  const selected = state.useStore((e) => e.selectedTitle);
+// const Titles = () => {
+//   const titles = state.useStore((e) => e.titles);
+//   const selected = state.useStore((e) => e.selectedTitle);
 
-  return (
-    <Flex w="full" alignItems="center">
-      <Menu>
-        <MenuButton
-          variant="outline"
-          as={Button}
-          rightIcon={
-            <CustomAddIcon color="white" bg="whiteAlpha.100" children="-" />
-          }
-          rounded="20px"
-          _hover={{}}
-          border="none"
-          bg="whiteAlpha.100"
-          p="10px"
-          py="25px"
-          _active={{ backgroundColor: "whiteAlpha.200" }}
-        >
-          اختيار عنوان
-        </MenuButton>
+//   return (
+//     <Flex w="full" alignItems="center">
+//       <Menu>
+//         <MenuButton
+//           variant="outline"
+//           as={Button}
+//           rightIcon={
+//             <CustomAddIcon color="white" bg="whiteAlpha.100" children="-" />
+//           }
+//           rounded="20px"
+//           _hover={{}}
+//           border="none"
+//           bg="whiteAlpha.100"
+//           p="10px"
+//           py="25px"
+//           _active={{ backgroundColor: "whiteAlpha.200" }}
+//         >
+//           اختيار عنوان
+//         </MenuButton>
 
-        <MenuList
-          bg="rgb(0,0,0,50%)"
-          backdropFilter="blur(30px)"
-          p="20px"
-          border="none"
-          rounded="20px"
-        >
-          {titles.map((e: any, i: any) => (
-            <MenuItem
-              key={i * 60}
-              bg={selected == e.id ? "gray" : "transparent"}
-              _hover={{ bg: "blackAlpha.500" }}
-              rounded="10px"
-              p="10px"
-              px="20px"
-              onClick={() => state.changeState({ selectedTitle: e.id })}
-            >
-              {e.title}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-      <Divider borderColor="transparent" w="20px" />
-      <Text
-        p="10px"
-        bg="blue.0"
-        color="blue.1"
-        rounded="10px"
-        fontWeight="bold"
-      >
-        {titles.filter((e: any) => e.id == selected && e)[0]?.title}
-      </Text>
-    </Flex>
-  );
-};
+//         <MenuList
+//           bg="rgb(0,0,0,50%)"
+//           backdropFilter="blur(30px)"
+//           p="20px"
+//           border="none"
+//           rounded="20px"
+//         >
+//           {titles.map((e: any, i: any) => (
+//             <MenuItem
+//               key={i * 60}
+//               bg={selected == e.id ? "gray" : "transparent"}
+//               _hover={{ bg: "blackAlpha.500" }}
+//               rounded="10px"
+//               p="10px"
+//               px="20px"
+//               onClick={() => state.changeState({ selectedTitle: e.id })}
+//             >
+//               {e.title}
+//             </MenuItem>
+//           ))}
+//         </MenuList>
+//       </Menu>
+//       <Divider borderColor="transparent" w="20px" />
+//       <Text
+//         p="10px"
+//         bg="blue.0"
+//         color="blue.1"
+//         rounded="10px"
+//         fontWeight="bold"
+//       >
+//         {titles.filter((e: any) => e.id == selected && e)[0]?.title}
+//       </Text>
+//     </Flex>
+//   );
+// };
 
-const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
+export const PostsImages = (props: {
+  selctedId: string;
+  is_photo: boolean;
+}) => {
   const discloser = useDisclosure();
   const toast = useToast();
   const [posts, setPosts] = useState<any[]>([]);
@@ -614,8 +629,8 @@ const PostsImages = (props: { selctedId: string; is_photo: boolean }) => {
 };
 
 export default () => {
-  const selected = state.useStore((e) => e.selectedTitle);
-  state.useStore((e) => e.refreshtextsAndImages);
+  // const selected = state.useStore((e) => e.selectedTitle);
+  // state.useStore((e) => e.refreshtextsAndImages);
 
   return (
     <HStack
@@ -625,14 +640,14 @@ export default () => {
       alignItems="start"
     >
       <TitleEdit />
-      <Titles />
-      {selected !== "" && (
+      {/* <Titles /> */}
+      {/* {selected !== "" && (
         <>
           <Texts selctedId={selected} />
           <PostsImages selctedId={selected} is_photo={true} />
           <PostsImages selctedId={selected} is_photo={false} />
         </>
-      )}
+      )} */}
     </HStack>
   );
 };

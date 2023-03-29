@@ -57,10 +57,10 @@ export default () => {
 
           <ActionIcon text="تصدير" onClick={() => view(accountsExport)} />
 
-          <ActionIcon
+          {/* <ActionIcon
             text="حذف الحسابات​"
             onClick={() => view(removeAccounts)}
-          />
+          /> */}
         </>
       )}
     </HStack>

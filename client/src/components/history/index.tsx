@@ -8,12 +8,13 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postsHistory } from "../../utils/api/posts.api";
 import { date } from "../../utils/dates";
-import { Go } from "../icons";
+import { Go, Refresh } from "../icons";
 
 const Rows = (props: History) => (
   <Tr>
@@ -91,14 +92,35 @@ const fakeData = [
 
 export default () => {
   const [history, setHistory] = useState<History[]>(fakeData);
+  const [refresh, setRefresh] = useState(0);
+  const toast = useToast();
 
-  useState(() => {
-    postsHistory.then(({ res, err }) => {
-      if (err) return;
-      if (res?.data.length < 1) return setHistory(() => fakeData);
-      return setHistory(() => [...res?.data].reverse());
+  useEffect(() => {
+    toast({
+      status: "loading",
+      title: " تحميل ",
+      isClosable: true,
+      duration: 2000,
     });
-  });
+    postsHistory.then(({ res, err }) => {
+      if (err)
+        return toast({
+          status: "success",
+          title: "تحميل خطا في ",
+          isClosable: true,
+          duration: 2000,
+        });
+
+      if (res?.data.length < 1) return setHistory(() => fakeData);
+      setHistory(() => [...res?.data].reverse());
+      return toast({
+        status: "success",
+        title: "تم تحميل",
+        isClosable: true,
+        duration: 2000,
+      });
+    });
+  }, [refresh]);
 
   return (
     <VStack
@@ -114,6 +136,18 @@ export default () => {
     >
       {/* header */}
 
+      <HStack
+        spacing="30px"
+        rounded="20px"
+        p="10px"
+        bg="green.0"
+        color="green.1"
+        cursor="pointer"
+        onClick={() => setRefresh(() => Date.now())}
+      >
+        <Text>تجديد</Text>
+        <Refresh />
+      </HStack>
       <Table />
 
       <Table

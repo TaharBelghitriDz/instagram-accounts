@@ -36,6 +36,8 @@ export default () => {
   const [selectedPost, setSelectedPost] = useState("");
 
   useEffect(() => {
+    console.log("render");
+
     postsGet.then(({ err, res }) => {
       if (err) return;
       setPosts(() => [...res?.data]);

@@ -29,13 +29,23 @@ export default () => {
   const groups: GroupInutType[] = state.useStore((e) => e.groups);
   const selectedAccountsState = state.useStore((e) => e.selectedAccounts);
 
+  const selectedView = state.useStore((e) => e.accountsView);
+
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
     accountGet(selectedGroup).then(({ res, err }) => {
       if (err) return;
 
-      setAccounts(() => [...res?.data]);
+      setAccounts(() =>
+        [...res?.data].map((e) => {
+          if (typeof e.is_active == "string") return e;
+
+          if (!e.is_active) e.is_active = "غير مفعل​";
+          else e.is_active = "مفعل​";
+          return e;
+        })
+      );
     });
   }, [selectedGroup]);
 
@@ -45,12 +55,29 @@ export default () => {
     );
 
   const selectAll = () => {
-    const allIds = accounts.map((e) => e.id);
+    if (selectedView.length > 0) {
+      const selected = accounts
+        .filter((e) => {
+          if (
+            selectedView.includes(e.is_active) ||
+            selectedView.includes(e.status)
+          )
+            return e;
+        })
+        .map((e) => e.id);
 
-    if (allIds.length == selectedAccountsState.length)
-      return state.changeState({ selectedAccounts: [] });
+      if (selected.length == selectedAccountsState.length)
+        return state.changeState({ selectedAccounts: [] });
 
-    state.changeState({ selectedAccounts: allIds });
+      state.changeState({ selectedAccounts: selected });
+    } else {
+      const allIds = accounts.map((e) => e.id);
+
+      if (allIds.length == selectedAccountsState.length)
+        return state.changeState({ selectedAccounts: [] });
+
+      state.changeState({ selectedAccounts: allIds });
+    }
   };
 
   return (

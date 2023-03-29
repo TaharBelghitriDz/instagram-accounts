@@ -104,7 +104,17 @@ export default (props: { onClose: () => void; id: number }) => {
   useState(() => {
     setLoading(() => true);
     accoutGetById(props.id).then(({ err, res }) => {
-      setValues(() => res?.data);
+      if (err)
+        return (
+          toast({
+            title: "خطا في العملية",
+            status: "error",
+            isClosable: true,
+          }),
+          props.onClose()
+        );
+
+      setValues(() => ({ ...values, ...res?.data }));
       setLoading(() => false);
     });
   });
@@ -218,7 +228,7 @@ function AccountsInputs(props: {
         <Text> بروكسي </Text>
         <AccountsSettingsInput
           w="100%"
-          value={props.values.proxy}
+          value={props.values.proxy.replace("http://", "")}
           onChange={({ target: { value } }) =>
             props.setVelaues((e) => ({ ...e, proxy: value }))
           }
