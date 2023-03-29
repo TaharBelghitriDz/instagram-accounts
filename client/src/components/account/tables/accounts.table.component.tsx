@@ -169,8 +169,8 @@ export default () => {
   const [selctedAccount, setSelectedAccount] = useState(0);
   const refresh = state.useStore((e) => e.refreshAccounts);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const selectedView = state.useStore((e) => e.accountsView);
+  // const [accounts, setAccounts] = useState<Account[]>([]);
+  // const selectedView = state.useStore((e) => e.accountsView);
 
   // const [selectedCheckBox, setselectedCheckBox] = useState<number[]>([]);
 
@@ -183,21 +183,21 @@ export default () => {
     state.changeState({ selectedAccounts: [] });
   }, [refresh]);
 
-  useEffect(() => {
-    accountGet(selectedGroup).then(({ res, err }) => {
-      if (err) return;
+  // useEffect(() => {
+  //   accountGet(selectedGroup).then(({ res, err }) => {
+  //     if (err) return;
 
-      setAccounts(() =>
-        [...res?.data].map((e) => {
-          if (typeof e.is_active == "string") return e;
+  //     setAccounts(() =>
+  //       [...res?.data].map((e) => {
+  //         if (typeof e.is_active == "string") return e;
 
-          if (!e.is_active) e.is_active = "غير مفعل​";
-          else e.is_active = "مفعل​";
-          return e;
-        })
-      );
-    });
-  }, [selectedGroup]);
+  //         if (!e.is_active) e.is_active = "غير مفعل​";
+  //         else e.is_active = "مفعل​";
+  //         return e;
+  //       })
+  //     );
+  //   });
+  // }, [selectedGroup]);
 
   const CheckBox = (id: number) => {
     // const selectedAccounts = accounts
@@ -209,6 +209,8 @@ export default () => {
     //       return e;
     //   })
     //   .map((e) => e.id);
+
+    console.log(id);
 
     if (!selectedCheckBox.includes(id))
       return setselectedCheckBox([...selectedCheckBox, id]);
