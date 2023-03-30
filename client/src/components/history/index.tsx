@@ -112,7 +112,8 @@ export default () => {
         });
 
       if (res?.data.length < 1) return setHistory(() => fakeData);
-      setHistory(() => [...res?.data].reverse());
+
+      setHistory(() => [...res?.data]);
       return toast({
         status: "success",
         title: "تم تحميل",
