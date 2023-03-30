@@ -8,6 +8,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -34,13 +35,25 @@ export default () => {
   const discloser = useDisclosure();
   const editDiscloser = useDisclosure();
   const [selectedPost, setSelectedPost] = useState("");
+  const toast = useToast();
 
   useEffect(() => {
-    console.log("render");
+    toast({
+      status: "loading",
+      title: " تحميل ",
+      isClosable: true,
+      duration: 2000,
+    });
 
     postsGet.then(({ err, res }) => {
       if (err) return;
       setPosts(() => [...res?.data]);
+      return toast({
+        status: "success",
+        title: "تم تحميل",
+        isClosable: true,
+        duration: 2000,
+      });
     });
   }, []);
 
