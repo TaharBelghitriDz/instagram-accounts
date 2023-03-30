@@ -120,7 +120,7 @@ const Row = (props: {
 
   return (
     <Tbody>
-      {accountsView?.reverse().map((e, i) => (
+      {accountsView?.map((e, i) => (
         <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
           <Td>
             <Selected
