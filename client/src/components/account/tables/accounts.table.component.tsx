@@ -60,6 +60,7 @@ const Row = (props: {
           });
 
         if (err) return;
+        console.log(res?.data);
 
         setAccounts(() =>
           [...res?.data].map((e) => {
@@ -209,8 +210,6 @@ export default () => {
     //       return e;
     //   })
     //   .map((e) => e.id);
-
-    console.log(id);
 
     if (!selectedCheckBox.includes(id))
       return setselectedCheckBox([...selectedCheckBox, id]);
