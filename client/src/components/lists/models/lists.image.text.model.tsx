@@ -66,8 +66,8 @@ export default (props: {
 
             <VStack w="full">
               <Texts selctedId={props.id} />
-              {/* <PostsImages selctedId={props.id} is_photo={true} /> */}
-              {/* <PostsImages selctedId={props.id} is_photo={false} /> */}
+              <PostsImages selctedId={props.id} is_photo={true} />
+              <PostsImages selctedId={props.id} is_photo={false} />
             </VStack>
           </VStack>
         </AlertDialogBody>
