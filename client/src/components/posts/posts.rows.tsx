@@ -7,7 +7,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Post } from ".";
 import { date } from "../../utils/dates";
 import state from "../../utils/state";
@@ -19,10 +19,27 @@ export default (props: Post & { onClick: (e: any) => void }) => {
   const groupsState = state.useStore((e) => e.groups);
   const toast = useToast();
 
+  const [values, setValues] = useState<{ title: string; group: string }>({
+    title: "",
+    group: "",
+  });
+
   if (titlesState.length == 0) return <Tr />;
+
+  // console.log(groupsState);
+  console.log(titlesState.filter((e: any) => e.id == props.title_id && e)[0]);
 
   const titles = titlesState.filter((e: any) => e.id == props.title_id && e)[0];
   const groups = groupsState.filter((e: any) => e.id == props.group_id && e)[0];
+
+  useEffect(() => {
+    if (titles && groups) {
+      setValues(() => ({
+        group: groups.name,
+        title: titles.title,
+      }));
+    }
+  }, []);
 
   const copy = () => {
     toast({ status: "success", title: "تم النسخ", isClosable: true });
@@ -42,8 +59,8 @@ export default (props: Post & { onClick: (e: any) => void }) => {
           نسخ
         </Text>
       </Td> */}
-      <Td textAlign="center">{titles.title}</Td>
-      <Td textAlign="center">{groups.name}</Td>
+      <Td textAlign="center">{values.title}</Td>
+      <Td textAlign="center">{values.group}</Td>
       {/* <Td textAlign="center"> {props.time_between_posting} </Td> */}
       <Td textAlign="center"> {props.is_photo ? "post" : "reels"} </Td>
       <Td isNumeric>
