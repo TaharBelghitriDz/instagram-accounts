@@ -35,16 +35,18 @@ export const Titles = (props: {
         </MenuButton>
 
         <MenuList
-          bg="rgb(0,0,0,50%)"
-          backdropFilter="blur(30px)"
+          bg="rgb(10,10,10,100%)"
+          backdropFilter="blur(50px)"
           p="20px"
           border="none"
           rounded="20px"
+          maxH="300px"
+          overflow="auto"
         >
           {props.names.map((e: any, i: any) => (
             <MenuItem
               key={i * 60}
-              _hover={{ bg: "blackAlpha.500" }}
+              _hover={{ bg: "whiteAlpha.200" }}
               rounded="10px"
               p="10px"
               px="20px"
