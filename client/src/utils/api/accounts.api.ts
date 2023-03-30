@@ -103,6 +103,8 @@ export const initialData = groupGet
     await state.changeState({ groups: res?.data });
     await state.changeState({ selectedGroup: res?.data[0]?.id });
 
+    console.log(res?.data[0]?.id);
+
     return res?.data[0]?.id;
   })
   .then((id) => {
