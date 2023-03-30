@@ -615,6 +615,7 @@ export const PostsImages = (props: {
         flexWrap="wrap"
         justifyContent="space-evenly"
         spacing={4}
+        alignItems="start"
       >
         {posts?.map((e, i) => (
           <Image
