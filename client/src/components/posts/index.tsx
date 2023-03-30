@@ -47,7 +47,10 @@ export default () => {
 
     postsGet.then(({ err, res }) => {
       if (err) return;
+      console.log(res?.data);
+
       setPosts(() => [...res?.data]);
+
       return toast({
         status: "success",
         title: "تم تحميل",
