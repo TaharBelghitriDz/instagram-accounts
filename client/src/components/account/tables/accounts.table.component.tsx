@@ -14,6 +14,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Account, accountGet } from "../../../utils/api/accounts.api";
 import { date } from "../../../utils/dates";
@@ -60,7 +61,6 @@ const Row = (props: {
           });
 
         if (err) return;
-        console.log(res?.data);
 
         setAccounts(() =>
           [...res?.data].map((e) => {
