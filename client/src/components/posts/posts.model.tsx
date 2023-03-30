@@ -40,10 +40,10 @@ export default (props: {
   post?: Post;
 }) => {
   const ref = useRef(null);
-  useOutsideClick({
-    ref: ref,
-    handler: () => props.onClose(),
-  });
+  // useOutsideClick({
+  //   ref: ref,
+  //   handler: () => props.onClose(),
+  // });
 
   // window.scrollTo(0, 0);
 
