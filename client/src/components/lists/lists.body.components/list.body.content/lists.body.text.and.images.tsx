@@ -524,7 +524,7 @@ export const PostsImages = (props: {
         ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
       ]);
     });
-    refresh();
+    // refresh();
   }, [selectedGroup, medias, props.selctedId]);
 
   const addPictureModel = (
@@ -565,7 +565,8 @@ export const PostsImages = (props: {
 
   return (
     <VStack
-      maxW={{ start: "full", md: "46%" }}
+      maxW={{ start: "full" }}
+      w="full"
       alignItems="start"
       spacing="20px"
       bg="blackAlpha.400"
@@ -584,7 +585,7 @@ export const PostsImages = (props: {
       >
         {props.is_photo ? "صور البوسة" : "ريلز"}
       </Text>
-      <HStack w="full" justifyContent="space-between">
+      <HStack w="full" justifyContent="space-between" alignItems="start">
         <Text cursor="pointer"> العدد {posts.length} </Text>
         <Text
           cursor="pointer"
