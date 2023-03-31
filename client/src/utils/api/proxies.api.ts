@@ -7,6 +7,7 @@ export type Proxies = {
   password: string;
   created_date?: string;
   id?: string;
+  status: string;
 };
 
 export const proxiesGet = axiosFun({
@@ -27,6 +28,14 @@ export const proxiesDelete = (data: string[]) =>
   axiosFun({
     method: "DELETE",
     url: endpoint + "/proxies",
+    headers: { Authorization: localStorage.getItem("token") },
+    data,
+  });
+
+export const proxiesCheck = (data: any) =>
+  axiosFun({
+    method: "POST",
+    url: endpoint + "/proxies/check",
     headers: { Authorization: localStorage.getItem("token") },
     data,
   });

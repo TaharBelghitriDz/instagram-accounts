@@ -1,9 +1,11 @@
 import {
+  Box,
   Checkbox,
   Table,
   TableCaption,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -19,20 +21,38 @@ import ProxiesTableHeader from "./proxies.table.header";
 const TableBodyRow = (
   props: Proxies & { setSelect: (p: boolean) => void; remove: boolean }
 ) => {
+  const status = () => {
+    if (props.status == "محظور") return { color: "red.700" };
+    if (props.status == "شغال") return { color: "green.700" };
+    else return { color: "blue.700" };
+  };
+
+  const Selected = (props: { selected: boolean; onClick: () => void }) => (
+    <Box
+      h="30px"
+      w="30px"
+      rounded="10px"
+      bg={props.selected ? "red" : ""}
+      cursor="pointer"
+      border="3px solid red "
+      onClick={props.onClick}
+    />
+  );
+
   return (
     <Tr bg={props.remove ? "red.900" : ""}>
       <Td>
-        <Checkbox
-          p="10px"
-          type="checkbox"
-          checked={props.remove}
-          onChange={(e) => {
-            console.log("here");
-
-            props.setSelect(e.target.checked);
-          }}
+        <Selected
+          selected={props.remove}
+          onClick={() => props.setSelect(!props.remove)}
         />
       </Td>
+
+      <Th color="white" textAlign="center">
+        <Text bg={status().color} p="10px" rounded="full">
+          {props.status || "غير معرف"}
+        </Text>
+      </Th>
 
       <Td textAlign="center">{props.username}</Td>
       <Td textAlign="center"> {props.password} </Td>
@@ -58,14 +78,10 @@ export default () => {
   const [select, setSelect] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log("select");
-    console.log(select);
-
     setSelect(() => []);
-    console.log(select);
   }, [proxiesState]);
 
-  useState(() => {
+  useEffect(() => {
     proxiesGet.then(({ err, res }) => {
       if (err)
         return toast({
@@ -77,7 +93,13 @@ export default () => {
       state.changeState({ proxies: res?.data });
       return;
     });
-  });
+  }, []);
+
+  // const check = () => {
+  //   proxiesCheck().then(({ res, err }) => {
+  //     if (err) return;
+  //   });
+  // };
 
   return (
     <VStack
@@ -102,6 +124,9 @@ export default () => {
         <Thead pt="20px">
           <Tr>
             <Th />
+            <Th color="white" textAlign="center">
+              الحالة
+            </Th>
             <Th color="white" textAlign="center">
               اسم
             </Th>

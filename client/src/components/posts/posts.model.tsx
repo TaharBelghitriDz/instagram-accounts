@@ -73,8 +73,6 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
 
-  console.log(titles);
-
   groups.length < 1 &&
     (props.onClose(),
     toast({ status: "error", isClosable: true, title: "اضف مجموعات" }));
@@ -166,7 +164,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           name="العنوان"
           names={state.useStore((e) => e.titles)}
           fun={(r: string) => {
-            setSelected((e) => ({ ...e, title: r }));
+            // setSelected((e) => ({ ...e, title: r }));
           }}
         />
         <Titles
@@ -174,7 +172,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           name="المجموعة"
           names={state.useStore((e) => e.groups)}
           fun={(r: string) => {
-            setSelected((e) => ({ ...e, group: r }));
+            // setSelected((e) => ({ ...e, group: r }));
           }}
         />
       </HStack>

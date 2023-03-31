@@ -1,4 +1,5 @@
 import {
+  Box,
   Flex,
   HStack,
   Input,
@@ -8,7 +9,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ComponentType, useState } from "react";
-import { proxiesDelete } from "../../../utils/api/proxies.api";
+import { proxiesCheck, proxiesDelete } from "../../../utils/api/proxies.api";
 import state from "../../../utils/state";
 import Models from "../../account/models";
 import { ActionIcon } from "../../custom.button.component";
@@ -19,6 +20,7 @@ import ProxiesSettingsModel from "../models/proxies.settings.model";
 export default (props: { select: string[] }) => {
   const discloser = useDisclosure();
   const toast = useToast();
+  const proxiesState = state.useStore((e) => e.proxies);
 
   const [content, setContent] = useState<JSX.Element>(
     <ProxiesSettingsModel {...discloser} />
@@ -44,6 +46,13 @@ export default (props: { select: string[] }) => {
         title: "تم العملية",
         isClosable: true,
       });
+    });
+  };
+
+  const check = () => {
+    proxiesCheck(proxiesState.map((e: any) => e.id)).then(({ res, err }) => {
+      if (err) return;
+      console.log(res);
     });
   };
 
@@ -80,7 +89,19 @@ export default (props: { select: string[] }) => {
         >
           حذف الكل
         </Text>
-
+        <Text
+          p="7px"
+          rounded="10px"
+          px="20px"
+          bg="red.800"
+          color="red.200"
+          verticalAlign="center"
+          textAlign="center"
+          cursor="pointer"
+          onClick={check}
+        >
+          فحص البروكسيات
+        </Text>
         <HStack
           w="40px"
           h="40px"
