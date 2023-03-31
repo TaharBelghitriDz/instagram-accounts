@@ -52,7 +52,11 @@ export default (props: { select: string[] }) => {
   const check = () => {
     proxiesCheck(proxiesState.map((e: any) => e.id)).then(({ res, err }) => {
       if (err) return;
-      console.log(res);
+      return toast({
+        status: "loading",
+        title: "بدا الفحص ",
+        isClosable: true,
+      });
     });
   };
 

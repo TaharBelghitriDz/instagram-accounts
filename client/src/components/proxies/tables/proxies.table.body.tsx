@@ -82,6 +82,12 @@ export default () => {
   }, [proxiesState]);
 
   useEffect(() => {
+    toast({
+      status: "loading",
+      title: " تحميل ",
+      isClosable: true,
+      duration: 2000,
+    });
     proxiesGet.then(({ err, res }) => {
       if (err)
         return toast({
@@ -91,7 +97,12 @@ export default () => {
         });
 
       state.changeState({ proxies: res?.data });
-      return;
+      return toast({
+        status: "success",
+        title: "تم تحميل",
+        isClosable: true,
+        duration: 2000,
+      });
     });
   }, []);
 
