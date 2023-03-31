@@ -7,7 +7,7 @@ export type Proxies = {
   password: string;
   created_date?: string;
   id?: string;
-  status: string;
+  status?: string;
 };
 
 export const proxiesGet = axiosFun({
