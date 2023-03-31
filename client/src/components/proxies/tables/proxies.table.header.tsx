@@ -65,27 +65,28 @@ export default (props: { select: string[] }) => {
   };
 
   const refresh = () => {
-    toast({
-      status: "loading",
-      title: " تحميل ",
-      isClosable: true,
-      duration: 2000,
-    });
-    proxiesGet.then(({ err, res }) => {
+    // toast({
+    //   status: "loading",
+    //   title: " تحميل ",
+    //   isClosable: true,
+    //   duration: 2000,
+    // });
+    return proxiesGet.then(({ err, res }) => {
       if (err)
         return toast({
           status: "error",
           title: "خطا في الاتصال",
           isClosable: true,
         });
+      console.log(res?.data);
 
       state.changeState({ proxies: res?.data });
-      return toast({
-        status: "success",
-        title: "تم تحميل",
-        isClosable: true,
-        duration: 2000,
-      });
+      // return toast({
+      //   status: "success",
+      //   title: "تم تحميل",
+      //   isClosable: true,
+      //   duration: 2000,
+      // });
     });
   };
 
@@ -131,7 +132,7 @@ export default (props: { select: string[] }) => {
           verticalAlign="center"
           textAlign="center"
           cursor="pointer"
-          onClick={check}
+          // onClick={check}
         >
           فحص البروكسيات
         </Text>
