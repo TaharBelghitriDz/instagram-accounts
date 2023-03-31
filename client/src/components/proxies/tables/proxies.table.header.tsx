@@ -9,11 +9,15 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ComponentType, useState } from "react";
-import { proxiesCheck, proxiesDelete } from "../../../utils/api/proxies.api";
+import {
+  proxiesCheck,
+  proxiesDelete,
+  proxiesGet,
+} from "../../../utils/api/proxies.api";
 import state from "../../../utils/state";
 import Models from "../../account/models";
 import { ActionIcon } from "../../custom.button.component";
-import { Settings } from "../../icons";
+import { Refresh, Settings } from "../../icons";
 import newProxiesModel from "../models/new.proxies.model";
 import ProxiesSettingsModel from "../models/proxies.settings.model";
 
@@ -56,6 +60,31 @@ export default (props: { select: string[] }) => {
         status: "loading",
         title: "بدا الفحص ",
         isClosable: true,
+      });
+    });
+  };
+
+  const refresh = () => {
+    toast({
+      status: "loading",
+      title: " تحميل ",
+      isClosable: true,
+      duration: 2000,
+    });
+    proxiesGet.then(({ err, res }) => {
+      if (err)
+        return toast({
+          status: "error",
+          title: "خطا في الاتصال",
+          isClosable: true,
+        });
+
+      state.changeState({ proxies: res?.data });
+      return toast({
+        status: "success",
+        title: "تم تحميل",
+        isClosable: true,
+        duration: 2000,
       });
     });
   };
@@ -106,6 +135,20 @@ export default (props: { select: string[] }) => {
         >
           فحص البروكسيات
         </Text>
+        <HStack
+          w="40px"
+          h="40px"
+          rounded="10px"
+          spacing="0"
+          justifyContent="center"
+          alignContent="center"
+          bg="blue.800"
+          color="blue.200"
+          cursor="pointer"
+          onClick={() => refresh()}
+        >
+          <Refresh w="24px" h="24px" bg="" />
+        </HStack>
         <HStack
           w="40px"
           h="40px"
