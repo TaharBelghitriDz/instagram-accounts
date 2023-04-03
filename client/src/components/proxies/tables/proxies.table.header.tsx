@@ -72,13 +72,14 @@ export default (props: { select: string[] }) => {
       duration: 2000,
     });
     return proxiesGet.then(({ err, res }) => {
+      console.log("here");
+
       if (err)
         return toast({
           status: "error",
           title: "خطا في الاتصال",
           isClosable: true,
         });
-      console.log(res?.data);
 
       state.changeState({ proxies: res?.data });
       return toast({
@@ -132,7 +133,7 @@ export default (props: { select: string[] }) => {
           verticalAlign="center"
           textAlign="center"
           cursor="pointer"
-          // onClick={check}
+          onClick={check}
         >
           فحص البروكسيات
         </Text>
