@@ -1,14 +1,9 @@
 import {
-  Button,
   Divider,
   Flex,
   HStack,
   Image,
   Input,
-  // Menu,
-  // MenuButton,
-  // MenuItem,
-  // MenuList,
   Stack,
   Text,
   useDisclosure,
@@ -276,120 +271,120 @@ const TitleEdit = () => {
 };
 
 export const Texts = (props: { selctedId: string }) => {
-  const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
-  // const [reload, setReaload] = useState(false);
-  const discloser = useDisclosure();
+  // const [titles, setTitles] = useState<{ caption: string; id: number }[]>([]);
+  // // const [reload, setReaload] = useState(false);
+  // const discloser = useDisclosure();
 
-  useEffect(() => {
-    captionGet(props.selctedId).then(({ res, err }) => {
-      state.changeState({ caption: res?.data });
-      setTitles(() => [...res?.data]);
-    });
-  }, [props.selctedId]);
+  // useEffect(() => {
+  //   captionGet(props.selctedId).then(({ res, err }) => {
+  //     state.changeState({ caption: res?.data });
+  //     setTitles(() => [...res?.data]);
+  //   });
+  // }, [props.selctedId]);
 
-  const Add = () => (
-    <ListsAddTitle
-      {...discloser}
-      name="اضافة عنوان"
-      fun={(e: any) => {
-        captionAdd({ id: props.selctedId, data: [{ caption: e }] }).then(
-          ({ res, err }) => {
-            if (err) return;
+  // const Add = () => (
+  //   <ListsAddTitle
+  //     {...discloser}
+  //     name="اضافة عنوان"
+  //     fun={(e: any) => {
+  //       captionAdd({ id: props.selctedId, data: [{ caption: e }] }).then(
+  //         ({ res, err }) => {
+  //           if (err) return;
 
-            state.changeState({ caption: [...res?.data] });
-            setTitles(() => [...res?.data]);
-            discloser.onClose();
-          }
-        );
-      }}
-    />
-  );
-  const TextItem = (props2: { name: string; id: number }) => {
-    const removeDiscloser = useDisclosure();
-    const editDiscloser = useDisclosure();
+  //           state.changeState({ caption: [...res?.data] });
+  //           setTitles(() => [...res?.data]);
+  //           discloser.onClose();
+  //         }
+  //       );
+  //     }}
+  //   />
+  // );
+  // const TextItem = (props2: { name: string; id: number }) => {
+  //   const removeDiscloser = useDisclosure();
+  //   const editDiscloser = useDisclosure();
 
-    const Remove = () => (
-      <ListsRemove
-        {...removeDiscloser}
-        fun={() => {
-          captionDelete({ id: props.selctedId, data: [props2.id] }).then(
-            ({ res, err }) => {
-              if (err) return;
+  //   const Remove = () => (
+  //     <ListsRemove
+  //       {...removeDiscloser}
+  //       fun={() => {
+  //         captionDelete({ id: props.selctedId, data: [props2.id] }).then(
+  //           ({ res, err }) => {
+  //             if (err) return;
 
-              // setReaload((e) => !e);
+  //             // setReaload((e) => !e);
 
-              removeDiscloser.onClose();
-            }
-          );
-        }}
-      />
-    );
+  //             removeDiscloser.onClose();
+  //           }
+  //         );
+  //       }}
+  //     />
+  //   );
 
-    const Edit = () => (
-      <ListsAddTitle
-        {...editDiscloser}
-        name="تعديل على النبدة"
-        content={props2.name}
-        fun={(e: any) => {
-          captionUpdate({ id: props2.id, title: e }).then(({ res, err }) => {
-            if (err) return;
+  //   const Edit = () => (
+  //     <ListsAddTitle
+  //       {...editDiscloser}
+  //       name="تعديل على النبدة"
+  //       content={props2.name}
+  //       fun={(e: any) => {
+  //         captionUpdate({ id: props2.id, title: e }).then(({ res, err }) => {
+  //           if (err) return;
 
-            // state.changeState({
-            //   titles: [
-            //     ...titles.map((e) => (e.id == res?.data.id ? res?.data : e)),
-            //   ],
-            // });
-            setTitles((e) => [
-              ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
-            ]);
-            // refresh();
-            discloser.onClose();
-          });
-        }}
-      />
-    );
-    return (
-      <HStack
-        as={motion.div}
-        whileHover={{ backgroundColor: "#020202" }}
-        spacing="10px"
-        justifyContent="space-between"
-        w="full"
-        alignItems="start"
-        p="10px"
-        bg="blackAlpha.400"
-        rounded="10px"
-      >
-        <Models {...removeDiscloser} content={<Remove />} />
-        <Models {...editDiscloser} content={<Edit />} />
+  //           // state.changeState({
+  //           //   titles: [
+  //           //     ...titles.map((e) => (e.id == res?.data.id ? res?.data : e)),
+  //           //   ],
+  //           // });
+  //           setTitles((e) => [
+  //             ...e.map((e) => (e.id == res?.data.id ? res?.data : e)),
+  //           ]);
+  //           // refresh();
+  //           discloser.onClose();
+  //         });
+  //       }}
+  //     />
+  //   );
+  //   return (
+  //     <HStack
+  //       as={motion.div}
+  //       whileHover={{ backgroundColor: "#020202" }}
+  //       spacing="10px"
+  //       justifyContent="space-between"
+  //       w="full"
+  //       alignItems="start"
+  //       p="10px"
+  //       bg="blackAlpha.400"
+  //       rounded="10px"
+  //     >
+  //       <Models {...removeDiscloser} content={<Remove />} />
+  //       <Models {...editDiscloser} content={<Edit />} />
 
-        <Text>{props2.name}</Text>
-        <Stack spacing={{ start: "10px" }} flexDir={{ start: "column" }}>
-          <Pen
-            h="40px"
-            w="40px"
-            p="10px"
-            bg="green.900"
-            color="green.100"
-            rounded="5px"
-            cursor="pointer"
-            onClick={editDiscloser.onOpen}
-          />
-          <Divider borderColor="transparent" w="10px" h="0px" />
-          <Historiq
-            h="40px"
-            w="40px"
-            p="10px"
-            bg="red.800"
-            color="red.100"
-            rounded="5px"
-            cursor="pointer"
-            onClick={removeDiscloser.onOpen}
-          />
-        </Stack>
-      </HStack>
-    );
-  };
+  //       <Text>{props2.name}</Text>
+  //       <Stack spacing={{ start: "10px" }} flexDir={{ start: "column" }}>
+  //         <Pen
+  //           h="40px"
+  //           w="40px"
+  //           p="10px"
+  //           bg="green.900"
+  //           color="green.100"
+  //           rounded="5px"
+  //           cursor="pointer"
+  //           onClick={editDiscloser.onOpen}
+  //         />
+  //         <Divider borderColor="transparent" w="10px" h="0px" />
+  //         <Historiq
+  //           h="40px"
+  //           w="40px"
+  //           p="10px"
+  //           bg="red.800"
+  //           color="red.100"
+  //           rounded="5px"
+  //           cursor="pointer"
+  //           onClick={removeDiscloser.onOpen}
+  //         />
+  //       </Stack>
+  //     </HStack>
+  //   );
+  // };
 
   return (
     <VStack
@@ -402,7 +397,7 @@ export const Texts = (props: { selctedId: string }) => {
       rounded="15px"
       style={{ margin: "10px" }}
     >
-      <Models {...discloser} content={<Add />} />
+      {/* <Models {...discloser} content={<Add />} />
 
       <Text
         bg="green.900"
@@ -440,7 +435,7 @@ export const Texts = (props: { selctedId: string }) => {
         {titles.map((e, i) => (
           <TextItem key={i * 34} name={e.caption} id={e.id} />
         ))}
-      </VStack>
+      </VStack> */}
     </VStack>
   );
 };
@@ -509,59 +504,59 @@ export const PostsImages = (props: {
   selctedId: string;
   is_photo: boolean;
 }) => {
-  const discloser = useDisclosure();
-  const toast = useToast();
-  const [posts, setPosts] = useState<any[]>([]);
-  const selectedGroup = state.useStore((e) => e.selectedGroup);
-  const medias = state.useStore((e) => e.medias);
+  // const discloser = useDisclosure();
+  // const toast = useToast();
+  // const [posts, setPosts] = useState<any[]>([]);
+  // const selectedGroup = state.useStore((e) => e.selectedGroup);
+  // const medias = state.useStore((e) => e.medias);
 
-  useEffect(() => {
-    mediaGet(props.selctedId).then(({ res, err }) => {
-      if (err) return;
-      console.log(res);
+  // useEffect(() => {
+  //   mediaGet(props.selctedId).then(({ res, err }) => {
+  //     if (err) return;
+  //     console.log(res);
 
-      setPosts(() => [
-        ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
-      ]);
-    });
-    // refresh();
-  }, [selectedGroup, medias, props.selctedId]);
+  //     setPosts(() => [
+  //       ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
+  //     ]);
+  //   });
+  //   // refresh();
+  // }, [selectedGroup, medias, props.selctedId]);
 
-  const addPictureModel = (
-    <ListsAddPicture
-      {...discloser}
-      for_title
-      is_photo={props.is_photo}
-      id={props.selctedId}
-    />
-  );
+  // const addPictureModel = (
+  //   <ListsAddPicture
+  //     {...discloser}
+  //     for_title
+  //     is_photo={props.is_photo}
+  //     id={props.selctedId}
+  //   />
+  // );
 
-  const remove = () => {
-    mediaDelete({
-      id: props.selctedId,
-      data: posts
-        .filter((e: any) => e.is_photo == props.is_photo && e)
-        .map((e) => e.id),
-    }).then(({ res, err }) => {
-      if (err)
-        return toast({
-          title: "خطا في الاتصال",
-          status: "error",
-          isClosable: true,
-        });
+  // const remove = () => {
+  //   mediaDelete({
+  //     id: props.selctedId,
+  //     data: posts
+  //       .filter((e: any) => e.is_photo == props.is_photo && e)
+  //       .map((e) => e.id),
+  //   }).then(({ res, err }) => {
+  //     if (err)
+  //       return toast({
+  //         title: "خطا في الاتصال",
+  //         status: "error",
+  //         isClosable: true,
+  //       });
 
-      toast({
-        title: "تم العملية",
-        status: "success",
-        isClosable: true,
-      });
+  //     toast({
+  //       title: "تم العملية",
+  //       status: "success",
+  //       isClosable: true,
+  //     });
 
-      state.changeState({ medias: [...res?.data] });
-      setPosts(() => [
-        ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
-      ]);
-    });
-  };
+  //     state.changeState({ medias: [...res?.data] });
+  //     setPosts(() => [
+  //       ...res?.data.filter((e: any) => e.is_photo == props.is_photo && e),
+  //     ]);
+  //   });
+  // };
 
   return (
     <VStack
@@ -574,7 +569,7 @@ export const PostsImages = (props: {
       rounded="15px"
       style={{ margin: "10px" }}
     >
-      <Models content={addPictureModel} {...discloser} />
+      {/* <Models content={addPictureModel} {...discloser} />
       <Text
         bg="green.900"
         color="green.100"
@@ -625,7 +620,7 @@ export const PostsImages = (props: {
             style={{ margin: "5px" }}
           />
         ))}
-      </HStack>
+      </HStack> */}
     </VStack>
   );
 };
