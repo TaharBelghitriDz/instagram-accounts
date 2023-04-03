@@ -83,7 +83,7 @@ const state = {
   listPlace: "names",
   selectedGroup: "",
   accountsView: [] as string[] | undefined,
-
+  selectedProxies: [] as number[],
   selectedAccounts: [],
   refreshAccounts: 0,
   refreshtextsAndImages: 0,
@@ -97,7 +97,7 @@ const state = {
   selectedPics: [] as number[],
   postSelected: {} as { title: number; group: number },
   titles: [] as { title: string; id: number }[],
-  selectedTitle: "",
+  selectedTitles: [] as number[],
   captions: [] as { caption: string; id: number }[],
   posts: [] as Post[],
   medias: [] as {
