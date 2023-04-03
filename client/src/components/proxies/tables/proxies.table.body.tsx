@@ -82,6 +82,10 @@ export default () => {
   }, [proxiesState]);
 
   useEffect(() => {
+    state.changeState({ selectedProxies: select });
+  }, [select]);
+
+  useEffect(() => {
     toast({
       status: "loading",
       title: " تحميل ",
