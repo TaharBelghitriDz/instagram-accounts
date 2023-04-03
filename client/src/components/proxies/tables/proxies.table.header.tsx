@@ -25,6 +25,7 @@ export default (props: { select: string[] }) => {
   const discloser = useDisclosure();
   const toast = useToast();
   const proxiesState = state.useStore((e) => e.proxies);
+  const selectedProxies = state.useStore((e) => e.selectedProxies);
 
   const [content, setContent] = useState<JSX.Element>(
     <ProxiesSettingsModel {...discloser} />
@@ -54,7 +55,7 @@ export default (props: { select: string[] }) => {
   };
 
   const check = () => {
-    proxiesCheck(proxiesState.map((e: any) => e.id)).then(({ res, err }) => {
+    proxiesCheck(selectedProxies).then(({ res, err }) => {
       if (err) return;
       return toast({
         status: "loading",
@@ -135,7 +136,7 @@ export default (props: { select: string[] }) => {
           verticalAlign="center"
           textAlign="center"
           cursor="pointer"
-          // onClick={check}
+          onClick={check}
         >
           فحص البروكسيات
         </Text>
