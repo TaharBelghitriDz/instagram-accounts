@@ -116,6 +116,12 @@ export default () => {
   //   });
   // };
 
+  const selectAll = () => {
+    if (select.length == proxiesState.length) return setSelect(() => []);
+
+    return setSelect(() => [...proxiesState.map((e: any) => e.id)]);
+  };
+
   return (
     <VStack
       w="full"
@@ -138,7 +144,18 @@ export default () => {
         <TableCaption h="20px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            <Th />
+            <Th color="white" textAlign="center" w="150px">
+              <Text
+                bg="green.0"
+                w="auto"
+                p="10px"
+                rounded="10px"
+                cursor="pointer"
+                onClick={selectAll}
+              >
+                تحديد الكل
+              </Text>
+            </Th>
             <Th color="white" textAlign="center">
               الحالة
             </Th>

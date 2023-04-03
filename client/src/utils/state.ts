@@ -100,12 +100,14 @@ const state = {
   selectedTitles: [] as number[],
   captions: [] as { caption: string; id: number }[],
   posts: [] as Post[],
+  postView: "",
   medias: [] as {
     media_link: string;
     is_photo: boolean;
     id: number;
     title_id: number;
   }[],
+  selectedPost: [] as number[],
 };
 
 export default createState(state, ({ groups }) => ({

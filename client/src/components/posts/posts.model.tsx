@@ -172,7 +172,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           name="المجموعة"
           names={state.useStore((e) => e.groups)}
           fun={(r: string) => {
-            // setSelected((e) => ({ ...e, group: r }));
+            setSelected((e) => ({ ...e, group: r }));
           }}
         />
       </HStack>
@@ -222,7 +222,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
-          onClick={fun}
+          // onClick={fun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

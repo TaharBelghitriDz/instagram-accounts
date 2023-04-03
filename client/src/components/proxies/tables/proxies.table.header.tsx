@@ -37,7 +37,7 @@ export default (props: { select: string[] }) => {
   };
 
   const fun = () => {
-    proxiesDelete(props.select).then(({ err, res }) => {
+    proxiesDelete(selectedProxies).then(({ err, res }) => {
       if (err)
         return toast({
           status: "error",
@@ -104,14 +104,14 @@ export default (props: { select: string[] }) => {
       <Models {...discloser} content={content} />
       <Flex alignItems="center">
         <ActionIcon text="جديد" onClick={() => view(newProxiesModel)} />
-        <Input
+        {/* <Input
           border="none"
           rounded="15px"
           p="20px"
           py="22px"
           bg="black.0"
           placeholder="بحث"
-        />
+        /> */}
       </Flex>
       <HStack spacing="10px">
         <Text

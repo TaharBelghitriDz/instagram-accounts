@@ -1,4 +1,6 @@
 import {
+  Box,
+  Flex,
   HStack,
   Td,
   Text,
@@ -13,6 +15,18 @@ import { date } from "../../utils/dates";
 import state from "../../utils/state";
 import PostsRemoveModel from "./posts.remove.model";
 
+const Selected = (props: { selected: boolean; onClick: () => void }) => (
+  <Box
+    h="30px"
+    w="30px"
+    rounded="full"
+    bg={props.selected ? "red" : ""}
+    cursor="pointer"
+    border="3px solid red "
+    onClick={props.onClick}
+  />
+);
+
 export default (props: Post & { onClick: (e: any) => void }) => {
   const discoler = useDisclosure();
   const titlesState = state.useStore((e) => e.titles);
@@ -25,9 +39,8 @@ export default (props: Post & { onClick: (e: any) => void }) => {
   });
 
   if (titlesState.length == 0) return <Tr />;
-
-  // console.log(groupsState);
-  console.log(titlesState.filter((e: any) => e.id == props.title_id && e)[0]);
+  const postsSelectedState = state.useStore((e) => e.selectedPost);
+  const isSelected = postsSelectedState.includes(props.id);
 
   const titles = titlesState.filter((e: any) => e.id == props.title_id && e)[0];
   const groups = groupsState.filter((e: any) => e.id == props.group_id && e)[0];
@@ -41,24 +54,44 @@ export default (props: Post & { onClick: (e: any) => void }) => {
     }
   }, []);
 
-  const copy = () => {
-    toast({ status: "success", title: "تم النسخ", isClosable: true });
+  const select = () => {
+    if (!isSelected)
+      return state.changeState({
+        selectedPost: [...postsSelectedState, props.id],
+      });
+
+    return state.changeState({
+      selectedPost: postsSelectedState.filter(
+        (e: number) => e != props.id && e
+      ),
+    });
   };
 
+  const posted = Math.floor(Math.random() * 3) + 1 > 1;
+
   return (
-    <Tr>
-      {/* <Td>
+    <Tr bg={isSelected ? "red.800" : ""}>
+      <Td
+        w="150px"
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+      >
+        <Flex justifyContent="center">
+          <Selected onClick={select} selected={isSelected} />
+        </Flex>
+      </Td>
+      <Td>
         <Text
-          bg="green.0"
-          color="green.1"
+          w="full"
+          bg={posted ? "green.0" : "red.900"}
+          textAlign="center"
           p="10px"
-          rounded="2xl"
-          cursor="pointer"
-          onClick={copy}
+          rounded="10px"
         >
-          نسخ
+          {posted ? "تم النشر" : "لم يتم النشر"}
         </Text>
-      </Td> */}
+      </Td>
       <Td textAlign="center">{values.title}</Td>
       <Td textAlign="center">{values.group}</Td>
       {/* <Td textAlign="center"> {props.time_between_posting} </Td> */}

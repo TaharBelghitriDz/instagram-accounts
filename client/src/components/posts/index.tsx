@@ -1,4 +1,5 @@
 import {
+  Flex,
   HStack,
   Table,
   TableCaption,
@@ -15,7 +16,9 @@ import { useEffect, useState } from "react";
 import { postsGet } from "../../utils/api/posts.api";
 import state from "../../utils/state";
 import { CustomAddIcon } from "../custom.button.component";
+import { Historiq } from "../icons";
 import PostsModel from "./posts.model";
+import PostsRemoveAllModel from "./posts.remove.all.model";
 import PostsRows from "./posts.rows";
 
 export type Post = {
@@ -30,10 +33,13 @@ export type Post = {
 
 export default () => {
   const postsState = state.useStore((e) => e.posts);
+  const postsSelectedState = state.useStore((e) => e.selectedPost);
 
   const [posts, setPosts] = useState<Post[]>([...postsState]);
   const discloser = useDisclosure();
   const editDiscloser = useDisclosure();
+  const removeDiscloser = useDisclosure();
+
   const [selectedPost, setSelectedPost] = useState("");
   const toast = useToast();
 
@@ -64,6 +70,13 @@ export default () => {
     setPosts(() => [...postsState]);
   }, [postsState]);
 
+  const selectAll = () => {
+    if (postsSelectedState.length == posts.length)
+      return state.changeState({ selectedPost: [] });
+
+    return state.changeState({ selectedPost: posts.map((e) => e.id) });
+  };
+
   return (
     <VStack
       w="full"
@@ -77,37 +90,62 @@ export default () => {
       spacing="10px"
     >
       <Table />
-
       <PostsModel {...discloser} />
       <PostsModel
         {...editDiscloser}
         post={posts.filter((e) => e.id?.toString() == selectedPost && e)[0]}
       />
-
-      <HStack
-        spacing="10px"
-        bg="green.0"
-        p="10px"
-        color="green.1"
-        rounded="20px"
-        cursor="pointer"
-        onClick={discloser.onOpen}
-      >
-        <Text>اضافة</Text>
-        <CustomAddIcon />
+      <PostsRemoveAllModel {...removeDiscloser} />
+      <HStack spacing="30px">
+        <HStack
+          spacing="10px"
+          bg="green.0"
+          p="10px"
+          color="green.1"
+          rounded="20px"
+          cursor="pointer"
+          onClick={discloser.onOpen}
+        >
+          <Text>اضافة</Text>
+          <CustomAddIcon />
+        </HStack>
+        <HStack
+          spacing="10px"
+          bg="red.800"
+          p="10px"
+          color="red.100"
+          rounded="20px"
+          cursor="pointer"
+          onClick={removeDiscloser.onOpen}
+        >
+          <Text>مسح</Text>
+          <Historiq />
+        </HStack>
       </HStack>
-
       <Table
         variant="simple"
         colorScheme="whiteAlpha"
-        // p="20px"
         bg="black.0"
         rounded="20px"
       >
         <TableCaption h="0px"> </TableCaption>
         <Thead pt="20px">
           <Tr>
-            {/* <Th textAlign="center">نسخ الرابط</Th> */}
+            <Th color="white" textAlign="center" w="150px">
+              <Text
+                bg="green.0"
+                w="auto"
+                p="10px"
+                rounded="10px"
+                cursor="pointer"
+                onClick={selectAll}
+              >
+                تحديد الكل
+              </Text>
+            </Th>
+            <Th color="white" textAlign="center">
+              الحالة
+            </Th>
             <Th color="white" textAlign="center">
               العنوان
             </Th>

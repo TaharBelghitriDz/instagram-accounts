@@ -14,6 +14,7 @@ import {
   useMenuItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import state from "../../utils/state";
 import { CustomAddIcon } from "../custom.button.component";
 
 export const Titles = (props: {
@@ -24,8 +25,33 @@ export const Titles = (props: {
 }) => {
   const [items, setItems] = useState<typeof props.names>(props.names);
   const [values, setValue] = useState("");
+  console.log("rerender");
 
-  const select = () => {};
+  const selectedTitles = state.useStore((e) => e.selectedTitles);
+
+  const Selected = (props: { selected: boolean; onClick: () => void }) => (
+    <Box
+      h="20px"
+      w="20px"
+      rounded="full"
+      bg={props.selected ? "red" : ""}
+      cursor="pointer"
+      border="3px solid red "
+      onClick={props.onClick}
+    />
+  );
+
+  const select = (id: number) => {
+    if (!selectedTitles.includes(id))
+      return state.changeState({ selectedTitles: [...selectedTitles, id] });
+
+    const newArray = selectedTitles.filter((e: number) => e != id && e);
+    return state.changeState({ selectedTitles: newArray });
+  };
+
+  const isSelected = (id: number) => {
+    return selectedTitles.includes(id);
+  };
 
   return (
     <Flex w="full">
@@ -64,38 +90,41 @@ export const Titles = (props: {
             }
           }}
         >
-          <MenuItem
-            bg="transparent"
-            // onClick={(e) => e.stopPropagation()}
-            // onKeyDown={(e) => {
-            //   e.stopPropagation();
-            // }}
-          >
-            <Input
-              w="full"
-              bg="whiteAlpha.100"
-              onClick={(e) => e.stopPropagation()}
-              border=""
-              rounded="10px"
-              placeholder="بحث عن عنوان"
-              value={values}
-              onChange={({ target: { value } }) => {
-                setValue(() => value);
+          {props.names[0].title && (
+            <MenuItem
+              bg="transparent"
+              // onClick={(e) => e.stopPropagation()}
+              // onKeyDown={(e) => {
+              //   e.stopPropagation();
+              // }}
+            >
+              <Input
+                w="full"
+                bg="whiteAlpha.100"
+                onClick={(e) => e.stopPropagation()}
+                border=""
+                rounded="10px"
+                placeholder="بحث عن عنوان"
+                value={values}
+                onChange={({ target: { value } }) => {
+                  setValue(() => value);
 
-                setItems(() => {
-                  return [
-                    ...props.names.filter((s) => {
-                      if (s.title && s.title.split(value).length > 1) return s;
-                      if (s.name && s.name.split(value).length > 1) return s;
-                    }),
-                  ];
-                });
-              }}
-            />
-          </MenuItem>
+                  setItems(() => {
+                    return [
+                      ...props.names.filter((s) => {
+                        if (s.title && s.title.split(value).length > 1)
+                          return s;
+                        if (s.name && s.name.split(value).length > 1) return s;
+                      }),
+                    ];
+                  });
+                }}
+              />
+            </MenuItem>
+          )}
 
           {items.map((e, i: any) => (
-            <MenuItemOption
+            <MenuItem
               key={i * 60}
               onMouseEnter={(e) => e.stopPropagation()}
               _hover={{ bg: "whiteAlpha.200" }}
@@ -103,10 +132,13 @@ export const Titles = (props: {
               p="10px"
               px="20px"
               bg="transparent"
-              onClick={() => props.fun(e.name || e.title)}
+              onClick={() => (e.name ? props.fun(e.name) : select(e.id))}
             >
-              {e.name || e.title}
-            </MenuItemOption>
+              {e.title && (
+                <Selected selected={isSelected(e.id)} onClick={() => {}} />
+              )}
+              <Text pr="20px"> {e.name || e.title}</Text>
+            </MenuItem>
           ))}
         </MenuList>
       </Menu>
