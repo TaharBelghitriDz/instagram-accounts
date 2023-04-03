@@ -71,8 +71,10 @@ export default (props: { select: string[] }) => {
       isClosable: true,
       duration: 2000,
     });
-    return proxiesGet.then(({ err, res }) => {
+    proxiesGet.then(({ err, res }) => {
       console.log("here");
+      console.log(res);
+      console.log(err);
 
       if (err)
         return toast({
@@ -133,7 +135,7 @@ export default (props: { select: string[] }) => {
           verticalAlign="center"
           textAlign="center"
           cursor="pointer"
-          onClick={check}
+          // onClick={check}
         >
           فحص البروكسيات
         </Text>
