@@ -25,6 +25,8 @@ export const Titles = (props: {
   const [items, setItems] = useState<typeof props.names>(props.names);
   const [values, setValue] = useState("");
 
+  const select = () => {};
+
   return (
     <Flex w="full">
       <Menu closeOnSelect={false}>
