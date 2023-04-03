@@ -11,7 +11,7 @@ import {
   useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import state from "../../../utils/state";
 import { Add } from "../../icons";
 import {
@@ -26,8 +26,9 @@ export default (props: {
   id: string;
   //   content?: string;
 }) => {
-  const selected = state.useStore((e) => e.selectedTitle);
-  state.useStore((e) => e.refreshtextsAndImages);
+  const refresh = state.useStore((e) => e.refreshtextsAndImages);
+
+  useEffect(() => {}, [refresh]);
 
   const ref = useRef(null);
   //   useOutsideClick({
