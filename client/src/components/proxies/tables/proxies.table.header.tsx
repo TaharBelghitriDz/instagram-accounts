@@ -65,12 +65,12 @@ export default (props: { select: string[] }) => {
   };
 
   const refresh = () => {
-    // toast({
-    //   status: "loading",
-    //   title: " تحميل ",
-    //   isClosable: true,
-    //   duration: 2000,
-    // });
+    toast({
+      status: "loading",
+      title: " تحميل ",
+      isClosable: true,
+      duration: 2000,
+    });
     return proxiesGet.then(({ err, res }) => {
       if (err)
         return toast({
@@ -81,12 +81,12 @@ export default (props: { select: string[] }) => {
       console.log(res?.data);
 
       state.changeState({ proxies: res?.data });
-      // return toast({
-      //   status: "success",
-      //   title: "تم تحميل",
-      //   isClosable: true,
-      //   duration: 2000,
-      // });
+      return toast({
+        status: "success",
+        title: "تم تحميل",
+        isClosable: true,
+        duration: 2000,
+      });
     });
   };
 
@@ -146,7 +146,7 @@ export default (props: { select: string[] }) => {
           bg="blue.800"
           color="blue.200"
           cursor="pointer"
-          onClick={() => refresh()}
+          onClick={refresh}
         >
           <Refresh w="24px" h="24px" bg="" />
         </HStack>
