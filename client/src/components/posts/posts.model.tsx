@@ -73,6 +73,8 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
   const titles = state.useStore((e) => e.titles);
   const groups = state.useStore((e) => e.groups);
 
+  const selectedTitles = state.useStore((e) => e.selectedTitles);
+
   groups.length < 1 &&
     (props.onClose(),
     toast({ status: "error", isClosable: true, title: "اضف مجموعات" }));
@@ -92,11 +94,11 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
         }
   );
 
-  const [value, setValue] = useState(props.post?.time_between_posting || 10);
+  const [value, setValue] = useState(props.post?.time_between_posting || 900);
   const [isPhoto, setIsPhoto] = useState<boolean>(props.post?.is_photo || true);
 
   const fun = () => {
-    let title_id = titles.filter((e: any) => e.title == selected.title);
+    let title_id = titles.filter((e: any) => e.id == selectedTitles[0]);
     let group_id = groups.filter((e: any) => e.name == selected.group);
     const time_between_posting = value;
     const is_photo = isPhoto;
@@ -121,28 +123,33 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
       is_active,
     };
 
-    if (!props.post)
-      return postsAdd(body).then(async ({ err, res }) => {
-        if (err) return;
+    console.log(body);
 
-        let newState = [...postsstate, res?.data];
+    // if (!props.post)
+    return postsAdd(body).then(async ({ err, res }) => {
+      if (err) return;
 
-        state.changeState({ posts: [...newState] });
-        props.onClose();
-      });
+      let newState = [...postsstate, res?.data];
 
-    postsUpdate({ data: body, id: (props.post as any).id }).then(
-      ({ err, res }) => {
-        if (err) return;
+      // console.log(newState);
+      // console.log(res?.data);
 
-        return postsGet.then(({ err, res }) => {
-          if (err) return;
+      state.changeState({ posts: newState });
+      props.onClose();
+    });
 
-          state.changeState({ posts: res?.data });
-          props.onClose();
-        });
-      }
-    );
+    // postsUpdate({ data: body, id: (props.post as any).id }).then(
+    //   ({ err, res }) => {
+    //     if (err) return;
+
+    //     return postsGet.then(({ err, res }) => {
+    //       if (err) return;
+
+    //       state.changeState({ posts: res?.data });
+    //       props.onClose();
+    //     });
+    //   }
+    // );
   };
 
   return (
@@ -222,7 +229,7 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
           p="20px"
           rounded="15px"
           cursor="pointer"
-          // onClick={fun}
+          onClick={fun}
         >
           <Text>تاكيد</Text>
           <Add h="24px" w="24px" />

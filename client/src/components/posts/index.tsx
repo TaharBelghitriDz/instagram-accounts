@@ -13,10 +13,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { axiosFun, endpoint } from "../../utils/api/costant";
 import { postsGet } from "../../utils/api/posts.api";
 import state from "../../utils/state";
 import { CustomAddIcon } from "../custom.button.component";
-import { Historiq } from "../icons";
+import { Historiq, Refresh } from "../icons";
 import PostsModel from "./posts.model";
 import PostsRemoveAllModel from "./posts.remove.all.model";
 import PostsRows from "./posts.rows";
@@ -28,6 +29,7 @@ export type Post = {
   time_between_posting: number;
   is_photo: true;
   id?: number;
+  is_launched: boolean;
   created_date: string;
 };
 
@@ -40,6 +42,8 @@ export default () => {
   const editDiscloser = useDisclosure();
   const removeDiscloser = useDisclosure();
 
+  const [update, setUpdate] = useState(0);
+
   const [selectedPost, setSelectedPost] = useState("");
   const toast = useToast();
 
@@ -51,11 +55,15 @@ export default () => {
       duration: 2000,
     });
 
-    postsGet.then(({ err, res }) => {
+    axiosFun({
+      method: "GET",
+      headers: { authorization: localStorage.getItem("token") },
+      url: endpoint + "/posts",
+    }).then(({ err, res }) => {
       if (err) return;
-      console.log(res?.data);
 
       setPosts(() => [...res?.data]);
+      state.changeState({ posts: res?.data });
 
       return toast({
         status: "success",
@@ -64,7 +72,7 @@ export default () => {
         duration: 2000,
       });
     });
-  }, []);
+  }, [update]);
 
   useEffect(() => {
     setPosts(() => [...postsState]);
@@ -75,6 +83,10 @@ export default () => {
       return state.changeState({ selectedPost: [] });
 
     return state.changeState({ selectedPost: posts.map((e) => e.id) });
+  };
+
+  const refresh = () => {
+    setUpdate(() => Date.now());
   };
 
   return (
@@ -109,6 +121,7 @@ export default () => {
           <Text>اضافة</Text>
           <CustomAddIcon />
         </HStack>
+
         <HStack
           spacing="10px"
           bg="red.800"
@@ -120,6 +133,18 @@ export default () => {
         >
           <Text>مسح</Text>
           <Historiq />
+        </HStack>
+        <HStack
+          spacing="10px"
+          bg="blue.800"
+          p="10px"
+          color="blue.100"
+          rounded="20px"
+          cursor="pointer"
+          onClick={refresh}
+        >
+          <Text>تحديث</Text>
+          <Refresh w="24px" h="24px" bg="" />
         </HStack>
       </HStack>
       <Table

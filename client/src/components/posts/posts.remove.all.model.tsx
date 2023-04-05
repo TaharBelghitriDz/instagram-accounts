@@ -9,13 +9,35 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRef } from "react";
+import { axiosFun } from "../../utils/api/costant";
+import state from "../../utils/state";
 import { Add } from "../icons";
 
 export default (props: { isOpen: boolean; onClose: () => void }) => {
   const ref = useRef(null);
   const toast = useToast();
+  const selectedPost = state.useStore((e) => e.selectedPost);
 
-  const fun = () => {};
+  const fun = () => {
+    if (selectedPost.length == 0)
+      return toast({ status: "error", isClosable: true, title: "حدد حملات" });
+
+    axiosFun({
+      method: "DELETE",
+      url: "http://135.181.209.82:1996/posts",
+      headers: { authorization: localStorage.getItem("token") },
+      data: selectedPost,
+    })
+      .then(({ err, res }) => {
+        if (err) return toast({ status: "success", title: "لم يتم المسح " });
+
+        return state.changeState({ posts: res?.data });
+      })
+      .then(() => {
+        props.onClose();
+        toast({ status: "success", title: "تم المسح" });
+      });
+  };
 
   return (
     <AlertDialog

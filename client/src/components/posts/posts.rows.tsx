@@ -67,7 +67,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
     });
   };
 
-  const posted = Math.floor(Math.random() * 3) + 1 > 1;
+  const posted = !!props.is_launched;
 
   return (
     <Tr bg={isSelected ? "red.800" : ""}>
@@ -95,7 +95,7 @@ export default (props: Post & { onClick: (e: any) => void }) => {
       <Td textAlign="center">{values.title}</Td>
       <Td textAlign="center">{values.group}</Td>
       {/* <Td textAlign="center"> {props.time_between_posting} </Td> */}
-      <Td textAlign="center"> {props.is_photo ? "post" : "reels"} </Td>
+      <Td textAlign="center"> {props.is_photo ? "بوست" : "رييلز"} </Td>
       <Td isNumeric>
         <VStack>
           <span style={{ textAlign: "center" }}>

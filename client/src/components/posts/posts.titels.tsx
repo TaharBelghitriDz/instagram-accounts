@@ -13,19 +13,38 @@ import {
   Text,
   useMenuItem,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import state from "../../utils/state";
 import { CustomAddIcon } from "../custom.button.component";
 
 export const Titles = (props: {
   name: string;
   value?: string;
-  names: { name: string; title: string; id: number }[];
+  names: {
+    name: string;
+    title: string;
+    id: number;
+    choosen?: boolean;
+  }[];
   fun: (str: string) => void;
 }) => {
-  const [items, setItems] = useState<typeof props.names>(props.names);
+  const posts = state.useStore((e) => e.posts);
+
+  const [items, setItems] = useState<typeof props.names>(
+    props.names.map((e) => {
+      if (props.names[0].name) return e;
+
+      const postsIds = posts.map((e: any) => e.title_id);
+
+      console.log(postsIds);
+      console.log(e.id);
+
+      if (postsIds.includes(e.id)) return { ...e, choosen: true };
+
+      return e;
+    })
+  );
   const [values, setValue] = useState("");
-  console.log("rerender");
 
   const selectedTitles = state.useStore((e) => e.selectedTitles);
 
@@ -125,6 +144,7 @@ export const Titles = (props: {
 
           {items.map((e, i: any) => (
             <MenuItem
+              isDisabled={!!e.choosen}
               key={i * 60}
               onMouseEnter={(e) => e.stopPropagation()}
               _hover={{ bg: "whiteAlpha.200" }}
