@@ -12,6 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { axiosFun, endpoint } from "../../utils/api/costant";
 import { postsHistory } from "../../utils/api/posts.api";
 import { date } from "../../utils/dates";
 import { Go, Refresh } from "../icons";
@@ -102,7 +103,11 @@ export default () => {
       isClosable: true,
       duration: 2000,
     });
-    postsHistory.then(({ res, err }) => {
+    axiosFun({
+      method: "GET",
+      headers: { authorization: localStorage.getItem("token") },
+      url: endpoint + "/posts/history",
+    }).then(({ res, err }) => {
       if (err)
         return toast({
           status: "success",

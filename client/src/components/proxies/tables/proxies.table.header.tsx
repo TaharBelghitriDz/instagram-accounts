@@ -8,7 +8,9 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { ComponentType, useState } from "react";
+import { axiosFun, endpoint } from "../../../utils/api/costant";
 import {
   proxiesCheck,
   proxiesDelete,
@@ -55,6 +57,13 @@ export default (props: { select: string[] }) => {
   };
 
   const check = () => {
+    if (selectedProxies.length == 0)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "حدد بروكسيات اولا",
+      });
+
     proxiesCheck(selectedProxies).then(({ res, err }) => {
       if (err) return;
       return toast({
@@ -65,18 +74,18 @@ export default (props: { select: string[] }) => {
     });
   };
 
-  const refresh = () => {
+  const refresh = async () => {
     toast({
       status: "loading",
       title: " تحميل ",
       isClosable: true,
       duration: 2000,
     });
-    proxiesGet.then(({ err, res }) => {
-      console.log("here");
-      console.log(res);
-      console.log(err);
-
+    await axiosFun({
+      method: "GET",
+      url: endpoint + "/proxies",
+      headers: { Authorization: localStorage.getItem("token") },
+    }).then(async ({ err, res }) => {
       if (err)
         return toast({
           status: "error",
@@ -84,8 +93,8 @@ export default (props: { select: string[] }) => {
           isClosable: true,
         });
 
-      state.changeState({ proxies: res?.data });
-      return toast({
+      await state.changeState({ proxies: res?.data });
+      toast({
         status: "success",
         title: "تم تحميل",
         isClosable: true,
@@ -150,9 +159,9 @@ export default (props: { select: string[] }) => {
           bg="blue.800"
           color="blue.200"
           cursor="pointer"
-          onClick={refresh}
+          // onClick={refresh}
         >
-          <Refresh w="24px" h="24px" bg="" />
+          <Refresh onClick={refresh} w="24px" h="24px" bg="" />
         </HStack>
         <HStack
           w="40px"
