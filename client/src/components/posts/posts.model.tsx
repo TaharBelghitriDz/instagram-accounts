@@ -113,21 +113,23 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
       return;
     }
 
-    title_id = title_id[0].id;
+    title_id = selectedTitles;
     group_id = group_id[0].id;
-    const body = {
+
+    const body = selectedTitles.map((title_id: number) => ({
       title_id,
       group_id,
       time_between_posting,
       is_photo,
       is_active,
-    };
+    }));
 
     console.log(body);
 
     // if (!props.post)
+
     return postsAdd(body).then(async ({ err, res }) => {
-      if (err) return;
+      if (err) return props.onClose();
 
       let newState = [...postsstate, res?.data];
 

@@ -231,7 +231,7 @@ const TitleEdit = () => {
       <Flex flexDir={{ base: "column", md: "row" }} w="full">
         <HStack w="full" spacing={5}>
           <Text cursor="pointer"> العدد {titles.length} </Text>
-          <Text
+          {/* <Text
             cursor="pointer"
             p="10px"
             bg="red.800"
@@ -239,7 +239,7 @@ const TitleEdit = () => {
             rounded="10px"
           >
             حذف الكل
-          </Text>
+          </Text> */}
           <Text
             cursor="pointer"
             p="10px"

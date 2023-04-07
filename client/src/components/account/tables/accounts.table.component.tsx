@@ -1,7 +1,9 @@
 import {
   Box,
   Checkbox,
+  HStack,
   Image,
+  Input,
   Table,
   TableCaption,
   Tbody,
@@ -36,6 +38,10 @@ const Row = (props: {
   const refreshAccounts = state.useStore((e) => e.refreshAccounts);
   const selectedView = state.useStore((e) => e.accountsView);
   const [accountsView, setAccountsView] = useState<Account[]>(accountsState);
+
+  const [accountsPerPage, setAccountsPerPage] = useState(10);
+  const [value, setValue] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     setAccountsView(() => [...accounts]);
@@ -118,50 +124,91 @@ const Row = (props: {
       />
     );
   };
+  const addAccountsNumber = () => {
+    console.log(value);
+    console.log(accountsView.length);
 
+    setAccountsPerPage(() => Math.floor(accountsView.length / value));
+  };
+
+  const accountsViewWithPagination = () => {
+    console.log("accountsPerPage");
+    // console.log(accountsPerPage);
+    // console.log(accountsView.length);
+
+    const start = (pageNumber - 1) * accountsPerPage;
+    const end = (pageNumber - 0) * accountsPerPage;
+
+    console.log(start, end);
+
+    return accountsView?.slice(start, end);
+  };
   return (
-    <Tbody>
-      {accountsView?.map((e, i) => (
-        <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
-          <Td>
-            <Selected
-              selected={props.selected.includes(e.id)}
-              onClick={() => props.onCheckBox(e.id)}
-            />
-          </Td>
-          <Td onClick={() => props.onCheckBox(e.id)}>
-            <Image
-              src={e.profile_pic_link}
-              h="75px"
-              minW="75"
-              w="75px"
-              rounded="10px"
-            />
-          </Td>
-          <Td onClick={() => props.onClick(e.id)} textAlign="center">
-            {e.username}
-          </Td>
-          <Td onClick={() => props.onClick(e.id)} textAlign="center">
-            {e.is_active}
-          </Td>
-          <Td onClick={() => props.onClick(e.id)} textAlign="center">
-            <Text p="10px" rounded="10px" bg="green.900" color="green.100">
-              {e.status}
-            </Text>
-          </Td>
-          <Td onClick={() => props.onClick(e.id)} isNumeric>
-            <VStack>
-              <span style={{ textAlign: "center" }}>
-                {date(e.created_date, "day")}
-              </span>
-              <span style={{ textAlign: "center" }}>
-                {date(e.created_date, "time")}
-              </span>
-            </VStack>
-          </Td>
-        </Tr>
-      ))}
-    </Tbody>
+    <>
+      {/* <HStack minW="400px">
+        <Text
+          p="10px"
+          bg="green.0"
+          rounded="20px"
+          cursor="pointer"
+          onClick={() => addAccountsNumber()}
+        >
+          تطبيق
+        </Text>
+        <Input
+          width="full"
+          rounded="15px"
+          placeholder="عدد الحسابات في الصفحة"
+          type="number"
+          value={value}
+          onChange={({ target: { value } }) => {
+            setValue(() => parseInt(value));
+          }}
+        />
+      </HStack> */}
+      <Tbody>
+        {accountsViewWithPagination().map((e, i) => (
+          <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
+            <Td>
+              <Selected
+                selected={props.selected.includes(e.id)}
+                onClick={() => props.onCheckBox(e.id)}
+              />
+            </Td>
+            <Td onClick={() => props.onCheckBox(e.id)}>
+              <Image
+                src={e.profile_pic_link}
+                h="75px"
+                minW="75"
+                w="75px"
+                rounded="10px"
+              />
+            </Td>
+            <Td onClick={() => props.onClick(e.id)} textAlign="center">
+              {e.username}
+            </Td>
+            <Td onClick={() => props.onClick(e.id)} textAlign="center">
+              {e.is_active}
+            </Td>
+            <Td onClick={() => props.onClick(e.id)} textAlign="center">
+              <Text p="10px" rounded="10px" bg="green.900" color="green.100">
+                {e.status}
+              </Text>
+            </Td>
+            <Td onClick={() => props.onClick(e.id)} isNumeric>
+              <VStack>
+                <span style={{ textAlign: "center" }}>
+                  {date(e.created_date, "day")}
+                </span>
+                <span style={{ textAlign: "center" }}>
+                  {date(e.created_date, "time")}
+                </span>
+              </VStack>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </>
   );
 };
 
@@ -170,6 +217,7 @@ export default () => {
   const [selctedAccount, setSelectedAccount] = useState(0);
   const refresh = state.useStore((e) => e.refreshAccounts);
   const selectedGroup = state.useStore((e) => e.selectedGroup);
+
   // const [accounts, setAccounts] = useState<Account[]>([]);
   // const selectedView = state.useStore((e) => e.accountsView);
 
@@ -282,3 +330,5 @@ export default () => {
     </VStack>
   );
 };
+
+function Pagenation() {}
