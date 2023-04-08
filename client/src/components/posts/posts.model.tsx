@@ -131,11 +131,11 @@ const Inputs = (props: { onClose: () => void; post?: Post }) => {
     return postsAdd(body).then(async ({ err, res }) => {
       if (err) return props.onClose();
 
-      let newState = [...postsstate, res?.data];
+      let newState = res?.data;
 
       // console.log(newState);
       // console.log(res?.data);
-
+      state.changeState({ selectedTitles: [] });
       state.changeState({ posts: newState });
       props.onClose();
     });

@@ -39,6 +39,13 @@ export default (props: { select: string[] }) => {
   };
 
   const fun = () => {
+    if (selectedProxies.length == 0)
+      return toast({
+        status: "error",
+        isClosable: true,
+        title: "حدد بروكسيات اولا",
+      });
+
     proxiesDelete(selectedProxies).then(({ err, res }) => {
       if (err)
         return toast({
