@@ -108,6 +108,11 @@ const state = {
     title_id: number;
   }[],
   selectedPost: [] as number[],
+  pagination: {
+    page: 1,
+    accounts: 10,
+  },
+  accountsViewPagination: 0,
 };
 
 export default createState(state, ({ groups }) => ({

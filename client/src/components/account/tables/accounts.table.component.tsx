@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   HStack,
   Image,
@@ -39,9 +40,7 @@ const Row = (props: {
   const selectedView = state.useStore((e) => e.accountsView);
   const [accountsView, setAccountsView] = useState<Account[]>(accountsState);
 
-  const [accountsPerPage, setAccountsPerPage] = useState(10);
-  const [value, setValue] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
+  const pagination = state.useStore((e) => e.pagination);
 
   useEffect(() => {
     setAccountsView(() => [...accounts]);
@@ -96,7 +95,7 @@ const Row = (props: {
       if (selectedView.includes(e.status) || selectedView.includes(e.is_active))
         return e;
     });
-
+    state.changeState({ accountsViewPagination: selectedAccounts.length });
     setAccountsView(() => [...selectedAccounts]);
   }, [selectedView]);
 
@@ -124,50 +123,20 @@ const Row = (props: {
       />
     );
   };
-  const addAccountsNumber = () => {
-    console.log(value);
-    console.log(accountsView.length);
 
-    setAccountsPerPage(() => Math.floor(accountsView.length / value));
+  const accountsPerPage = () => {
+    const accouts = accountsView.slice(
+      (pagination.page - 1) * pagination.accounts,
+      pagination.page * pagination.accounts
+    );
+
+    return accouts;
   };
 
-  const accountsViewWithPagination = () => {
-    console.log("accountsPerPage");
-    // console.log(accountsPerPage);
-    // console.log(accountsView.length);
-
-    const start = (pageNumber - 1) * accountsPerPage;
-    const end = (pageNumber - 0) * accountsPerPage;
-
-    console.log(start, end);
-
-    return accountsView?.slice(start, end);
-  };
   return (
     <>
-      {/* <HStack minW="400px">
-        <Text
-          p="10px"
-          bg="green.0"
-          rounded="20px"
-          cursor="pointer"
-          onClick={() => addAccountsNumber()}
-        >
-          تطبيق
-        </Text>
-        <Input
-          width="full"
-          rounded="15px"
-          placeholder="عدد الحسابات في الصفحة"
-          type="number"
-          value={value}
-          onChange={({ target: { value } }) => {
-            setValue(() => parseInt(value));
-          }}
-        />
-      </HStack> */}
       <Tbody>
-        {accountsViewWithPagination().map((e, i) => (
+        {accountsPerPage().map((e, i) => (
           <Tr key={i * 12} bg={props.selected.includes(e.id) ? "red.800" : ""}>
             <Td>
               <Selected
@@ -209,6 +178,107 @@ const Row = (props: {
         ))}
       </Tbody>
     </>
+  );
+};
+
+const Pagination = () => {
+  // const page = state.useStore((e) => e.pagination.accounts);
+  const changePageNumber = (num: number) => {
+    state.changeState({ pagination: { accounts: num } });
+  };
+
+  return (
+    <HStack spacing="20px" minW="500px" alignItems="center">
+      <Text p="10px" px="30px" bg="green.0" rounded="10px" cursor="pointer">
+        عدد الحسابات في الصفحة
+      </Text>
+      <Text
+        bg="blue.0"
+        color="blue.1"
+        textAlign="center"
+        p="10px"
+        rounded="10px"
+        cursor="pointer"
+        onClick={() => changePageNumber(10)}
+      >
+        10
+      </Text>
+      <Text
+        bg="blue.0"
+        color="blue.1"
+        textAlign="center"
+        p="10px"
+        rounded="10px"
+        cursor="pointer"
+        onClick={() => changePageNumber(20)}
+      >
+        20
+      </Text>
+      <Text
+        bg="blue.0"
+        color="blue.1"
+        textAlign="center"
+        p="10px"
+        rounded="10px"
+        cursor="pointer"
+        onClick={() => changePageNumber(50)}
+      >
+        50
+      </Text>
+    </HStack>
+  );
+};
+
+const PaginationHandler = () => {
+  const accoutsView = state.useStore((e) => e.accountsViewPagination);
+  const accoutState = state.useStore((e) => e.accounts);
+  const pagination: { page: number; accounts: number } = state.useStore(
+    (e) => e.pagination
+  );
+
+  const pagesMaxNumber =
+    Math.floor(
+      (accoutsView == 0 ? accoutState.length : accoutsView) /
+        pagination.accounts
+    ) + 1;
+
+  const items = new Array(pagesMaxNumber).fill("").map((_, i) => i + 1);
+
+  const changePage = (page: number) => {
+    state.changeState({ pagination: { page } });
+  };
+
+  const nextPage = () =>
+    state.changeState({ pagination: { page: pagination.page + 1 } });
+
+  const prePage = () =>
+    state.changeState({ pagination: { page: pagination.page - 1 } });
+
+  return (
+    <HStack spacing="20px" pb="20px">
+      <Button
+        colorScheme="green"
+        onClick={prePage}
+        isDisabled={pagination.page == 1}
+      >
+        السابق
+      </Button>
+      {items.map((e) => (
+        <Button
+          colorScheme={pagination.page == e ? "blue" : "whiteAlpha"}
+          onClick={() => changePage(e)}
+        >
+          {e}
+        </Button>
+      ))}
+      <Button
+        colorScheme="green"
+        onClick={nextPage}
+        isDisabled={pagination.page == pagesMaxNumber}
+      >
+        التالي
+      </Button>
+    </HStack>
   );
 };
 
@@ -284,6 +354,7 @@ export default () => {
         {...discloser}
       />
 
+      <Pagination />
       <Table
         variant="simple"
         colorScheme="whiteAlpha"
@@ -327,8 +398,7 @@ export default () => {
           />
         )}
       </Table>
+      <PaginationHandler />
     </VStack>
   );
 };
-
-function Pagenation() {}
